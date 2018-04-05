@@ -1,9 +1,11 @@
 package com.mk;
 
 import com.mk.configuration.Configuration;
+import com.mk.graphic.PlotMesh;
 import com.mk.models.physics.Substrate;
 import com.mk.models.physics.Walker;
 import com.mk.utils.SimulationUtils;
+import org.jzy3d.analysis.AnalysisLauncher;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
@@ -26,7 +28,7 @@ public class SiOxDla3d {
     private String name = "test";
 
 
-    public SiOxDla3d() {
+    public SiOxDla3d() throws Exception {
         simulationUtils = new SimulationUtils(this);
 
         System.out.println(">>> Loading configuration: " + name);
@@ -46,12 +48,15 @@ public class SiOxDla3d {
         //TODO: set iteration variables
         int i = 0;
 
-        walker = new Walker(configuration, substrate.getHighestPoint() - 10);
+        //walker = new Walker(configuration, substrate.getHighestPoint() - 10);
+        walker = new Walker(configuration, substrate.getFront() - 10);
 
         while (run) {
             simulationUtils.moveWalker();
 
-            simulationUtils.calculateSticking();
+            if (walker.getPosition().getZ() < substrate.getFront() - 20 || walker.getPosition().getZ() > substrate.getFront()) walker.respawn(substrate.getFront() - 10);
+
+            //simulationUtils.calculateSticking();
             //TODO: implement no further sticking than 2 from growth front
 
             if (simulationUtils.walkerSticks()) {
@@ -59,20 +64,28 @@ public class SiOxDla3d {
                         walker.getPosition().getX(),
                         walker.getPosition().getY(),
                         walker.getPosition().getZ(), 1);
+                //System.out.println("sticked = " + walker.getPosition());
+                walker.nextSector();
+                walker.respawn(substrate.getFront() - 10);
             }
 
             simulationUtils.moveGrowthFront();
 
             //TODO: check break conditions (number of crystallites, front, no of iterations)
-            if(i > 1e5) run = false;
+            //if (i > 1e8) run = false;
+            if (substrate.getFront() <= 20) run = false;
             i++;
         }
+
+        PlotMesh plotMesh = new PlotMesh();
+        plotMesh.plot3d(mesh);
+        AnalysisLauncher.open(plotMesh);
 
         //TODO: prepare mesh for visualization
         //TODO: display results
     }
 
-    public static void main( String[] args ) {
+    public static void main( String[] args ) throws Exception {
         System.out.println("### New DLA Simulation");
         SiOxDla3d siOxDla3d = new SiOxDla3d();
     }

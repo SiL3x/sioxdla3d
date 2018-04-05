@@ -4,7 +4,9 @@ import com.mk.SiOxDla3d;
 import com.mk.configuration.Configuration;
 import com.mk.models.physics.Walker;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.cpu.nativecpu.NDArray;
 import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.indexing.INDArrayIndex;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 
 public class SimulationUtils {
@@ -76,7 +78,8 @@ public class SimulationUtils {
 
         sim.walker.moveRnd();
 
-        if (zWalker < (zBorder - 30)) sim.walker.respawn(sim.substrate);
+        //if (zWalker < (zBorder - 30)) sim.walker.respawn(sim.substrate);
+        if (zWalker < 0) sim.walker.respawn(sim.substrate);
         if (zWalker >= (sim.substrate.values.getInt(xWalker, yWalker))) sim.walker.respawn(sim.substrate);
     }
 
@@ -89,6 +92,7 @@ public class SimulationUtils {
         sim.walker.moveRnd();
 
         if (zWalker < (zBorder - 30)) sim.walker.respawn(sim.substrate);
+        if (zWalker < 0) sim.walker.respawn(sim.substrate);
     }
 
     public void calculateSticking() {
@@ -106,14 +110,42 @@ public class SimulationUtils {
 
         if ((int) subArray.sumNumber().intValue() > 0) {
             sim.mesh.putScalar(xWalker, yWalker, zWalker, 1);
-            System.out.println("Sticked at = " + sim.walker.getPosition());
+            //System.out.println("Sticked at = " + sim.walker.getPosition());
         }
     }
 
     public void moveGrowthFront() {
         //TODO: move growth front
-    }
+        //TODO: use nd-array multiplication for summation
+        INDArray slice;
+        int sum;
+        for (int i = sim.substrate.getFront() - 1; i > sim.substrate.getFront() - 6; i--) { //sim.substrate.getSpread()
+            slice = sim.mesh.get(NDArrayIndex.all(), NDArrayIndex.all(), NDArrayIndex.point(i));
+            sum = slice.sumNumber().intValue();
 
+            if (sum >= sim.configuration.getGrowthRatio()) {
+                sim.substrate.setFront(i);
+                System.out.println("slice.sumNumber() = " + sum + "  front = " + i);
+            }
+
+            /*
+            sum = 0;
+            for (int x = 0; x < sim.meshSize; x++) {
+                for (int y = 0; y < sim.meshSize; y++) {
+                    sum += sim.mesh.getInt(x, y, sim.substrate.getValue(x, y) + (i - sim.substrate.getFront()));
+                }
+            }
+
+            if(sum != 0) {
+                System.out.println("sum = " + sum);
+            }
+            if ((100 * sum / sim.meshSize * sim.meshSize) >=  sim.configuration.getGrowthRatio()) {
+                sim.substrate.setFront(i);
+                System.out.println("New front = " + i);
+            }
+            */
+        }
+    }
 
     public boolean walkerSticks() {
         //TODO: implement calculate sticking with kernel
