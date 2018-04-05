@@ -11,6 +11,10 @@ public class Walker {
     private Position position;
     private Configuration configuration;
     private int spawnZ;
+    private int sector = 0 ;
+    int perRow;
+    int distance;
+
 
     public Walker(Configuration configuration) {
         this.configuration = configuration;
@@ -19,6 +23,10 @@ public class Walker {
     }
 
     public Walker(Configuration configuration, int front) {
+        perRow = (int) Math.round(Math.sqrt(configuration.getSectorNumber()));
+        System.out.println("perRow = " + perRow + " sector no " +configuration.getSectorNumber());
+        distance = (int) Math.round(configuration.getMeshSize() / perRow);
+
         this.configuration = configuration;
         this.spawnZ = front - configuration.getSpawnOffset();
         this.border = configuration.getKernel().length/2 +1;
@@ -41,6 +49,17 @@ public class Walker {
         spawnZ = substrate.getValue(randomX, randomY) - configuration.getSpawnOffset();
         this.position = new Position(randomX, randomY, spawnZ);
     }
+    public void respawn(int spawnZ) {
+        //TODO: rework respawn for evenly distributed random respawn
+
+        int x = (sector % perRow) * distance + distance / 2;
+        int y = (int) Math.floor((sector / perRow) * distance + distance / 2);
+
+        int randomX = ThreadLocalRandom.current().nextInt((sector % perRow) * distance + border, (sector % perRow) * distance + distance - border);
+        int randomY = ThreadLocalRandom.current().nextInt((int) (Math.floor((sector / perRow) * distance) + border), (int) (Math.floor((sector / perRow) * distance)  + distance - border));
+
+        this.position = new Position(randomX, randomY, spawnZ);
+    }
 
     public void moveRnd() {
         int direction = ThreadLocalRandom.current().nextInt(0, 5 + 1);
@@ -55,5 +74,12 @@ public class Walker {
 
     public Position getPosition() {
         return position;
+    }
+
+    public void nextSector() {
+        sector++;
+        if (sector >= configuration.getSectorNumber()) {
+            sector = sector % configuration.getSectorNumber();
+        }
     }
 }

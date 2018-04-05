@@ -46,6 +46,7 @@ public class Substrate {
 
         max = values.minNumber().intValue();
         min = values.maxNumber().intValue();
+        front = min;
         highestPoint = max;
         spread = min - max;
 
@@ -79,5 +80,17 @@ public class Substrate {
             outString += polygon + "\n";
         }
         return outString;
+    }
+
+    public int getFront() {
+        return front;
+    }
+
+    public void setFront(int front) {
+        this.front = front;
+    }
+
+    public int getSpread() {
+        return spread;
     }
 }

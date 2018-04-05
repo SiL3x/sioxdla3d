@@ -28,6 +28,7 @@ public class Configuration {
     private int seedNumber;
     private int surfaceStickDistance;
     private List<List<Vector3D>> substrate;
+    private int sectorNumber;
 
     public Configuration(String configName) {
         this.configName = configName;
@@ -54,6 +55,8 @@ public class Configuration {
 
             setSeedNumber(100);
             setSpawnOffset(10);
+            setGrowthRatio(20);
+            setSectorNumber(16);
             int[][] kernel = {{1}};
             setKernel(kernel);
         }
@@ -164,5 +167,13 @@ public class Configuration {
 
     public List<List<Vector3D>> getSubstrate() {
         return substrate;
+    }
+
+    public int getSectorNumber() {
+        return sectorNumber;
+    }
+
+    public void setSectorNumber(int sectorNumber) {
+        this.sectorNumber = sectorNumber;
     }
 }
