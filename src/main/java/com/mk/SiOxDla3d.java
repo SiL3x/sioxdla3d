@@ -47,6 +47,7 @@ public class SiOxDla3d {
 
         //TODO: set iteration variables
         int i = 0;
+        int sticked = 0;
 
         //walker = new Walker(configuration, substrate.getHighestPoint() - 10);
         walker = new Walker(configuration, substrate.getFront() - 10);
@@ -54,7 +55,8 @@ public class SiOxDla3d {
         while (run) {
             simulationUtils.moveWalker();
 
-            if (walker.getPosition().getZ() < substrate.getFront() - 20 || walker.getPosition().getZ() > substrate.getFront()) walker.respawn(substrate.getFront() - 10);
+            if (walker.getPosition().getZ() < substrate.getFront() - 20
+                    || walker.getPosition().getZ() > substrate.getFront()) walker.respawn(substrate.getFront() - 10);
 
             //simulationUtils.calculateSticking();
             //TODO: implement no further sticking than 2 from growth front
@@ -64,12 +66,13 @@ public class SiOxDla3d {
                         walker.getPosition().getX(),
                         walker.getPosition().getY(),
                         walker.getPosition().getZ(), 1);
-                //System.out.println("sticked = " + walker.getPosition());
+                //System.out.println("sticked = " + walker.getPosition() + "  i = " + i + "  sector = " + walker.getSector());
                 walker.nextSector();
                 walker.respawn(substrate.getFront() - 10);
+                sticked++;
             }
 
-            simulationUtils.moveGrowthFront();
+            if (sticked % 20 == 0) simulationUtils.moveGrowthFront();
 
             //TODO: check break conditions (number of crystallites, front, no of iterations)
             //if (i > 1e8) run = false;
