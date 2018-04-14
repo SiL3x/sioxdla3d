@@ -4,9 +4,7 @@ import com.mk.SiOxDla3d;
 import com.mk.configuration.Configuration;
 import com.mk.models.physics.Walker;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.cpu.nativecpu.NDArray;
 import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.linalg.indexing.INDArrayIndex;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 
 public class SimulationUtils {
@@ -84,6 +82,7 @@ public class SimulationUtils {
     }
 
     public void moveSeed() {
+        //TODO: Take substrate into account
         int xWalker = sim.walker.getPosition().getX();
         int yWalker = sim.walker.getPosition().getY();
         int zWalker = sim.walker.getPosition().getZ();
@@ -101,8 +100,6 @@ public class SimulationUtils {
         int yWalker = sim.walker.getPosition().getY();
         int zWalker = sim.walker.getPosition().getZ();
 
-        //System.out.println("Walker = " + sim.walker.getPosition());
-
         INDArray subArray = sim.mesh.get(
                 NDArrayIndex.interval(xWalker - 1, xWalker + 1),
                 NDArrayIndex.interval(yWalker - 1, yWalker + 1),
@@ -110,40 +107,27 @@ public class SimulationUtils {
 
         if ((int) subArray.sumNumber().intValue() > 0) {
             sim.mesh.putScalar(xWalker, yWalker, zWalker, 1);
-            //System.out.println("Sticked at = " + sim.walker.getPosition());
         }
     }
 
     public void moveGrowthFront() {
-        //TODO: move growth front
-        //TODO: use nd-array multiplication for summation
-        INDArray slice;
+
         int sum;
-        for (int i = sim.substrate.getFront() - 1; i > sim.substrate.getFront() - 6; i--) { //sim.substrate.getSpread()
-            slice = sim.mesh.get(NDArrayIndex.all(), NDArrayIndex.all(), NDArrayIndex.point(i));
-            sum = slice.sumNumber().intValue();
+        INDArray subArray;
+
+        for (int i = sim.substrate.getFront() - 6; i < sim.substrate.getFront() - 1 ; i++) {
+            subArray = sim.mesh.get(
+                    NDArrayIndex.all(),
+                    NDArrayIndex.all(),
+                    NDArrayIndex.interval(i, i + sim.substrate.getSpread() + 1));
+
+            sum = subArray.mul(sim.substrate.getSubstrateArray()).sumNumber().intValue();
 
             if (sum >= sim.configuration.getGrowthRatio()) {
                 sim.substrate.setFront(i);
-                System.out.println("slice.sumNumber() = " + sum + "  front = " + i);
+                System.out.println("sum = " + sum + "  front = " + i);
+                break;
             }
-
-            /*
-            sum = 0;
-            for (int x = 0; x < sim.meshSize; x++) {
-                for (int y = 0; y < sim.meshSize; y++) {
-                    sum += sim.mesh.getInt(x, y, sim.substrate.getValue(x, y) + (i - sim.substrate.getFront()));
-                }
-            }
-
-            if(sum != 0) {
-                System.out.println("sum = " + sum);
-            }
-            if ((100 * sum / sim.meshSize * sim.meshSize) >=  sim.configuration.getGrowthRatio()) {
-                sim.substrate.setFront(i);
-                System.out.println("New front = " + i);
-            }
-            */
         }
     }
 

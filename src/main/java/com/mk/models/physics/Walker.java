@@ -11,6 +11,7 @@ public class Walker {
     private Position position;
     private Configuration configuration;
     private int spawnZ;
+
     private int sector = 0 ;
     int perRow;
     int distance;
@@ -81,5 +82,9 @@ public class Walker {
         if (sector >= configuration.getSectorNumber()) {
             sector = sector % configuration.getSectorNumber();
         }
+    }
+
+    public int getSector() {
+        return sector;
     }
 }

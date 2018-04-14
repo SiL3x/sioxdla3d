@@ -12,12 +12,19 @@ import java.util.List;
 public class Substrate {
 
     public INDArray values; // 2D array
+    private INDArray substrateArray;
     int meshSize;
     int highestPoint;
     int front;
     int spread;
+
+    public int getMin() {
+        return min;
+    }
+
     int min;
     int max;
+
     List<Polygon> faces;
 
     public Substrate(int meshSize) {
@@ -50,6 +57,14 @@ public class Substrate {
         highestPoint = max;
         spread = min - max;
 
+        substrateArray = Nd4j.zeros(meshSize, meshSize, spread + 1);
+
+        for (int x = 0; x < meshSize; x++) {
+            for (int y = 0; y < meshSize; y++) {
+                substrateArray.putScalar(x, y, getValue(x, y) - min, 1);
+            }
+        }
+
         //  check if all mesh sides are safe, by checking if all values[x, y] are set
         if (max == 0) System.out.println("!!! ERROR: Substrate not completely covered by polygons");
     }
@@ -68,7 +83,6 @@ public class Substrate {
             }
         }
     }
-
 
     public int getHighestPoint() {
         return highestPoint;
@@ -92,5 +106,9 @@ public class Substrate {
 
     public int getSpread() {
         return spread;
+    }
+
+    public INDArray getSubstrateArray() {
+        return substrateArray;
     }
 }
