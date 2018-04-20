@@ -2,16 +2,18 @@ package com.mk.models.physics;
 
 public class BondPosition {
 
-    private final int x;
-    private final int y;
+    private int x;
+    private int y;
+    private int z;
     private final int bondValue;
     private final double r;
-    private final double angle;
+    private double angle;
     private double xTilt;
     private double yTilt;
+    private double azimuth;
+    private double polar;
 
     public BondPosition(final int x, final int y, final int bondValue) {
-        //TODO: modify for 3D
         this.x = x;
         this.y = y;
         this.bondValue = bondValue;
@@ -19,6 +21,19 @@ public class BondPosition {
         yTilt = y;
         r = Math.sqrt(x * x + y * y);
         angle = Math.asin(x / r); // In radians - only valid for below the center
+    }
+
+    public BondPosition(final int x, final int y, final int z, final int bondValue) {
+        //TODO: modify for 3D
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.bondValue = bondValue;
+        xTilt = x;
+        yTilt = y;
+        r = Math.sqrt(x * x + y * y);
+        this.azimuth = Math.asin(x / r); //TODO: implement
+        this.polar = r; //TODO: implement
     }
 
     public void tilt(final double turnAngle) {
