@@ -30,7 +30,6 @@ public class PlotMesh extends AbstractAnalysis{
             for (int y = 0; y < size[1]; y++) {
                 for (int z = 0; z < size[2]; z++) {
                     if (array.getInt(x, y, z) > 0) {
-                        //System.out.println("new Coord3d(x, y, z) = " + new Coord3d(x, y, z));
                         pointList.add(new Coord3d(x, y, 100 - z));
                     }
                 }
@@ -40,7 +39,7 @@ public class PlotMesh extends AbstractAnalysis{
         System.out.println("pointList.size() = " + pointList.size());
 
         points = new Coord3d[pointList.size() + 4];
-        Color plotColor = new Color(1, 1, 1, (float) 0.5);
+        Color plotColor = new Color(1, 1, 1, (float) 0.3);
 
         int i = 0;
         for (Coord3d coord3d : pointList) {
@@ -58,9 +57,7 @@ public class PlotMesh extends AbstractAnalysis{
         chart = AWTChartComponentFactory.chart(Quality.Advanced, "newt");
         chart.getAxeLayout().setMainColor(plotColor);
         chart.getView().setBackgroundColor(Color.BLACK);
-
         chart.getScene().add(scatter);
-
     }
 
     public void plot() {
@@ -92,7 +89,6 @@ public class PlotMesh extends AbstractAnalysis{
             a = 0.25f;
             colors[i] = new Color(x, y, z, a);
         }
-
     }
 
     public void createData2() {
@@ -117,8 +113,6 @@ public class PlotMesh extends AbstractAnalysis{
         colors[2] = Color.BLACK;
         colors[3] = Color.BLACK;
         colors[4] = Color.BLACK;
-
-
     }
 
     public static void main(String[] args) throws Exception {
@@ -127,7 +121,4 @@ public class PlotMesh extends AbstractAnalysis{
         plotMesh.plot();
         AnalysisLauncher.open(plotMesh);
     }
-
-
-
 }

@@ -97,14 +97,15 @@ public class SiOxDla3d {
         while (notSticked) {
             walker.moveRnd();
 
-            if (walker.getPosition().getZ() < substrate.getFront() - 20 || walker.getPosition().getZ() > substrate.getFront()) {
+            if (walker.getPosition().getZ() < substrate.getFront() - 20 ||
+                    walker.getPosition().getZ() > substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY())) {
                 walker.respawn(substrate.getFront() - 10);
             }
 
-            //simulationUtils.calculateSticking();
-            //TODO: implement no further sticking than 2 from growth front
-
-            notSticked = !simulationUtils.walkerSticks(walker);
+            //simulationUtils.calculateSticking(); //TODO: implement sticking in 3D
+            if (walker.getPosition().getZ() >= (substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY()) - 2)) {
+                notSticked = !simulationUtils.walkerSticks(walker);
+            }
         }
         return walker;
     }
