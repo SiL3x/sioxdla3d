@@ -37,6 +37,10 @@ public class Substrate {
         return values.getInt(x, y);
     }
 
+    public int getValueWithFront(final int x, final int y) {
+        return values.getInt(x, y) - (min - front);
+    }
+
     public void createSubstrate(final List<List<Vector3D>> verticesList) {
         faces = new ArrayList<>();
 
