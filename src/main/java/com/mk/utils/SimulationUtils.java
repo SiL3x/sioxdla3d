@@ -68,17 +68,17 @@ public class SimulationUtils {
         return sim.configuration;
     }
 
-    public void moveWalker() {
-        int xWalker = sim.walker.getPosition().getX();
-        int yWalker = sim.walker.getPosition().getY();
-        int zWalker = sim.walker.getPosition().getZ();
+    public void moveWalker(Walker walker) {
+        int xWalker = walker.getPosition().getX();
+        int yWalker = walker.getPosition().getY();
+        int zWalker = walker.getPosition().getZ();
         int zBorder = sim.substrate.getHighestPoint();
 
-        sim.walker.moveRnd();
+        walker.moveRnd();
 
         //if (zWalker < (zBorder - 30)) sim.walker.respawn(sim.substrate);
-        if (zWalker < 0) sim.walker.respawn(sim.substrate);
-        if (zWalker >= (sim.substrate.values.getInt(xWalker, yWalker))) sim.walker.respawn(sim.substrate);
+        if (zWalker < 0) walker.respawn(sim.substrate);
+        if (zWalker >= (sim.substrate.values.getInt(xWalker, yWalker))) walker.respawn(sim.substrate);
     }
 
     public void moveSeed() {
@@ -136,6 +136,20 @@ public class SimulationUtils {
         int xWalker = sim.walker.getPosition().getX();
         int yWalker = sim.walker.getPosition().getY();
         int zWalker = sim.walker.getPosition().getZ();
+
+        INDArray subArray = sim.mesh.get(
+                NDArrayIndex.interval(xWalker - 1, xWalker + 2),
+                NDArrayIndex.interval(yWalker - 1, yWalker + 2),
+                NDArrayIndex.interval(zWalker - 1, zWalker + 2));
+
+        return subArray.sumNumber().intValue() > 0;
+    }
+
+    public boolean walkerSticks(Walker walker) {
+        //TODO: implement calculate sticking with kernel
+        int xWalker = walker.getPosition().getX();
+        int yWalker = walker.getPosition().getY();
+        int zWalker = walker.getPosition().getZ();
 
         INDArray subArray = sim.mesh.get(
                 NDArrayIndex.interval(xWalker - 1, xWalker + 2),

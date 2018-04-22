@@ -2,12 +2,17 @@ package com.mk;
 
 import com.mk.configuration.Configuration;
 import com.mk.graphic.PlotMesh;
+import com.mk.models.geometries.Position;
 import com.mk.models.physics.Substrate;
 import com.mk.models.physics.Walker;
 import com.mk.utils.SimulationUtils;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.factory.Nd4j;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ForkJoinPool;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Diffusion limited aggregation model in 3D
@@ -30,6 +35,11 @@ public class SiOxDla3d {
 
     public SiOxDla3d() throws Exception {
         simulationUtils = new SimulationUtils(this);
+        int cores = Runtime.getRuntime().availableProcessors();
+        System.out.println(">>> Cores detected : " + cores);
+
+        ForkJoinPool commonPool = ForkJoinPool.commonPool();
+        System.out.println(">>> Thread pool : " + commonPool.getParallelism());
 
         System.out.println(">>> Loading configuration: " + name);
         configuration = simulationUtils.loadConfiguration(name);
@@ -49,33 +59,28 @@ public class SiOxDla3d {
         int i = 0;
         int sticked = 0;
 
-        //walker = new Walker(configuration, substrate.getHighestPoint() - 10);
-        walker = new Walker(configuration, substrate.getFront() - 10);
+        List<Walker> walkers = new ArrayList<>();
+
+        for (int j = 0; j < configuration.getSectorNumber(); j++) {
+            walkers.add(new Walker(configuration, substrate.getFront(), j));
+        }
 
         while (run) {
-            simulationUtils.moveWalker();
+            List<Position> positions = walkers.parallelStream()
+                    .map(w -> spawnMoveAndStick(w).getPosition())
+                    .collect(toList());
 
-            if (walker.getPosition().getZ() < substrate.getFront() - 20
-                    || walker.getPosition().getZ() > substrate.getFront()) walker.respawn(substrate.getFront() - 10);
-
-            //simulationUtils.calculateSticking();
-            //TODO: implement no further sticking than 2 from growth front
-
-            if (simulationUtils.walkerSticks()) {
+            for (Position position : positions) {
                 mesh.putScalar(
-                        walker.getPosition().getX(),
-                        walker.getPosition().getY(),
-                        walker.getPosition().getZ(), 1);
-                //System.out.println("sticked = " + walker.getPosition() + "  i = " + i + "  sector = " + walker.getSector());
-                walker.nextSector();
-                walker.respawn(substrate.getFront() - 10);
-                sticked++;
+                        position.getX(),
+                        position.getY(),
+                        position.getZ(), 1);
             }
 
-            if (sticked % 20 == 0) simulationUtils.moveGrowthFront();
+            simulationUtils.moveGrowthFront();
 
             //TODO: check break conditions (number of crystallites, front, no of iterations)
-            //if (i > 1e8) run = false;
+            //if (i > 1e3) run = false;
             if (substrate.getFront() <= 20) run = false;
             i++;
         }
@@ -83,9 +88,25 @@ public class SiOxDla3d {
         PlotMesh plotMesh = new PlotMesh();
         plotMesh.plot3d(mesh);
         AnalysisLauncher.open(plotMesh);
+    }
 
-        //TODO: prepare mesh for visualization
-        //TODO: display results
+    private Walker spawnMoveAndStick(Walker walker) {
+        boolean notSticked = true;
+        walker.respawn(substrate.getFront() - 10);
+
+        while (notSticked) {
+            walker.moveRnd();
+
+            if (walker.getPosition().getZ() < substrate.getFront() - 20 || walker.getPosition().getZ() > substrate.getFront()) {
+                walker.respawn(substrate.getFront() - 10);
+            }
+
+            //simulationUtils.calculateSticking();
+            //TODO: implement no further sticking than 2 from growth front
+
+            notSticked = !simulationUtils.walkerSticks(walker);
+        }
+        return walker;
     }
 
     public static void main( String[] args ) throws Exception {

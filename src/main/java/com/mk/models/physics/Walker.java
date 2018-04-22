@@ -36,6 +36,19 @@ public class Walker {
         this.position = new Position(randomX, randomY, spawnZ);
     }
 
+    public Walker(Configuration configuration, int front, int sector) {
+        perRow = (int) Math.round(Math.sqrt(configuration.getSectorNumber()));
+        distance = Math.round(configuration.getMeshSize() / perRow);
+
+        this.configuration = configuration;
+        this.spawnZ = front - configuration.getSpawnOffset();
+        this.border = configuration.getKernel().length/2 +1;
+        int randomX = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSize() - border);
+        int randomY = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSize() - border);
+        this.position = new Position(randomX, randomY, spawnZ);
+        this.sector = sector;
+    }
+
     public Walker(Configuration configuration, int front, int x, int y) {
         this.configuration = configuration;
         this.spawnZ = front - configuration.getSpawnOffset();

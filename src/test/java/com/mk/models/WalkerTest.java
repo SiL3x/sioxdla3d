@@ -25,7 +25,7 @@ class WalkerTest {
         Assert.assertEquals(expectedStart.getZ(), walker.getPosition().getZ());
 
         for (int i = 0; i < 100; i++) {
-            walker = new Walker(configuration, 10);
+            walker = new Walker(configuration, 10); //TODO: Fix this test
             Assert.assertTrue((walker.getPosition().getX() <= 99) || (walker.getPosition().getX() >= 1));
             Assert.assertTrue((walker.getPosition().getY() <= 99) || (walker.getPosition().getY() >= 1));
         }
