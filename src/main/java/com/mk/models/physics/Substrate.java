@@ -18,6 +18,8 @@ public class Substrate {
     int front;
     int spread;
 
+    List<List<Vector3D>> orientationMap;
+
     public int getMin() {
         return min;
     }
@@ -73,6 +75,40 @@ public class Substrate {
         if (max == 0) System.out.println("!!! ERROR: Substrate not completely covered by polygons");
     }
 
+    public void calculateOrientationMap() {
+
+        orientationMap = new ArrayList<>();
+
+        for (int x = 0; x < meshSize; x++) {
+            List<Vector3D> orientationsY = new ArrayList<>();
+
+            for (int y = 0; y < meshSize; y++) {
+
+                double distanceSum = 0;
+                Vector3D orientation = new Vector3D(0, 0, 0);
+                Vector3D point = new Vector3D(x, y, this.getValue(x, y) - 2);
+
+                for (Polygon face : faces) {
+                    distanceSum += face.distanceToPoint(point);
+                }
+
+                for (Polygon face : faces) {
+                    /*
+                    System.out.println("point = " + point + "  face.normal = " + face.normal + "  scaled = " + face.normal.scalarMultiply(face.distanceToPoint(point) / distanceSum) +
+                    "  distSum = " + distanceSum + "  dist = " + face.distanceToPoint(point));
+                    */
+
+                    orientation = orientation
+                            .add(face.normal.scalarMultiply(1 - face.distanceToPoint(point) / distanceSum));
+                }
+
+                orientationsY.add(orientation);
+            }
+
+            orientationMap.add(orientationsY);
+        }
+    }
+
     private void setZValue(final int x, final int y) {
 
         final Line line = new Line(new Vector3D(x, y, 0), new Vector3D(x, y, 1), 0.05);
@@ -86,6 +122,18 @@ public class Substrate {
                 break;
             }
         }
+    }
+
+    public INDArray getValues() {
+        return values;
+    }
+
+    public List<List<Vector3D>> getOrientationMap() {
+        return orientationMap;
+    }
+
+    public Vector3D getOrientation(final int x, final int y) {
+        return orientationMap.get(x).get(y);
     }
 
     public int getHighestPoint() {
@@ -103,7 +151,7 @@ public class Substrate {
     public int getFront() {
         return front;
     }
-
+ 
     public void setFront(int front) {
         this.front = front;
     }

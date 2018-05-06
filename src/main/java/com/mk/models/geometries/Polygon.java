@@ -47,7 +47,7 @@ public class Polygon {
     }
 
     private void calculatePlane() {
-        plane = new Plane(vectors.get(0), vectors.get(1), vectors.get(2), 0);
+        plane = new Plane(vectors.get(0), vectors.get(1), vectors.get(2), 0.05);
         normal = plane.getNormal();
     }
 
