@@ -44,7 +44,7 @@ public class BondPosition {
     }
 
     public void tilt3D(final double turnPol, final double turnAzi) {
-        // turn angle in radians
+        // turn angles in radians
         // first rotate around z axis
         xTilt = Math.cos(turnPol) * x - Math.sin(turnPol) * y;
         yTilt = Math.sin(turnPol) * x + Math.cos(turnPol) * y;

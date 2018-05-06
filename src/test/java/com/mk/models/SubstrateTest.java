@@ -35,7 +35,53 @@ class SubstrateTest {
 
         Assert.assertEquals(90D, (double) substrate.values.minNumber(), DELTA);
         Assert.assertEquals(90D, (double) substrate.values.maxNumber(), DELTA);
-
     }
 
+    @Test
+    public void createOrientationMap() {
+        Substrate substrate = new Substrate(100);
+
+        List<List<Vector3D>> vertices = Arrays.asList(
+                Arrays.asList(
+                        new Vector3D( 0, 49, 90),
+                        new Vector3D(99, 49, 90),
+                        new Vector3D(99, 99, 40),
+                        new Vector3D( 0, 99, 40)),
+                Arrays.asList(
+                        new Vector3D( 0, 0, 90),
+                        new Vector3D(99, 0, 90),
+                        new Vector3D(99,49, 90),
+                        new Vector3D( 0,49, 90)
+                ));
+
+
+        /*
+        List<List<Vector3D>> vertices = Arrays.asList(
+                Arrays.asList(
+                        new Vector3D( 0,  0, 90),
+                        new Vector3D(99,  0, 90),
+                        new Vector3D(99, 99, 90),
+                        new Vector3D( 0, 99, 90)));
+        */
+
+        /*
+        List<List<Vector3D>> vertices = Arrays.asList(
+                Arrays.asList(
+                        new Vector3D( 0,  0, 90),
+                        new Vector3D(99,  0, 90),
+                        new Vector3D(99, 99, 40),
+                        new Vector3D( 0, 99, 40)));
+        */
+
+        substrate.createSubstrate(vertices);
+        substrate.calculateOrientationMap();
+        //System.out.println("substrate.getOrientationMap() = " + substrate.getOrientationMap());
+        System.out.println("(49, 0) substrate = " + substrate.getValue(49, 0) + "  normal = " + substrate.getOrientation(49, 0));
+        System.out.println("(49, 24) substrate = " + substrate.getValue(49, 24) + "  normal = " + substrate.getOrientation(49, 24));
+        System.out.println("(49, 44) substrate = " + substrate.getValue(49, 44) + "  normal = " + substrate.getOrientation(49, 44));
+        System.out.println("(49, 49) substrate = " + substrate.getValue(49, 49) + "  normal = " + substrate.getOrientation(49, 49));
+        System.out.println("(49, 54) substrate = " + substrate.getValue(49, 54) + "  normal = " + substrate.getOrientation(49, 54));
+        System.out.println("(49, 74) substrate = " + substrate.getValue(49, 74) + "  normal = " + substrate.getOrientation(49, 74));
+        System.out.println("(49, 99) substrate = " + substrate.getValue(49, 99) + "  normal = " + substrate.getOrientation(49, 99));
+    }
 }
