@@ -20,7 +20,7 @@ public class Walker {
     public Walker(Configuration configuration) {
         this.configuration = configuration;
         this.position = configuration.getWalkerStart();
-        this.border = configuration.getKernel().length/2 +1;
+        this.border = configuration.getKernel3D().length/2 +1;
     }
 
     public Walker(Configuration configuration, int front) {
@@ -42,7 +42,7 @@ public class Walker {
 
         this.configuration = configuration;
         this.spawnZ = front - configuration.getSpawnOffset();
-        this.border = configuration.getKernel().length/2 +1;
+        this.border = configuration.getKernel3D().length/2 +1;
         int randomX = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSize() - border);
         int randomY = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSize() - border);
         this.position = new Position(randomX, randomY, spawnZ);
@@ -52,7 +52,7 @@ public class Walker {
     public Walker(Configuration configuration, int front, int x, int y) {
         this.configuration = configuration;
         this.spawnZ = front - configuration.getSpawnOffset();
-        this.border = configuration.getKernel().length/2 +1;
+        this.border = configuration.getKernel3D().length/2 +1;
         this.position = new Position(x, y, spawnZ);
     }
 

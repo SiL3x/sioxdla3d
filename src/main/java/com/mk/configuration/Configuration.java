@@ -2,6 +2,9 @@ package com.mk.configuration;
 
 import com.mk.models.geometries.Position;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.util.ArrayUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +32,10 @@ public class Configuration {
     private int surfaceStickDistance;
     private List<List<Vector3D>> substrate;
     private int sectorNumber;
+    private float[][][] kernel3D;
+
+
+    private INDArray kernel3Dnd;
 
     public Configuration(String configName) {
         this.configName = configName;
@@ -57,8 +64,20 @@ public class Configuration {
             setSpawnOffset(10);
             setGrowthRatio(20);
             setSectorNumber(16);
-            int[][] kernel = {{1}};
-            setKernel(kernel);
+            setStickingProbability(2);
+
+            float[][][] kernel =
+                    {{{0, 0, 1},
+                      {0, 0, 1},
+                      {0, 0, 1}},
+                    {{0, 0, 1},
+                     {0, 0, 1},
+                     {0, 0, 1}},
+                    {{0, 0, 1},
+                     {0, 0, 1},
+                     {0, 0, 1}}};
+
+            setKernel3D(kernel);
         }
 
         System.out.println("    - configuration loaded");
@@ -141,8 +160,23 @@ public class Configuration {
         this.kernel = kernel;
     }
 
+    public void setKernel3D(float[][][] kernel) {
+        float[] flatKernel = ArrayUtil.flattenFloatArray(kernel);
+        int[] shape = {kernel.length, kernel.length, kernel.length};
+        this.kernel3Dnd = Nd4j.create(flatKernel, shape, 'c');
+        this.kernel3D = kernel;
+    }
+
     public int[][] getKernel() {
         return kernel;
+    }
+
+    public float[][][] getKernel3D() {
+        return kernel3D;
+    }
+
+    public INDArray getKernel3Dnd() {
+        return kernel3Dnd;
     }
 
     public void setSeedNumber(int seedNumber) {

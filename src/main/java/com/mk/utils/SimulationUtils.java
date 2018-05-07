@@ -7,6 +7,8 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class SimulationUtils {
 
     private SiOxDla3d sim;
@@ -145,17 +147,20 @@ public class SimulationUtils {
         return subArray.sumNumber().intValue() > 0;
     }
 
-    public boolean walkerSticks(Walker walker) {
-        //TODO: implement calculate sticking with kernel
+    public boolean walkerSticks(final Walker walker) {
+        //TODO: implement probability
+        int halfsize = sim.configuration.getKernel3D().length / 2;
         int xWalker = walker.getPosition().getX();
         int yWalker = walker.getPosition().getY();
         int zWalker = walker.getPosition().getZ();
 
         INDArray subArray = sim.mesh.get(
-                NDArrayIndex.interval(xWalker - 1, xWalker + 2),
-                NDArrayIndex.interval(yWalker - 1, yWalker + 2),
-                NDArrayIndex.interval(zWalker - 1, zWalker + 2));
+                NDArrayIndex.interval(xWalker - halfsize, xWalker + halfsize + 1),
+                NDArrayIndex.interval(yWalker - halfsize, yWalker + halfsize + 1),
+                NDArrayIndex.interval(zWalker - halfsize, zWalker + halfsize + 1));
 
-        return subArray.sumNumber().intValue() > 0;
+        float bondValue = subArray.mul(sim.configuration.getKernel3Dnd()).sumNumber().intValue();
+        double rnd = ThreadLocalRandom.current().nextFloat() * Math.pow((double) bondValue, 2);
+        return rnd > sim.configuration.getStickingProbability();
     }
 }
