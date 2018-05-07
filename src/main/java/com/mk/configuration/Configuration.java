@@ -64,7 +64,7 @@ public class Configuration {
             setSpawnOffset(10);
             setGrowthRatio(20);
             setSectorNumber(16);
-            setStickingProbability(5);
+            setStickingProbability(2);
 
             float[][][] kernel =
                     {{{0, 0, 1},

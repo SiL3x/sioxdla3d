@@ -7,6 +7,8 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class SimulationUtils {
 
     private SiOxDla3d sim;
@@ -157,6 +159,8 @@ public class SimulationUtils {
                 NDArrayIndex.interval(yWalker - halfsize, yWalker + halfsize + 1),
                 NDArrayIndex.interval(zWalker - halfsize, zWalker + halfsize + 1));
 
-        return subArray.mul(sim.configuration.getKernel3Dnd()).sumNumber().intValue() > 0;
+        float bondValue = subArray.mul(sim.configuration.getKernel3Dnd()).sumNumber().intValue();
+        double rnd = ThreadLocalRandom.current().nextFloat() * Math.pow((double) bondValue, 2);
+        return rnd > sim.configuration.getStickingProbability();
     }
 }
