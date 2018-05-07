@@ -1,0 +1,7 @@
+# ignore all compiled
+*.class
+*.jar
+
+#
+/target/*
+/.idea/*

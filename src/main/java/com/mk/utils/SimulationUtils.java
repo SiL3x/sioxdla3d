@@ -134,7 +134,6 @@ public class SimulationUtils {
     }
 
     public boolean walkerSticks() {
-        //TODO: implement calculate sticking with kernel
         int xWalker = sim.walker.getPosition().getX();
         int yWalker = sim.walker.getPosition().getY();
         int zWalker = sim.walker.getPosition().getZ();
@@ -148,7 +147,6 @@ public class SimulationUtils {
     }
 
     public boolean walkerSticks(final Walker walker) {
-        //TODO: implement probability
         int halfsize = sim.configuration.getKernel3D().length / 2;
         int xWalker = walker.getPosition().getX();
         int yWalker = walker.getPosition().getY();
