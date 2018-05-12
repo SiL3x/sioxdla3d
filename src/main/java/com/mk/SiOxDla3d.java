@@ -3,6 +3,7 @@ package com.mk;
 import com.mk.configuration.Configuration;
 import com.mk.graphic.PlotMesh;
 import com.mk.models.geometries.Position;
+import com.mk.models.physics.BondPosition;
 import com.mk.models.physics.Substrate;
 import com.mk.models.physics.Walker;
 import com.mk.utils.SimulationUtils;
@@ -26,7 +27,7 @@ public class SiOxDla3d {
     public Substrate substrate;
     public int meshSize;
     public Walker walker;
-
+    public List<BondPosition> bondPositions;
     public SimulationUtils simulationUtils;
 
     private boolean run = true;
@@ -51,8 +52,9 @@ public class SiOxDla3d {
         substrate = new Substrate(configuration.getMeshSize());
         substrate.createSubstrate(configuration.getSubstrate());
 
-        //TODO: calculate vector field for substrate normals and store them in an array
         //TODO: calculate bond positions
+        bondPositions = simulationUtils.calculateBondpositions(configuration.getKernel3D());
+
         simulationUtils.placeSeeds();
 
         //TODO: set iteration variables

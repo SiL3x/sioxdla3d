@@ -2,11 +2,14 @@ package com.mk.utils;
 
 import com.mk.SiOxDla3d;
 import com.mk.configuration.Configuration;
+import com.mk.models.physics.BondPosition;
 import com.mk.models.physics.Walker;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SimulationUtils {
@@ -160,5 +163,38 @@ public class SimulationUtils {
         float bondValue = subArray.mul(sim.configuration.getKernel3Dnd()).sumNumber().intValue();
         double rnd = ThreadLocalRandom.current().nextFloat() * Math.pow((double) bondValue, 2);
         return rnd > sim.configuration.getStickingProbability();
+    }
+
+    private float calculateRotatedKernelOverlap(final Walker walker) {
+        double sum = 0;
+        int halfDiag = (int) Math.floor(sim.configuration.getKernel3D().length * Math.sqrt(3) / 2);
+
+        for (BondPosition bondPosition : sim.bondPositions) {
+            for (int x = walker.getPosition().getX() - halfDiag; x < walker.getPosition().getX() + halfDiag; x++) {
+                for (int y = walker.getPosition().getY() - halfDiag; y < walker.getPosition().getY() + halfDiag; y++) {
+                    for (int z = walker.getPosition().getZ() - halfDiag; z < walker.getPosition().getZ() + halfDiag; z++) {
+                        //TODO: implement a distance between two positions
+                        //TODO: if d > 0.5 add 1 to sum
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+
+
+    public List<BondPosition> calculateBondpositions(final float[][][] kernel) {
+        List<BondPosition> bondPositions = new LinkedList<>();
+
+        for (int x = 0; x < kernel.length; x++) {
+            for (int y = 0; y < kernel.length; y++) {
+                for (int z = 0; z < kernel.length; z++) {
+                    if (kernel[x][y][z] > 0) bondPositions.add(new BondPosition(x, y, z, 1));
+                }
+            }
+        }
+
+        return bondPositions;
     }
 }
