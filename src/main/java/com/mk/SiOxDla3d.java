@@ -9,6 +9,9 @@ import com.mk.models.physics.Walker;
 import com.mk.utils.SimulationUtils;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.util.ArrayUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
@@ -23,6 +26,7 @@ import static java.util.stream.Collectors.toList;
 public class SiOxDla3d {
 
     public Configuration configuration;
+
     public INDArray mesh;
     public Substrate substrate;
     public int meshSize;
@@ -116,4 +120,28 @@ public class SiOxDla3d {
         System.out.println("### New DLA Simulation");
         SiOxDla3d siOxDla3d = new SiOxDla3d();
     }
+
+    public float[][][] getKernel3D() {
+        return configuration.getKernel3D();
+    }
+
+    public INDArray getKernel3Dnd() {
+        float[][][] kernel = getKernel3D();
+        float[] flatKernel = ArrayUtil.flattenFloatArray(kernel);
+        int[] shape = {kernel.length, kernel.length, kernel.length};
+        return  Nd4j.create(flatKernel, shape, 'c');
+    }
+
+    public INDArray getMesh() {
+        return mesh;
+    }
+
+    public List<BondPosition> getBondPositions() {
+        return bondPositions;
+    }
+
+    public int getStickingProbability() {
+        return configuration.getStickingProbability();
+    }
+
 }
