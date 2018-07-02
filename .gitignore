@@ -3,5 +3,6 @@
 *.jar
 
 #
+/out/*
 /target/*
 /.idea/*
