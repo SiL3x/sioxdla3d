@@ -2,12 +2,17 @@ package com.mk.utils;
 
 import com.mk.SiOxDla3d;
 import com.mk.configuration.Configuration;
+import com.mk.models.physics.BondPosition;
 import com.mk.models.physics.Walker;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static com.mk.utils.MathUtils.distance;
 
 public class SimulationUtils {
 
@@ -134,7 +139,6 @@ public class SimulationUtils {
     }
 
     public boolean walkerSticks() {
-        //TODO: implement calculate sticking with kernel
         int xWalker = sim.walker.getPosition().getX();
         int yWalker = sim.walker.getPosition().getY();
         int zWalker = sim.walker.getPosition().getZ();
@@ -148,19 +152,70 @@ public class SimulationUtils {
     }
 
     public boolean walkerSticks(final Walker walker) {
-        //TODO: implement probability
-        int halfsize = sim.configuration.getKernel3D().length / 2;
+        int halfsize = sim.getKernel3D().length / 2;
         int xWalker = walker.getPosition().getX();
         int yWalker = walker.getPosition().getY();
         int zWalker = walker.getPosition().getZ();
 
-        INDArray subArray = sim.mesh.get(
+        INDArray subArray = sim.getMesh().get(
                 NDArrayIndex.interval(xWalker - halfsize, xWalker + halfsize + 1),
                 NDArrayIndex.interval(yWalker - halfsize, yWalker + halfsize + 1),
-                NDArrayIndex.interval(zWalker - halfsize, zWalker + halfsize + 1));
+                NDArrayIndex.interval(zWalker - halfsize, zWalker + halfsize + 1)
+        );
 
-        float bondValue = subArray.mul(sim.configuration.getKernel3Dnd()).sumNumber().intValue();
+        //float bondValue = subArray.mul(sim.getKernel3Dnd()).sumNumber().intValue();
+        double bondValue = calculateRotatedKernelOverlap(walker);
         double rnd = ThreadLocalRandom.current().nextFloat() * Math.pow((double) bondValue, 2);
-        return rnd > sim.configuration.getStickingProbability();
+
+        System.out.println("bondValue = " + bondValue);
+        //System.out.println("bondValue = " + bondValue + "  bondValueKernelOverlap = " + calculateRotatedKernelOverlap(walker));
+
+        return rnd > sim.getStickingProbability();
+    }
+
+    public void rotateBondPositions(final double turnPol, final double turnAzi) {
+        for (BondPosition bondPosition : sim.getBondPositions()) {
+            bondPosition.tilt3D(turnPol, turnAzi);
+        }
+    }
+
+    private double calculateRotatedKernelOverlap(final Walker walker) {
+        //TODO: implement test
+        double sum = 0;
+        int halfDiag = (int) Math.floor(sim.getKernel3D().length * Math.sqrt(3) / 2);
+        // int half = (int) Math.floor(sim.getKernel3D().length / 2);
+
+        //System.out.println("caclulate rotated kernel overlap: " + sim.getBondPositions());
+
+        for (BondPosition bondPosition : sim.getBondPositions()) {
+            //System.out.println("Walker pos = " + walker.getPosition() + "  halfDiag = " + half);
+            for (int x = walker.getPosition().getX() - halfDiag; x <= walker.getPosition().getX() + halfDiag; x++) {
+                for (int y = walker.getPosition().getY() - halfDiag; y <= walker.getPosition().getY() + halfDiag; y++) {
+                    for (int z = walker.getPosition().getZ() - halfDiag; z <= walker.getPosition().getZ() + halfDiag; z++) {
+                        double distance = distance(walker, bondPosition, x, y, z);
+                        System.out.println("(x, y, z) = (" + x + ", " + y + ", " + z + ")" + "  dist = " + distance);
+                        if (distance < 0.5) sum += sim.mesh.getInt(x, y, z);
+                    }
+                }
+            }
+        }
+        return sum;
+    }
+
+    public List<BondPosition> calculateBondpositions(final float[][][] kernel) {
+        List<BondPosition> bondPositions = new LinkedList<>();
+
+        int length = kernel.length;
+        int half = (int) Math.floor(length / 2);
+
+        for (int x = 0; x < length; x++) {
+            for (int y = 0; y < length; y++) {
+                for (int z = 0; z < length; z++) {
+                    if (kernel[x][y][z] > 0) bondPositions.add(new BondPosition(x - half, y - half, z - half, 1));
+                }
+            }
+        }
+
+        return bondPositions;
     }
 }
