@@ -48,7 +48,7 @@ class SimulationUtilsTest {
 
     @Test
     public void stickingKernelTest() {
-
+        //TODO: finish test
         SiOxDla3d sim = mock(SiOxDla3d.class);
         Walker walker = mock(Walker.class);
         SimulationUtils simulationUtils = new SimulationUtils(sim);
@@ -59,15 +59,15 @@ class SimulationUtilsTest {
         mesh.putScalar(4, 4, 5, 1);
 
         float[][][] kernel =
-                        {{{0, 0, 1},
-                         {0, 0, 1},
-                         {0, 0, 1}},
-                        {{0, 0, 1},
-                         {0, 0, 1},
-                         {0, 0, 1}},
-                        {{0, 0, 1},
-                         {0, 0, 1},
-                         {0, 0, 1}}};
+                        {{{0, 0, 0},
+                          {0, 0, 0},
+                          {0, 0, 0}},
+                         {{0, 0, 0},
+                          {0, 1, 0},
+                          {0, 0, 0}},
+                         {{0, 0, 0},
+                          {0, 0, 0},
+                          {0, 0, 0}}};
 
         List<BondPosition> bondPositions = simulationUtils.calculateBondpositions(kernel);
 
@@ -79,14 +79,16 @@ class SimulationUtilsTest {
         when(sim.getKernel3Dnd()).thenReturn(Nd4j.create(flatKernel, shape, 'c'));
         when(sim.getBondPositions()).thenReturn(bondPositions);
         when(walker.getPosition()).thenReturn(position);
+
         sim.walker = walker;
         sim.mesh = mesh;
 
-        simulationUtils.walkerSticks(walker);
-        //System.out.println("calc = " + simulationUtils.calculateR);
+        Assert.assertFalse(simulationUtils.walkerSticks(walker));
 
-        position = new Position(4, 4, 3);
+        position = new Position(4, 4, 5);
         when(walker.getPosition()).thenReturn(position);
         sim.walker = walker;
+
+        Assert.assertTrue(simulationUtils.walkerSticks(walker));
     }
 }
