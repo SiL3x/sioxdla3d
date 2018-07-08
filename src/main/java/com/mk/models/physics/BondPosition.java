@@ -50,8 +50,9 @@ public class BondPosition {
         yTilt = Math.sin(turnPol) * x + Math.cos(turnPol) * y;
 
         // next rotate around y axis
-        xTilt = Math.cos(turnAzi) * xTilt - Math.sin(turnAzi) * yTilt;
-        zTilt = Math.sin(turnAzi) * xTilt + Math.cos(turnAzi) * z;
+        zTilt =  - Math.sin(turnAzi) * xTilt + Math.cos(turnAzi) * z;
+        xTilt =   Math.cos(turnAzi) * xTilt + Math.sin(turnAzi) * z;
+
     }
 
     public double getX() {

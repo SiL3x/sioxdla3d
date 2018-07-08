@@ -44,12 +44,44 @@ class BondPositionTest {
     }
 
     @Test
-    public void tilt3D() {
-        BondPosition bondPosition = new BondPosition(1, 0, 1, 1);
-        bondPosition.tilt3D(Math.toRadians(45), Math.toRadians(45));
+    public void tilt3D90degreeAroundZ() {
+        BondPosition bondPosition = new BondPosition(-1, 0, 0, 1);
+        bondPosition.tilt3D(Math.toRadians(90), Math.toRadians(0));
+
         org.junit.Assert.assertEquals(0, bondPosition.getX(), DELTA);
-        org.junit.Assert.assertEquals(0.7071, bondPosition.getY(), DELTA);
-        org.junit.Assert.assertEquals(0.7071, bondPosition.getZ(), DELTA);
+        org.junit.Assert.assertEquals(-1, bondPosition.getY(), DELTA);
+        org.junit.Assert.assertEquals(0, bondPosition.getZ(), DELTA);
+
+        bondPosition.tilt3D(Math.toRadians(180), Math.toRadians(0));
     }
 
+    @Test
+    public void tilt3D180degreeAroundZ() {
+        BondPosition bondPosition = new BondPosition(-1, 0, 0, 1);
+        bondPosition.tilt3D(Math.toRadians(180), Math.toRadians(0));
+
+        org.junit.Assert.assertEquals(1, bondPosition.getX(), DELTA);
+        org.junit.Assert.assertEquals(0, bondPosition.getY(), DELTA);
+        org.junit.Assert.assertEquals(0, bondPosition.getZ(), DELTA);
+    }
+
+    @Test
+    public void tilt3D90degreeAroundY() {
+        BondPosition bondPosition = new BondPosition(0, 0, 1, 1);
+        bondPosition.tilt3D(Math.toRadians(0), Math.toRadians(90));
+
+        org.junit.Assert.assertEquals(1, bondPosition.getX(), DELTA);
+        org.junit.Assert.assertEquals(0, bondPosition.getY(), DELTA);
+        org.junit.Assert.assertEquals(0, bondPosition.getZ(), DELTA);
+    }
+
+    @Test
+    public void tilt3D180degreeAroundY() {
+        BondPosition bondPosition = new BondPosition(0, 0, 1, 1);
+        bondPosition.tilt3D(Math.toRadians(0), Math.toRadians(180));
+
+        org.junit.Assert.assertEquals(0, bondPosition.getX(), DELTA);
+        org.junit.Assert.assertEquals(0, bondPosition.getY(), DELTA);
+        org.junit.Assert.assertEquals(-1, bondPosition.getZ(), DELTA);
+    }
 }

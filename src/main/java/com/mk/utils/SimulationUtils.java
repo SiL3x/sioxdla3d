@@ -167,26 +167,33 @@ public class SimulationUtils {
         double bondValue = calculateRotatedKernelOverlap(walker);
         double rnd = ThreadLocalRandom.current().nextFloat() * Math.pow((double) bondValue, 2);
 
+        System.out.println("bondValue = " + bondValue);
         //System.out.println("bondValue = " + bondValue + "  bondValueKernelOverlap = " + calculateRotatedKernelOverlap(walker));
 
         return rnd > sim.getStickingProbability();
     }
 
+    public void rotateBondPositions(final double turnPol, final double turnAzi) {
+        for (BondPosition bondPosition : sim.getBondPositions()) {
+            bondPosition.tilt3D(turnPol, turnAzi);
+        }
+    }
+
     private double calculateRotatedKernelOverlap(final Walker walker) {
         //TODO: implement test
         double sum = 0;
-        //int halfDiag = (int) Math.floor(sim.getKernel3D().length * Math.sqrt(3) / 2);
-        int half = (int) Math.floor(sim.getKernel3D().length / 2);
+        int halfDiag = (int) Math.floor(sim.getKernel3D().length * Math.sqrt(3) / 2);
+        // int half = (int) Math.floor(sim.getKernel3D().length / 2);
 
         //System.out.println("caclulate rotated kernel overlap: " + sim.getBondPositions());
 
         for (BondPosition bondPosition : sim.getBondPositions()) {
             //System.out.println("Walker pos = " + walker.getPosition() + "  halfDiag = " + half);
-            for (int x = walker.getPosition().getX() - half; x <= walker.getPosition().getX() + half; x++) {
-                for (int y = walker.getPosition().getY() - half; y <= walker.getPosition().getY() + half; y++) {
-                    for (int z = walker.getPosition().getZ() - half; z <= walker.getPosition().getZ() + half; z++) {
+            for (int x = walker.getPosition().getX() - halfDiag; x <= walker.getPosition().getX() + halfDiag; x++) {
+                for (int y = walker.getPosition().getY() - halfDiag; y <= walker.getPosition().getY() + halfDiag; y++) {
+                    for (int z = walker.getPosition().getZ() - halfDiag; z <= walker.getPosition().getZ() + halfDiag; z++) {
                         double distance = distance(walker, bondPosition, x, y, z);
-                        //System.out.println("(x, y, z) = (" + x + ", " + y + ", " + z + ")" + "  dist = " + distance);
+                        System.out.println("(x, y, z) = (" + x + ", " + y + ", " + z + ")" + "  dist = " + distance);
                         if (distance < 0.5) sum += sim.mesh.getInt(x, y, z);
                     }
                 }

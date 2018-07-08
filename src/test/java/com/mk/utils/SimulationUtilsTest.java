@@ -48,7 +48,6 @@ class SimulationUtilsTest {
 
     @Test
     public void stickingKernelTest() {
-        //TODO: finish test
         SiOxDla3d sim = mock(SiOxDla3d.class);
         Walker walker = mock(Walker.class);
         SimulationUtils simulationUtils = new SimulationUtils(sim);
@@ -90,5 +89,62 @@ class SimulationUtilsTest {
         sim.walker = walker;
 
         Assert.assertTrue(simulationUtils.walkerSticks(walker));
+    }
+
+    @Test
+    public void stickingRotatedKernelTest() {
+        SiOxDla3d sim = mock(SiOxDla3d.class);
+        Walker walker = mock(Walker.class);
+        SimulationUtils simulationUtils = new SimulationUtils(sim);
+
+        Position position = new Position(4, 4, 4);
+
+        INDArray mesh = Nd4j.zeros(10, 10, 10);
+        mesh.putScalar(4, 5, 5, 1);
+
+        float[][][] kernel =
+                {
+                        {
+                            {0, 0, 0},
+                            {1, 0, 0},
+                            {0, 0, 0}
+                        },
+                        {
+                            {0, 0, 0},
+                            {0, 0, 0},
+                            {0, 0, 0}
+                        },
+                        {
+                            {0, 0, 0},
+                            {0, 0, 0},
+                            {0, 0, 0}
+                        }
+                };
+
+        List<BondPosition> bondPositions = simulationUtils.calculateBondpositions(kernel);
+
+        float[] flatKernel = ArrayUtil.flattenFloatArray(kernel);
+        int[] shape = {kernel.length, kernel.length, kernel.length};
+
+        when(sim.getKernel3D()).thenReturn(kernel);
+        when(sim.getMesh()).thenReturn(mesh);
+        when(sim.getKernel3Dnd()).thenReturn(Nd4j.create(flatKernel, shape, 'c'));
+        when(sim.getBondPositions()).thenReturn(bondPositions);
+        when(walker.getPosition()).thenReturn(position);
+
+        sim.walker = walker;
+        sim.mesh = mesh;
+
+        simulationUtils.rotateBondPositions(0, Math.toRadians(90));
+
+        Assert.assertFalse(simulationUtils.walkerSticks(walker));
+
+        /*
+        position = new Position(4, 4, 5);
+        when(walker.getPosition()).thenReturn(position);
+        sim.walker = walker;
+
+        Assert.assertTrue(simulationUtils.walkerSticks(walker));
+        */
     }
 }
