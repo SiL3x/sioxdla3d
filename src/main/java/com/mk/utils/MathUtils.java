@@ -4,6 +4,9 @@ package com.mk.utils;
 import com.mk.models.geometries.Position;
 import com.mk.models.physics.BondPosition;
 import com.mk.models.physics.Walker;
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 
 public class MathUtils {
 
@@ -41,5 +44,20 @@ public class MathUtils {
         double z1 = walker.getPosition().getZ() + position.getZ();
 
         return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2) + Math.pow((z1 - z2), 2));
+    }
+
+    static public Vector3D ndToVector(INDArray indArray) {
+        //TODO: implement test
+        return new Vector3D(indArray.getInt(0), indArray.getInt(1), indArray.getInt(2));
+    }
+
+    static public INDArray vectorToNd(Vector3D vector3D) {
+        //TODO: implement test
+        return Nd4j.create(
+                new float[]{
+                        (float) vector3D.getX(),
+                        (float) vector3D.getY(),
+                        (float) vector3D.getZ()
+                }, new int[]{3});
     }
 }
