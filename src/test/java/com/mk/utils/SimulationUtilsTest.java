@@ -93,6 +93,7 @@ class SimulationUtilsTest {
 
     @Test
     public void stickingRotatedKernelTest() {
+        //TODO: finish test
         SiOxDla3d sim = mock(SiOxDla3d.class);
         Walker walker = mock(Walker.class);
         SimulationUtils simulationUtils = new SimulationUtils(sim);
@@ -111,7 +112,7 @@ class SimulationUtilsTest {
                         },
                         {
                             {0, 0, 0},
-                            {0, 0, 0},
+                            {0, 0, 1},
                             {0, 0, 0}
                         },
                         {

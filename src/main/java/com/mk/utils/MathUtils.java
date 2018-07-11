@@ -48,7 +48,7 @@ public class MathUtils {
 
     static public Vector3D ndToVector(INDArray indArray) {
         //TODO: implement test
-        return new Vector3D(indArray.getInt(0), indArray.getInt(1), indArray.getInt(2));
+        return new Vector3D(indArray.getDouble(0), indArray.getDouble(1), indArray.getDouble(2));
     }
 
     static public INDArray vectorToNd(Vector3D vector3D) {
