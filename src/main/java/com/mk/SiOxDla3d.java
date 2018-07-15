@@ -34,7 +34,7 @@ public class SiOxDla3d {
     public SimulationUtils simulationUtils;
 
     private boolean run = true;
-    private String name = "test";
+    private String name = "large_test";
 
 
     public SiOxDla3d() throws Exception {
@@ -99,21 +99,25 @@ public class SiOxDla3d {
 
     private Walker spawnMoveAndStick(Walker walker) {
         boolean notSticked = true;
-        walker.respawn(substrate.getFront() - substrate.getSpread() - 10);
+        walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
+        //System.out.println("respawn_z = " + (substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset()));
 
         while (notSticked) {
             walker.moveRnd();
-
-            if (walker.getPosition().getZ() < substrate.getFront() -substrate.getSpread() - 20 ||
-                    walker.getPosition().getZ() > substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY())) {
-                walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
-            }
-
-            if (walker.getPosition().getZ() >= (substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY()) - 4)) {
-                notSticked = !simulationUtils.walkerSticks(walker);
-            }
+            if (walkerIsTooFarOrBelowSurface(walker)) walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
+            if (walkerIsNearToSurface(walker)) notSticked = !simulationUtils.walkerSticks(walker);
         }
+        System.out.println("walker = " + (substrate.getValue(walker.getPosition().getX(), walker.getPosition().getY()) - walker.getPosition().getZ()));
         return walker;
+    }
+
+    private boolean walkerIsTooFarOrBelowSurface(Walker walker) {
+        return walker.getPosition().getZ() < substrate.getFront() -substrate.getSpread() - 20 ||
+                walker.getPosition().getZ() >= substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY());
+    }
+
+    private boolean walkerIsNearToSurface(Walker walker) {
+        return walker.getPosition().getZ() >= (substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY()) - configuration.getKernel3D().length * 0.866);
     }
 
     public static void main( String[] args ) throws Exception {

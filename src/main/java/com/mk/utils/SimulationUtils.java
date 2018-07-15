@@ -60,7 +60,7 @@ public class SimulationUtils {
                 }
 
                 if (value == zWalker ) {
-                    sim.mesh.putScalar(xWalker, yWalker, zWalker, 1);
+                    sim.mesh.putScalar(xWalker, yWalker, zWalker, 10);
                     System.out.println("Seed at = " + walker.getPosition());
                     walking = false;
                 }
@@ -78,19 +78,6 @@ public class SimulationUtils {
         sim.configuration = new Configuration(name);
         //TODO: load configuration from resources
         return sim.configuration;
-    }
-
-    public void moveWalker(Walker walker) {
-        int xWalker = walker.getPosition().getX();
-        int yWalker = walker.getPosition().getY();
-        int zWalker = walker.getPosition().getZ();
-        int zBorder = sim.substrate.getHighestPoint();
-
-        walker.moveRnd();
-
-        //if (zWalker < (zBorder - 30)) sim.walker.respawn(sim.substrate);
-        if (zWalker < 0) walker.respawn(sim.substrate);
-        if (zWalker >= (sim.substrate.values.getInt(xWalker, yWalker))) walker.respawn(sim.substrate);
     }
 
     public void moveSeed() {
@@ -123,12 +110,13 @@ public class SimulationUtils {
     }
 
     public void moveGrowthFront() {
-
         int sum;
         INDArray subArray;
         Substrate substrate = sim.getSubstrate();
+        System.out.println("substrate.getFront() = " + substrate.getFront() + "  - spread = " + substrate.getSpread() + "  - kernel = " + Math.round(sim.getConfiguration().getKernel3D().length * 0.866));
 
-        for (int i = substrate.getFront() - substrate.getSpread(); i <= substrate.getFront(); i++) {
+        for (int i = (substrate.getFront() - substrate.getSpread() - (int) Math.round(sim.getConfiguration().getKernel3D().length * 0.866)); i <= substrate.getFront(); i++) {
+            System.out.println("i = " + i);
             subArray = sim.getMesh().get(
                     NDArrayIndex.all(),
                     NDArrayIndex.all(),
@@ -145,59 +133,25 @@ public class SimulationUtils {
         }
     }
 
-    public boolean walkerSticks() {
-        int xWalker = sim.walker.getPosition().getX();
-        int yWalker = sim.walker.getPosition().getY();
-        int zWalker = sim.walker.getPosition().getZ();
-
-        INDArray subArray = sim.mesh.get(
-                NDArrayIndex.interval(xWalker - 1, xWalker + 2),
-                NDArrayIndex.interval(yWalker - 1, yWalker + 2),
-                NDArrayIndex.interval(zWalker - 1, zWalker + 2));
-
-        return subArray.sumNumber().intValue() > 0;
-    }
-
-
-    /* Old Version
     public boolean walkerSticks(final Walker walker) {
-        int halfsize = sim.getKernel3D().length / 2;
         int xWalker = walker.getPosition().getX();
         int yWalker = walker.getPosition().getY();
-        int zWalker = walker.getPosition().getZ();
-
-        INDArray subArray = sim.getMesh().get(
-                NDArrayIndex.interval(xWalker - halfsize, xWalker + halfsize + 1),
-                NDArrayIndex.interval(yWalker - halfsize, yWalker + halfsize + 1),
-                NDArrayIndex.interval(zWalker - halfsize, zWalker + halfsize + 1)
-        );
-
-        //float bondValue = subArray.mul(sim.getKernel3Dnd()).sumNumber().intValue();
-        double bondValue = calculateRotatedKernelOverlap(walker);
-        double rnd = ThreadLocalRandom.current().nextFloat() * Math.pow((double) bondValue, 2);
-
-        System.out.println("bondValue = " + bondValue);
-        //System.out.println("bondValue = " + bondValue + "  bondValueKernelOverlap = " + calculateRotatedKernelOverlap(walker));
-
-        return rnd > sim.getStickingProbability();
-    }
-    */
-
-    public boolean walkerSticks(final Walker walker) {
-        int halfsize = sim.getKernel3D().length / 2;
-        int xWalker = walker.getPosition().getX();
-        int yWalker = walker.getPosition().getY();
-        int zWalker = walker.getPosition().getZ();
 
         Vector3D substrateNormal = sim.substrate.getOrientation(xWalker, yWalker);
         MoellerHughesRotation rotator = new MoellerHughesRotation(new Vector3D(0, 0, 1), substrateNormal);
         rotateBondPositions(rotator);
+
         double bondValue = calculateRotatedKernelOverlap(walker);
-        double rnd = ThreadLocalRandom.current().nextFloat() * Math.pow((double) bondValue, 2);
+        double rnd = ThreadLocalRandom.current().nextFloat() * Math.exp(bondValue);
 
-        //return rnd > sim.getStickingProbability();
+        /*
+        if (bondValue > 0) {
+            System.out.println("bondValue = " + bondValue + "  rnd = " + rnd);
+        }
+        */
 
-        return bondValue > 0;
+        return rnd > sim.getStickingProbability();
+        //return bondValue > 0;
     }
 
     public void rotateBondPositions(final double turnPol, final double turnAzi) {
@@ -213,8 +167,6 @@ public class SimulationUtils {
     }
 
     public double calculateRotatedKernelOverlap(final Walker walker) {
-        //TODO: implement test
-
         double sum = 0;
         Position walkerPosition = walker.getPosition();
 
@@ -241,7 +193,6 @@ public class SimulationUtils {
                 }
             }
         }
-
         return bondPositions;
     }
 }
