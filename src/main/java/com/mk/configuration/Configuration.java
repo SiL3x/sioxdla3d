@@ -77,12 +77,14 @@ public class Configuration {
                             new Vector3D(99, 99, 60))
             ));
 
-            setSeedNumber(100);
-            setSpawnOffset(15);
-            setGrowthRatio(20);
-            setSectorNumber(16);
-            setStickingProbability(2);
 
+            setSeedNumber(100);
+            setSpawnOffset(10);
+            setGrowthRatio(30);
+            setSectorNumber(16);
+            setStickingProbability(1);
+
+            /*
             float[][][] kernel =
                     {{{0, 0, 1},
                       {0, 0, 1},
@@ -93,12 +95,220 @@ public class Configuration {
                      {{0, 0, 1},
                       {0, 0, 1},
                       {0, 0, 1}}};
+            */
 
+
+            float[][][] kernel =
+                    {
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 0, 4, 2},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            }
+                    };
+            setKernel3D(kernel);
+        }
+
+        if (name == "test2") {
+            setMeshSize(100);
+
+            setSubstrate(
+                    Arrays.asList(
+                            Arrays.asList(
+                                    new Vector3D(0, 0, 70),
+                                    new Vector3D(99, 0, 70),
+                                    new Vector3D(0, 32, 90),
+                                    new Vector3D(99, 32, 90)
+                            ),
+                            Arrays.asList(
+                                    new Vector3D(0, 32, 90),
+                                    new Vector3D(99, 32, 90),
+                                    new Vector3D(0, 65, 70),
+                                    new Vector3D(99, 65, 70)
+                            ),
+                            Arrays.asList(
+                                    new Vector3D(0, 65, 70),
+                                    new Vector3D(99, 65, 70),
+                                    new Vector3D(0, 99, 90),
+                                    new Vector3D(99, 99, 90)
+                            )
+                    )
+            );
+
+            setSeedNumber(100);
+            setSpawnOffset(15);
+            setGrowthRatio(20);
+            setSectorNumber(16);
+            setStickingProbability(3);
+
+            float[][][] kernel =
+                    {
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 1, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 0, 6, 4},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 1, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            }
+                    };
+            setKernel3D(kernel);
+        }
+
+        if (name == "large_test") {
+            setMeshSize(150);
+
+            setSubstrate(Arrays.asList(
+                    Arrays.asList(
+                            new Vector3D(0 , 0, 125),
+                            new Vector3D(149, 0, 125),
+                            new Vector3D(0, 24, 110),
+                            new Vector3D(149, 24, 110)
+                    ),
+                    Arrays.asList(
+                            new Vector3D(0 , 24, 110),
+                            new Vector3D(149, 24, 110),
+                            new Vector3D(0, 74, 140),
+                            new Vector3D(149, 74, 140)
+                    ),
+                    Arrays.asList(
+                            new Vector3D(0, 74, 140),
+                            new Vector3D(149, 74, 140),
+                            new Vector3D(0, 124, 110),
+                            new Vector3D(149, 124, 110)
+                    ),
+                    Arrays.asList(
+                            new Vector3D(0 , 124, 110),
+                            new Vector3D(149, 124, 110),
+                            new Vector3D(0, 149, 125),
+                            new Vector3D(149, 149, 125)
+                    )
+            ));
+
+
+            setSeedNumber(100);
+            setSpawnOffset(10);
+            setGrowthRatio(45);
+            setSectorNumber(16);
+            setStickingProbability(1);
+
+            /*
+            float[][][] kernel =
+                    {{{0, 0, 1},
+                      {0, 0, 1},
+                      {0, 0, 1}},
+                     {{0, 0, 1},
+                      {0, 1, 1},
+                      {0, 0, 1}},
+                     {{0, 0, 1},
+                      {0, 0, 1},
+                      {0, 0, 1}}};
+            */
+
+
+            float[][][] kernel =
+                    {
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 0, 4, 2},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            }
+                    };
             setKernel3D(kernel);
         }
 
         System.out.println("    - configuration loaded");
     }
+
+
+
 
     public void setMeshResolution(int i) {
         meshResolution = 1;
