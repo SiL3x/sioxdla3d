@@ -214,45 +214,18 @@ public class SimulationUtils {
 
     public double calculateRotatedKernelOverlap(final Walker walker) {
         //TODO: implement test
-        //TODO: optimize the loops
-        double sum = 0;
-        int halfDiag = (int) Math.floor(sim.getKernel3D().length * Math.sqrt(3) / 2);
-        // int half = (int) Math.floor(sim.getKernel3D().length / 2);
 
-        //System.out.println("caclulate rotated kernel overlap: " + sim.getBondPositions());
+        double sum = 0;
         Position walkerPosition = walker.getPosition();
-        int xWalk = walkerPosition.getX();
-        int yWalk = walkerPosition.getY();
-        int zWalk = walkerPosition.getZ();
 
         for (BondPosition bondPosition : sim.getBondPositions()) {
-            //System.out.println("Walker pos = " + walker.getPosition() + "  halfDiag = " + half);
-            for (int x = xWalk - halfDiag; x <= xWalk + halfDiag; x++) {
-                for (int y = yWalk - halfDiag; y <= yWalk + halfDiag; y++) {
-                    for (int z = zWalk - halfDiag; z <= zWalk + halfDiag; z++) {
+            int xBond = (int) Math.round(bondPosition.getX() + walkerPosition.getX());
+            int yBond = (int) Math.round(bondPosition.getY() + walkerPosition.getY());
+            int zBond = (int) Math.round(bondPosition.getZ() + walkerPosition.getZ());
 
-                        if (inBoundary(bondPosition, walker.getPosition(), x, y, z)) {
-                            //System.out.println("walker_pos = " + walker.getPosition() + " nearest = (" + x + ", " + y + ", " + z + ")  value = " +sim.getMesh().getInt(x, y, z) + "  bp = (" + bondPosition.getX() + ", " + bondPosition.getY() + ", " + bondPosition.getZ() + ")" );
-                            sum += sim.getMesh().getInt(x, y, z);
-                        }
-                    }
-                }
-            }
+            sum += sim.getMesh().getInt(xBond, yBond, zBond);
         }
         return sum;
-    }
-
-    private boolean inBoundary(BondPosition bondPosition, Position walker, int x, int y, int z) {
-        double xBond = bondPosition.getX() + walker.getX();
-        double yBond = bondPosition.getY() + walker.getY();
-        double zBond = bondPosition.getZ() + walker.getZ();
-
-        //System.out.println("pos = (" + x + ", " + y + ", " + z + ")");
-        //System.out.println("bond = (" + xBond + ", " + yBond + ", " + zBond + ")");
-        return  xBond >= (x - 0.5) && xBond < (x + 0.5) &&
-                yBond >= (y - 0.5) && yBond < (y + 0.5) &&
-                zBond >= (z - 0.5) && zBond < (z + 0.5);
-
     }
 
     public List<BondPosition> calculateBondpositions(final float[][][] kernel) {
