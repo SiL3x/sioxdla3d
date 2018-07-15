@@ -26,7 +26,6 @@ import static java.util.stream.Collectors.toList;
 public class SiOxDla3d {
 
     public Configuration configuration;
-
     public INDArray mesh;
     public Substrate substrate;
     public int meshSize;
@@ -72,6 +71,7 @@ public class SiOxDla3d {
         }
 
         while (run) {
+
             List<Position> positions = walkers.parallelStream()
                     .map(w -> spawnMoveAndStick(w).getPosition())
                     .collect(toList());
@@ -86,10 +86,11 @@ public class SiOxDla3d {
             simulationUtils.moveGrowthFront();
 
             //TODO: check break conditions (number of crystallites, front, no of iterations)
-            //if (i > 1e3) run = false;
-            if (substrate.getFront() <= 20) run = false;
+            if (i > 1e3) run = false;
+            if (substrate.getFront() <= 10 + substrate.getSpread()) run = false;
             i++;
         }
+
 
         PlotMesh plotMesh = new PlotMesh();
         plotMesh.plot3d(mesh);
@@ -98,18 +99,17 @@ public class SiOxDla3d {
 
     private Walker spawnMoveAndStick(Walker walker) {
         boolean notSticked = true;
-        walker.respawn(substrate.getFront() - 10);
+        walker.respawn(substrate.getFront() - substrate.getSpread() - 10);
 
         while (notSticked) {
             walker.moveRnd();
 
-            if (walker.getPosition().getZ() < substrate.getFront() - 20 ||
+            if (walker.getPosition().getZ() < substrate.getFront() -substrate.getSpread() - 20 ||
                     walker.getPosition().getZ() > substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY())) {
-                walker.respawn(substrate.getFront() - 10);
+                walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
             }
 
-            //simulationUtils.calculateSticking(); //TODO: implement sticking in 3D
-            if (walker.getPosition().getZ() >= (substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY()) - 2)) {
+            if (walker.getPosition().getZ() >= (substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY()) - 4)) {
                 notSticked = !simulationUtils.walkerSticks(walker);
             }
         }
@@ -144,4 +144,11 @@ public class SiOxDla3d {
         return configuration.getStickingProbability();
     }
 
+    public Substrate getSubstrate() {
+        return substrate;
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
+    }
 }

@@ -1,5 +1,9 @@
 package com.mk.models.physics;
 
+import com.mk.utils.MoellerHughesRotation;
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.nd4j.linalg.api.ndarray.INDArray;
+
 public class BondPosition {
 
     private int x;
@@ -53,6 +57,16 @@ public class BondPosition {
         zTilt =  - Math.sin(turnAzi) * xTilt + Math.cos(turnAzi) * z;
         xTilt =   Math.cos(turnAzi) * xTilt + Math.sin(turnAzi) * z;
 
+    }
+
+    public void tilt3D(MoellerHughesRotation rotator) {
+        Vector3D vector = rotator.rotate(new Vector3D(x, y, z));
+
+        xTilt = vector.getX();
+        yTilt = vector.getY();
+        zTilt = vector.getZ();
+
+        //System.out.println("Vec = " + new Vector3D(x, y, z) + "  ==>  (" + xTilt + ", " +yTilt+", "+zTilt);
     }
 
     public double getX() {

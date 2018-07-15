@@ -62,17 +62,25 @@ public class Substrate {
         front = min;
         highestPoint = max;
         spread = min - max;
+        System.out.println("front = " + front + "  spread = " + spread);
 
-        substrateArray = Nd4j.zeros(meshSize, meshSize, spread + 1);
+        substrateArray = createSubstrateArray();
 
-        for (int x = 0; x < meshSize; x++) {
-            for (int y = 0; y < meshSize; y++) {
-                substrateArray.putScalar(x, y, getValue(x, y) - min, 1);
-            }
-        }
+        calculateOrientationMap();
 
         //  check if all mesh sides are safe, by checking if all values[x, y] are set
         if (max == 0) System.out.println("!!! ERROR: Substrate not completely covered by polygons");
+    }
+
+    public INDArray createSubstrateArray() {
+        INDArray outArray = Nd4j.zeros(meshSize, meshSize, spread + 1);
+
+        for (int x = 0; x < meshSize; x++) {
+            for (int y = 0; y < meshSize; y++) {
+                outArray.putScalar(x, y, getValue(x, y) - min + spread, 1);
+            }
+        }
+        return outArray;
     }
 
     public void calculateOrientationMap() {
@@ -109,7 +117,6 @@ public class Substrate {
             }
             orientationMap.add(orientationsY);
         }
-        System.out.println("orientationMap = " + orientationMap);
     }
 
     private void setZValue(final int x, final int y) {

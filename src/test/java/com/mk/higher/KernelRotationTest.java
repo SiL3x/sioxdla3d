@@ -8,6 +8,7 @@ import com.mk.models.physics.Walker;
 import com.mk.utils.MoellerHughesRotation;
 import com.mk.utils.SimulationUtils;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -27,29 +28,31 @@ public class KernelRotationTest {
     SimulationUtils simulationUtils;
     Substrate substrate;
 
-    @Before
-    public void setUp() {
+    private final double DELTA = 1e-3;
+
+    @Test
+    public void rotateToSubstrateNormalTest() {
         sim = mock(SiOxDla3d.class);
         walker = mock(Walker.class);
         simulationUtils = new SimulationUtils(sim);
         substrate = prepareSubstrate();
 
-        Position position = new Position(4, 4, 4);
+        Position position = new Position(49, 48, 49);
 
-        INDArray mesh = Nd4j.zeros(10, 10, 10);
-        mesh.putScalar(4, 4, 5, 1);
+        INDArray mesh = Nd4j.zeros(100, 100, 100);
+        mesh.putScalar(49, 49, 50, 1);
 
         float[][][] kernel =
                 {
-                 {{0, 0, 0},
-                  {0, 0, 0},
-                  {0, 0, 0}},
-                 {{0, 0, 0},
-                  {0, 0, 1},
-                  {0, 0, 0}},
-                 {{0, 0, 0},
-                  {0, 0, 0},
-                  {0, 0, 0}}
+                        {{0, 0, 0},
+                                {0, 0, 0},
+                                {0, 0, 0}},
+                        {{0, 0, 0},
+                                {0, 0, 1},
+                                {0, 0, 0}},
+                        {{0, 0, 0},
+                                {0, 0, 0},
+                                {0, 0, 0}}
                 };
 
         bondPositions = simulationUtils.calculateBondpositions(kernel);
@@ -62,17 +65,20 @@ public class KernelRotationTest {
         when(sim.getKernel3Dnd()).thenReturn(Nd4j.create(flatKernel, shape, 'c'));
         when(sim.getBondPositions()).thenReturn(bondPositions);
         when(walker.getPosition()).thenReturn(position);
-    }
-
-    @Test
-    public void rotateToSubstrateNormalTest() {
-        setUp();
-
         System.out.println("substrate.getValue(49, 49) = " + substrate.getValue(49, 49));
         System.out.println("substrate.getOrientation(49, 49) = " + substrate.getOrientation(49, 49));
 
-        MoellerHughesRotation rotator = new MoellerHughesRotation(substrate.getOrientation(49, 49), new Vector3D(0, 0, 1));
+        MoellerHughesRotation rotator = new MoellerHughesRotation(new Vector3D(0, 0, 1), substrate.getOrientation(49, 49));
         System.out.println("rotated = " + rotator.rotate(new Vector3D(0, 0, 1)));
+
+        simulationUtils.rotateBondPositions(rotator);
+        Assert.assertEquals(simulationUtils.calculateRotatedKernelOverlap(walker), 1, DELTA);
+
+        System.out.println("rotated = " + rotator.rotate(new Vector3D(1, 1, 1)));
+        System.out.println("rotated = " + rotator.rotate(new Vector3D(1, -1, 1)));
+
+        simulationUtils.rotateBondPositions(rotator);
+
     }
 
     private Substrate prepareSubstrate() {

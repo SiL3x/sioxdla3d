@@ -18,6 +18,7 @@ public class MoellerHughesRotationTest {
         Vector3D vector3D = new Vector3D(1, 0, 0);
         System.out.println("Vector = " + vector3D + "  => " + rotator.rotate(vector3D) );
 
+        /*
         vector3D = new Vector3D(0, 1, 0);
         System.out.println("Vector = " + vector3D + "  => " + rotator.rotate(vector3D) );
 
@@ -29,6 +30,15 @@ public class MoellerHughesRotationTest {
 
         vector3D = new Vector3D(0, -0.5, 1);
         System.out.println("Vector = " + vector3D + "  => " + rotator.rotate(vector3D) );
+
+*/
+        from = new Vector3D(0, 0, 1);
+        to = new Vector3D(1, 1, 1);
+        rotator = new MoellerHughesRotation(from, to);
+        vector3D = new Vector3D(0, 0, 1);
+        System.out.println("Vector = " + vector3D + "  => " + rotator.rotate(vector3D) );
+
+
     }
 
     @Test

@@ -8,6 +8,7 @@ import static com.mk.utils.MathUtils.ndToVector;
 import static com.mk.utils.MathUtils.vectorToNd;
 
 public class MoellerHughesRotation {
+    //TODO: figure out why the rotation matrix actually rotates the from to the to...
 
     final INDArray r; // rotation matrix
 
@@ -42,6 +43,7 @@ public class MoellerHughesRotation {
                     }, new int[]{3, 3});
         } else {
             //TODO: check rotation matrix construction
+            /*
             System.out.println("Warning: Nearly Parallel!! >> |f*t| = " + Math.abs(f.dotProduct(t)));
             Vector3D u = v.normalize();
 
@@ -67,9 +69,14 @@ public class MoellerHughesRotation {
                             r21, r22, r23,
                             r31, r32, r33
                     }, new int[]{3, 3});
+            */
+            r = Nd4j.create(
+                    new float[]{
+                            1, 0, 0,
+                            0, 1, 0,
+                            0, 0, 1
+                    }, new int[]{3, 3});
         }
-
-        System.out.println("r = \n" + r);
     }
 
     public Vector3D rotate(final Vector3D vector3D) {
@@ -77,6 +84,6 @@ public class MoellerHughesRotation {
     }
 
     public INDArray rotate(final INDArray vector) {
-        return vector.mmul(r);
+        return r.mmul(vector.transpose());
     }
 }
