@@ -1,16 +1,19 @@
 package com.mk.utils;
 
 import com.mk.SiOxDla3d;
+import com.mk.configuration.Configuration;
 import com.mk.models.geometries.Position;
 import com.mk.models.physics.BondPosition;
 import com.mk.models.physics.Substrate;
 import com.mk.models.physics.Walker;
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.util.ArrayUtil;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -93,6 +96,7 @@ class SimulationUtilsTest {
 
     @Test
     public void stickingRotatedKernelTest() {
+        //TODO: finish test
         SiOxDla3d sim = mock(SiOxDla3d.class);
         Walker walker = mock(Walker.class);
         SimulationUtils simulationUtils = new SimulationUtils(sim);
@@ -111,7 +115,7 @@ class SimulationUtilsTest {
                         },
                         {
                             {0, 0, 0},
-                            {0, 0, 0},
+                            {0, 0, 1},
                             {0, 0, 0}
                         },
                         {
@@ -146,5 +150,43 @@ class SimulationUtilsTest {
 
         Assert.assertTrue(simulationUtils.walkerSticks(walker));
         */
+    }
+
+    @Test
+    public void moveGrowthFrontTest() {
+        SiOxDla3d sim = mock(SiOxDla3d.class);
+        Configuration configuration = mock(Configuration.class);
+        Substrate substrate = createTestSubstrate();
+        when(configuration.getGrowthRatio()).thenReturn(4);
+        when(sim.getConfiguration()).thenReturn(configuration);
+        when(sim.getSubstrate()).thenReturn(substrate);
+
+        INDArray mesh = Nd4j.zeros(10, 10, 10);
+        mesh.putScalar(2, 0, 7, 1);
+        mesh.putScalar(6, 0, 7, 1);
+        mesh.putScalar(2, 9, 5, 1);
+        mesh.putScalar(6, 9, 5, 1);
+
+        when(sim.getMesh()).thenReturn(mesh);
+
+        SimulationUtils simulationUtils = new SimulationUtils(sim);
+
+        simulationUtils.moveGrowthFront();
+
+        Assert.assertEquals(sim.getSubstrate().getFront(), 6);
+    }
+
+    private Substrate createTestSubstrate() {
+        Substrate substrate = new Substrate(10);
+
+        List<List<Vector3D>> vertices = Arrays.asList(
+                Arrays.asList(
+                        new Vector3D(0, 0, 8),
+                        new Vector3D(9, 0, 8),
+                        new Vector3D(0, 9, 6),
+                        new Vector3D(9, 9, 6))
+        );
+        substrate.createSubstrate(vertices);
+        return substrate;
     }
 }

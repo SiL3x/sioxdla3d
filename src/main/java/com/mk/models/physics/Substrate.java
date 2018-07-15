@@ -62,17 +62,25 @@ public class Substrate {
         front = min;
         highestPoint = max;
         spread = min - max;
+        System.out.println("front = " + front + "  spread = " + spread);
 
-        substrateArray = Nd4j.zeros(meshSize, meshSize, spread + 1);
+        substrateArray = createSubstrateArray();
 
-        for (int x = 0; x < meshSize; x++) {
-            for (int y = 0; y < meshSize; y++) {
-                substrateArray.putScalar(x, y, getValue(x, y) - min, 1);
-            }
-        }
+        calculateOrientationMap();
 
         //  check if all mesh sides are safe, by checking if all values[x, y] are set
         if (max == 0) System.out.println("!!! ERROR: Substrate not completely covered by polygons");
+    }
+
+    public INDArray createSubstrateArray() {
+        INDArray outArray = Nd4j.zeros(meshSize, meshSize, spread + 1);
+
+        for (int x = 0; x < meshSize; x++) {
+            for (int y = 0; y < meshSize; y++) {
+                outArray.putScalar(x, y, getValue(x, y) - min + spread, 1);
+            }
+        }
+        return outArray;
     }
 
     public void calculateOrientationMap() {
@@ -86,25 +94,27 @@ public class Substrate {
 
                 double distanceSum = 0;
                 Vector3D orientation = new Vector3D(0, 0, 0);
-                Vector3D point = new Vector3D(x, y, this.getValue(x, y) - 2);
+                Vector3D point = new Vector3D(x, y, this.getValue(x, y) - 1);
 
                 for (Polygon face : faces) {
                     distanceSum += face.distanceToPoint(point);
                 }
 
-                for (Polygon face : faces) {
-                    /*
-                    System.out.println("point = " + point + "  face.normal = " + face.normal + "  scaled = " + face.normal.scalarMultiply(face.distanceToPoint(point) / distanceSum) +
-                    "  distSum = " + distanceSum + "  dist = " + face.distanceToPoint(point));
-                    */
+                if (faces.size() == 1) {
+                    orientation = orientation.add(faces.get(0).normal);
+                } else {
+                    for (Polygon face : faces) {
+                        /*
+                        System.out.println("point = " + point + "  face.normal = " + face.normal + "  scaled = " + face.normal.scalarMultiply(face.distanceToPoint(point) / distanceSum) +
+                        "  distSum = " + distanceSum + "  dist = " + face.distanceToPoint(point));
+                        */
 
-                    orientation = orientation
-                            .add(face.normal.scalarMultiply(1 - face.distanceToPoint(point) / distanceSum));
+                        orientation = orientation
+                                .add(face.normal.scalarMultiply((distanceSum - face.distanceToPoint(point)) / distanceSum)); // removed 1- face.distance...
+                    }
                 }
-
                 orientationsY.add(orientation);
             }
-
             orientationMap.add(orientationsY);
         }
     }

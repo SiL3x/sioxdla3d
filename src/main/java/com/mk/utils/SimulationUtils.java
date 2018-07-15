@@ -2,8 +2,11 @@ package com.mk.utils;
 
 import com.mk.SiOxDla3d;
 import com.mk.configuration.Configuration;
+import com.mk.models.geometries.Position;
 import com.mk.models.physics.BondPosition;
+import com.mk.models.physics.Substrate;
 import com.mk.models.physics.Walker;
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.NDArrayIndex;
@@ -52,7 +55,9 @@ public class SimulationUtils {
                 int zWalker = walker.getPosition().getZ();
                 int value = sim.substrate.getValue(xWalker, yWalker);
 
-                if (zWalker < (value - 10)) walker = new Walker(sim.configuration, sim.substrate.getValue(x, y), x, y);
+                if (zWalker < (value - sim.getSubstrate().getSpread() - sim.getConfiguration().getSpawnOffset())) {
+                    walker = new Walker(sim.configuration, sim.substrate.getValue(x, y), x, y);
+                }
 
                 if (value == zWalker ) {
                     sim.mesh.putScalar(xWalker, yWalker, zWalker, 1);
@@ -121,18 +126,20 @@ public class SimulationUtils {
 
         int sum;
         INDArray subArray;
+        Substrate substrate = sim.getSubstrate();
 
-        for (int i = sim.substrate.getFront() - 6; i < sim.substrate.getFront() - 1 ; i++) {
-            subArray = sim.mesh.get(
+        for (int i = substrate.getFront() - substrate.getSpread(); i <= substrate.getFront(); i++) {
+            subArray = sim.getMesh().get(
                     NDArrayIndex.all(),
                     NDArrayIndex.all(),
-                    NDArrayIndex.interval(i, i + sim.substrate.getSpread() + 1));
+                    NDArrayIndex.interval(i, i + substrate.getSpread() + 1)).dup();
 
-            sum = subArray.mul(sim.substrate.getSubstrateArray()).sumNumber().intValue();
+            sum = subArray.muli(substrate.getSubstrateArray()).sumNumber().intValue();
+            //System.out.println("i = " + i + "  z = " + (i + substrate.getSpread()) + "  sum = " + sum);
 
-            if (sum >= sim.configuration.getGrowthRatio()) {
-                sim.substrate.setFront(i);
-                System.out.println("sum = " + sum + "  front = " + i);
+            if (sum >= sim.getConfiguration().getGrowthRatio()) {
+                substrate.setFront(i + substrate.getSpread() - 1);
+                System.out.println("sum = " + sum + "  front = " + substrate.getFront());
                 break;
             }
         }
@@ -151,6 +158,8 @@ public class SimulationUtils {
         return subArray.sumNumber().intValue() > 0;
     }
 
+
+    /* Old Version
     public boolean walkerSticks(final Walker walker) {
         int halfsize = sim.getKernel3D().length / 2;
         int xWalker = walker.getPosition().getX();
@@ -172,6 +181,24 @@ public class SimulationUtils {
 
         return rnd > sim.getStickingProbability();
     }
+    */
+
+    public boolean walkerSticks(final Walker walker) {
+        int halfsize = sim.getKernel3D().length / 2;
+        int xWalker = walker.getPosition().getX();
+        int yWalker = walker.getPosition().getY();
+        int zWalker = walker.getPosition().getZ();
+
+        Vector3D substrateNormal = sim.substrate.getOrientation(xWalker, yWalker);
+        MoellerHughesRotation rotator = new MoellerHughesRotation(new Vector3D(0, 0, 1), substrateNormal);
+        rotateBondPositions(rotator);
+        double bondValue = calculateRotatedKernelOverlap(walker);
+        double rnd = ThreadLocalRandom.current().nextFloat() * Math.pow((double) bondValue, 2);
+
+        //return rnd > sim.getStickingProbability();
+
+        return bondValue > 0;
+    }
 
     public void rotateBondPositions(final double turnPol, final double turnAzi) {
         for (BondPosition bondPosition : sim.getBondPositions()) {
@@ -179,27 +206,53 @@ public class SimulationUtils {
         }
     }
 
-    private double calculateRotatedKernelOverlap(final Walker walker) {
+    public void rotateBondPositions(final MoellerHughesRotation rotator) {
+        for (BondPosition bondPosition : sim.getBondPositions()) {
+            bondPosition.tilt3D(rotator);
+        }
+    }
+
+    public double calculateRotatedKernelOverlap(final Walker walker) {
         //TODO: implement test
+        //TODO: optimize the loops
         double sum = 0;
         int halfDiag = (int) Math.floor(sim.getKernel3D().length * Math.sqrt(3) / 2);
         // int half = (int) Math.floor(sim.getKernel3D().length / 2);
 
         //System.out.println("caclulate rotated kernel overlap: " + sim.getBondPositions());
+        Position walkerPosition = walker.getPosition();
+        int xWalk = walkerPosition.getX();
+        int yWalk = walkerPosition.getY();
+        int zWalk = walkerPosition.getZ();
 
         for (BondPosition bondPosition : sim.getBondPositions()) {
             //System.out.println("Walker pos = " + walker.getPosition() + "  halfDiag = " + half);
-            for (int x = walker.getPosition().getX() - halfDiag; x <= walker.getPosition().getX() + halfDiag; x++) {
-                for (int y = walker.getPosition().getY() - halfDiag; y <= walker.getPosition().getY() + halfDiag; y++) {
-                    for (int z = walker.getPosition().getZ() - halfDiag; z <= walker.getPosition().getZ() + halfDiag; z++) {
-                        double distance = distance(walker, bondPosition, x, y, z);
-                        System.out.println("(x, y, z) = (" + x + ", " + y + ", " + z + ")" + "  dist = " + distance);
-                        if (distance < 0.5) sum += sim.mesh.getInt(x, y, z);
+            for (int x = xWalk - halfDiag; x <= xWalk + halfDiag; x++) {
+                for (int y = yWalk - halfDiag; y <= yWalk + halfDiag; y++) {
+                    for (int z = zWalk - halfDiag; z <= zWalk + halfDiag; z++) {
+
+                        if (inBoundary(bondPosition, walker.getPosition(), x, y, z)) {
+                            //System.out.println("walker_pos = " + walker.getPosition() + " nearest = (" + x + ", " + y + ", " + z + ")  value = " +sim.getMesh().getInt(x, y, z) + "  bp = (" + bondPosition.getX() + ", " + bondPosition.getY() + ", " + bondPosition.getZ() + ")" );
+                            sum += sim.getMesh().getInt(x, y, z);
+                        }
                     }
                 }
             }
         }
         return sum;
+    }
+
+    private boolean inBoundary(BondPosition bondPosition, Position walker, int x, int y, int z) {
+        double xBond = bondPosition.getX() + walker.getX();
+        double yBond = bondPosition.getY() + walker.getY();
+        double zBond = bondPosition.getZ() + walker.getZ();
+
+        //System.out.println("pos = (" + x + ", " + y + ", " + z + ")");
+        //System.out.println("bond = (" + xBond + ", " + yBond + ", " + zBond + ")");
+        return  xBond >= (x - 0.5) && xBond < (x + 0.5) &&
+                yBond >= (y - 0.5) && yBond < (y + 0.5) &&
+                zBond >= (z - 0.5) && zBond < (z + 0.5);
+
     }
 
     public List<BondPosition> calculateBondpositions(final float[][][] kernel) {

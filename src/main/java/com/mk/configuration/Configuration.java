@@ -54,14 +54,31 @@ public class Configuration {
 
         if (name == "test") {
             setMeshSize(100);
+
+            /*
             setSubstrate(Arrays.asList(Arrays.asList(
                     new Vector3D(00, 00, 90),
                     new Vector3D(99, 00, 90),
-                    new Vector3D(99, 99, 90),
-                    new Vector3D(00, 99, 90))));
+                    new Vector3D(99, 99, 60),
+                    new Vector3D(00, 99, 60))));
+            */
+
+            setSubstrate(Arrays.asList(
+                    Arrays.asList(
+                            new Vector3D(0 , 0, 60),
+                            new Vector3D(99, 0, 60),
+                            new Vector3D(0, 49, 90),
+                            new Vector3D(99, 49, 90)
+                    ),
+                    Arrays.asList(
+                            new Vector3D(0, 49, 90),
+                            new Vector3D(99, 49, 90),
+                            new Vector3D(0, 99, 60),
+                            new Vector3D(99, 99, 60))
+            ));
 
             setSeedNumber(100);
-            setSpawnOffset(10);
+            setSpawnOffset(15);
             setGrowthRatio(20);
             setSectorNumber(16);
             setStickingProbability(2);
@@ -71,7 +88,7 @@ public class Configuration {
                       {0, 0, 1},
                       {0, 0, 1}},
                      {{0, 0, 1},
-                      {0, 0, 1},
+                      {0, 1, 1},
                       {0, 0, 1}},
                      {{0, 0, 1},
                       {0, 0, 1},
