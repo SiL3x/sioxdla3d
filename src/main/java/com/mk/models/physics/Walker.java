@@ -76,8 +76,9 @@ public class Walker {
     }
 
     public void moveRnd() {
-        int direction = ThreadLocalRandom.current().nextInt(0, 5 + 1);
-        position.move(direction);
+        //int direction = ThreadLocalRandom.current().nextInt(0, 5 + 1);
+        //position.move(direction);
+        position.moveRnd3d();
         int meshSize = configuration.getMeshSize();
 
         if (position.getY() > (meshSize - border)) position.setY(meshSize - border);

@@ -2,6 +2,8 @@ package com.mk.models.geometries;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Position {
     private Vector3D vector3D;
 
@@ -16,6 +18,21 @@ public class Position {
         if (direction == 3) vector3D = vector3D.add(new Vector3D(0, -1, 0));
         if (direction == 4) vector3D = vector3D.add(new Vector3D(0, 0, 1));
         if (direction == 5) vector3D = vector3D.add(new Vector3D(0, 0, -1));
+    }
+
+    public void moveRnd3d() {
+        int[] nextMove = {0, 0, 0};
+
+        int rnd;
+        for (int i = 0; i < 3; i++) {
+            rnd = ThreadLocalRandom.current().nextInt(0, 5 + 1);
+
+            if (rnd == 0) nextMove[i] = -1;
+            if (rnd == 1) nextMove[i] = 0;
+            if (rnd == 2) nextMove[i] = 1;
+        }
+
+        vector3D = vector3D.add(new Vector3D(nextMove[0], nextMove[1], nextMove[2]));
     }
 
     public void setX(int xNew) {

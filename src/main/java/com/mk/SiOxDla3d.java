@@ -34,7 +34,7 @@ public class SiOxDla3d {
     public SimulationUtils simulationUtils;
 
     private boolean run = true;
-    private String name = "large_test";
+    private String name = "very_large_test";
 
 
     public SiOxDla3d() throws Exception {

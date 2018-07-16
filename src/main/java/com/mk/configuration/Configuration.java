@@ -247,21 +247,7 @@ public class Configuration {
             setSpawnOffset(10);
             setGrowthRatio(45);
             setSectorNumber(16);
-            setStickingProbability(1);
-
-            /*
-            float[][][] kernel =
-                    {{{0, 0, 1},
-                      {0, 0, 1},
-                      {0, 0, 1}},
-                     {{0, 0, 1},
-                      {0, 1, 1},
-                      {0, 0, 1}},
-                     {{0, 0, 1},
-                      {0, 0, 1},
-                      {0, 0, 1}}};
-            */
-
+            setStickingProbability(2);
 
             float[][][] kernel =
                     {
@@ -274,9 +260,9 @@ public class Configuration {
                             },
                             {
                                     {0, 0, 0, 0, 0},
-                                    {0, 0, 1, 0, 0},
                                     {0, 0, 1, 2, 0},
-                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
                                     {0, 0, 0, 0, 0}
                             },
                             {
@@ -288,9 +274,87 @@ public class Configuration {
                             },
                             {
                                     {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            }
+                    };
+            setKernel3D(kernel);
+        }
+
+        if (name == "very_large_test") {
+            setMeshSize(300);
+
+            setSubstrate(Arrays.asList(
+                    Arrays.asList(
+                            new Vector3D(0 , 0, 216),
+                            new Vector3D(299, 0, 216),
+                            new Vector3D(0, 74, 290),
+                            new Vector3D(299, 74, 290)
+                    ),
+                    Arrays.asList(
+                            new Vector3D(0 , 74, 290),
+                            new Vector3D(299, 74, 290),
+                            new Vector3D(0, 149, 216),
+                            new Vector3D(299, 149, 216)
+                    ),
+                    Arrays.asList(
+                            new Vector3D(0, 149, 216),
+                            new Vector3D(299, 149, 216),
+                            new Vector3D(0, 224, 290),
+                            new Vector3D(299, 224, 290)
+                    ),
+                    Arrays.asList(
+                            new Vector3D(0 , 224, 290),
+                            new Vector3D(299, 224, 290),
+                            new Vector3D(0, 299, 216),
+                            new Vector3D(299, 299, 216)
+                    )
+            ));
+
+
+            setSeedNumber(900);
+            setSpawnOffset(10);
+            setGrowthRatio(180);
+            setSectorNumber(32);
+            setStickingProbability(2);
+
+            float[][][] kernel =
+                    {
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
                                     {0, 0, 1, 0, 0},
                                     {0, 0, 1, 2, 0},
-                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 4, 2},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
                                     {0, 0, 0, 0, 0}
                             },
                             {
