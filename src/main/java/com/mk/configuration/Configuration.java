@@ -52,7 +52,7 @@ public class Configuration {
     public void load(String name) {
         //TODO: implement loading config json from name
 
-        if (name == "test") {
+        if (name.equals("test")) {
             setMeshSize(100);
 
             /*

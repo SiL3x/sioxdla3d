@@ -1,5 +1,6 @@
 package com.mk;
 
+import org.apache.commons.cli.*;
 import com.mk.configuration.Configuration;
 import com.mk.graphic.PlotMesh;
 import com.mk.models.geometries.Position;
@@ -11,7 +12,7 @@ import org.jzy3d.analysis.AnalysisLauncher;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.util.ArrayUtil;
-
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
@@ -34,10 +35,11 @@ public class SiOxDla3d {
     public SimulationUtils simulationUtils;
 
     private boolean run = true;
-    private String name = "very_large_test";
+    public String name;
 
 
-    public SiOxDla3d() throws Exception {
+    public SiOxDla3d(String _name) throws Exception {
+	name = _name;
         simulationUtils = new SimulationUtils(this);
         int cores = Runtime.getRuntime().availableProcessors();
         System.out.println(">>> Cores detected : " + cores);
@@ -122,7 +124,38 @@ public class SiOxDla3d {
 
     public static void main( String[] args ) throws Exception {
         System.out.println("### New DLA Simulation");
-        SiOxDla3d siOxDla3d = new SiOxDla3d();
+
+	Options options = new Options();
+        //Option config = new Option("cfg", "config", true, "config file path");
+        //config.setRequired(true);
+        //options.addOption(config);
+
+        Option testType = new Option("test", "test", true, "test type");
+        testType.setRequired(true);
+        options.addOption(testType);
+
+        CommandLineParser parser = new DefaultParser();
+        HelpFormatter formatter = new HelpFormatter();
+        CommandLine cmd;
+
+        try {
+            cmd = parser.parse(options, args);
+        String name_tmp = cmd.getOptionValue("test");
+	if (!name_tmp.equals("test")) {
+		name_tmp="test";
+	}
+
+        System.out.println("### New DLA Simulation");
+        SiOxDla3d siOxDla3d = new SiOxDla3d  (name_tmp);
+
+
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+            formatter.printHelp("utility-name", options);
+
+            System.exit(1);
+        }
+       // SiOxDla3d siOxDla3d = new SiOxDla3d("test");
     }
 
     public float[][][] getKernel3D() {

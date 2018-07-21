@@ -23,7 +23,7 @@ public class SimulationUtils {
 
     public SimulationUtils(SiOxDla3d simulation) {
         this.sim = simulation;
-
+	System.out.println(this.sim.name);
     }
 
     public void placeSeeds() {
