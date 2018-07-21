@@ -34,7 +34,7 @@ public class SiOxDla3d {
     public SimulationUtils simulationUtils;
 
     private boolean run = true;
-    private String name = "very_large_test";
+    private String name = "test";
 
 
     public SiOxDla3d() throws Exception {
@@ -98,12 +98,13 @@ public class SiOxDla3d {
     }
 
     private Walker spawnMoveAndStick(Walker walker) {
+        //TODO: @Max Wie kann man die Walker position visualisieren???
         boolean notSticked = true;
         walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
         //System.out.println("respawn_z = " + (substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset()));
 
         while (notSticked) {
-            walker.moveRnd();
+            walker.moveRnd(configuration.getZdrift());
             if (walkerIsTooFarOrBelowSurface(walker)) walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
             if (walkerIsNearToSurface(walker)) notSticked = !simulationUtils.walkerSticks(walker);
         }

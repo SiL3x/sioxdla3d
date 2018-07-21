@@ -75,6 +75,18 @@ public class Walker {
         this.position = new Position(randomX, randomY, spawnZ);
     }
 
+    public void moveRnd(final int zDrift) {
+        //int direction = ThreadLocalRandom.current().nextInt(0, 5 + 1);
+        //position.move(direction);
+        position.moveRnd3d(zDrift);
+        int meshSize = configuration.getMeshSize();
+
+        if (position.getY() > (meshSize - border)) position.setY(meshSize - border);
+        if (position.getY() < border) position.setY(border);
+        if (position.getX() < border) position.setX(border);
+        if (position.getX() > meshSize - border) position.setX(meshSize - border);
+    }
+
     public void moveRnd() {
         //int direction = ThreadLocalRandom.current().nextInt(0, 5 + 1);
         //position.move(direction);

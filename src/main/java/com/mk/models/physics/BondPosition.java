@@ -2,7 +2,6 @@ package com.mk.models.physics;
 
 import com.mk.utils.MoellerHughesRotation;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.nd4j.linalg.api.ndarray.INDArray;
 
 public class BondPosition {
 
