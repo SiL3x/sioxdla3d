@@ -36,6 +36,7 @@ public class Configuration {
 
 
     private INDArray kernel3Dnd;
+    private int zDrift;
 
     public Configuration(String configName) {
         this.configName = configName;
@@ -77,12 +78,12 @@ public class Configuration {
                             new Vector3D(99, 99, 60))
             ));
 
-
             setSeedNumber(100);
             setSpawnOffset(10);
-            setGrowthRatio(30);
+            setGrowthRatio(40);
             setSectorNumber(16);
-            setStickingProbability(1);
+            setStickingProbability(3);
+            setZDrift(4);
 
             /*
             float[][][] kernel =
@@ -371,7 +372,9 @@ public class Configuration {
         System.out.println("    - configuration loaded");
     }
 
-
+    private void setZDrift(int i) {
+        zDrift = i;
+    }
 
 
     public void setMeshResolution(int i) {
@@ -500,5 +503,9 @@ public class Configuration {
 
     public void setSectorNumber(int sectorNumber) {
         this.sectorNumber = sectorNumber;
+    }
+
+    public int getZdrift() {
+        return zDrift;
     }
 }

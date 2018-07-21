@@ -56,7 +56,7 @@ class WalkerTest {
         int yActual = walker.getPosition().getY();
         int zActual = walker.getPosition().getZ();
 
-        walker.moveRnd();
+        walker.moveRnd(4);
 
         Position moved = walker.getPosition();
 
