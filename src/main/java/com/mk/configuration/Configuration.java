@@ -37,6 +37,7 @@ public class Configuration {
 
     private INDArray kernel3Dnd;
     private int zDrift;
+    private int meshSizeZ;
 
     public Configuration(String configName) {
         this.configName = configName;
@@ -50,54 +51,38 @@ public class Configuration {
         meshSize = i;
     }
 
+    public void setMeshSize(final int x, final int y, final int z) {
+        meshSizeX = x;
+        meshSizeY = y;
+        meshSizeZ = z;
+    }
+
     public void load(String name) {
         //TODO: implement loading config json from name
 
         if (name == "test") {
-            setMeshSize(100);
-
-            /*
-            setSubstrate(Arrays.asList(Arrays.asList(
-                    new Vector3D(00, 00, 90),
-                    new Vector3D(99, 00, 90),
-                    new Vector3D(99, 99, 60),
-                    new Vector3D(00, 99, 60))));
-            */
+            setMeshSize(100, 100, 170);
 
             setSubstrate(Arrays.asList(
                     Arrays.asList(
-                            new Vector3D(0 , 0, 60),
-                            new Vector3D(99, 0, 60),
-                            new Vector3D(0, 49, 90),
-                            new Vector3D(99, 49, 90)
+                            new Vector3D(0 , 0, 130),
+                            new Vector3D(99, 0, 130),
+                            new Vector3D(0, 49, 160),
+                            new Vector3D(99, 49, 160)
                     ),
                     Arrays.asList(
-                            new Vector3D(0, 49, 90),
-                            new Vector3D(99, 49, 90),
-                            new Vector3D(0, 99, 60),
-                            new Vector3D(99, 99, 60))
+                            new Vector3D(0, 49, 160),
+                            new Vector3D(99, 49, 160),
+                            new Vector3D(0, 99, 130),
+                            new Vector3D(99, 99, 130))
             ));
 
-            setSeedNumber(100);
-            setSpawnOffset(10);
-            setGrowthRatio(40);
+            setSeedNumber(500);
+            setSpawnOffset(5);
+            setGrowthRatio(30);
             setSectorNumber(16);
-            setStickingProbability(3);
+            setStickingProbability(2);
             setZDrift(4);
-
-            /*
-            float[][][] kernel =
-                    {{{0, 0, 1},
-                      {0, 0, 1},
-                      {0, 0, 1}},
-                     {{0, 0, 1},
-                      {0, 1, 1},
-                      {0, 0, 1}},
-                     {{0, 0, 1},
-                      {0, 0, 1},
-                      {0, 0, 1}}};
-            */
-
 
             float[][][] kernel =
                     {
@@ -111,21 +96,21 @@ public class Configuration {
                             {
                                     {0, 0, 0, 0, 0},
                                     {0, 0, 1, 0, 0},
-                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 3, 0},
                                     {0, 0, 1, 0, 0},
                                     {0, 0, 0, 0, 0}
                             },
                             {
                                     {0, 0, 1, 0, 0},
-                                    {0, 0, 1, 2, 0},
-                                    {0, 0, 0, 4, 2},
-                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 3, 0},
+                                    {0, 0, 0, 6, 2},
+                                    {0, 0, 1, 3, 0},
                                     {0, 0, 1, 0, 0}
                             },
                             {
                                     {0, 0, 0, 0, 0},
                                     {0, 0, 1, 0, 0},
-                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 3, 0},
                                     {0, 0, 1, 0, 0},
                                     {0, 0, 0, 0, 0}
                             },
@@ -385,6 +370,17 @@ public class Configuration {
         return meshSize;
     }
 
+    public int getMeshSizeX() {
+        return meshSizeX;
+    }
+
+    public int getMeshSizeY() {
+        return meshSizeY;
+    }
+
+    public int getMeshSizeZ() {
+        return meshSizeZ;
+    }
 
     public List<Position> getSeedPosition() {
         return seedPosition;
