@@ -47,17 +47,23 @@ public class SiOxDla3d {
 
         System.out.println(">>> Loading configuration: " + name);
         configuration = simulationUtils.loadConfiguration(name);
-        meshSize = configuration.getMeshSize();
+        meshSize = 0;
+
         System.out.println(">>> creating mesh");
-        mesh = simulationUtils.createMesh();
+        mesh = simulationUtils.createMesh(
+                configuration.getMeshSizeX(),
+                configuration.getMeshSizeY(),
+                configuration.getMeshSizeZ()
+        );
 
         System.out.println(">>> Creating substrate");
-        substrate = new Substrate(configuration.getMeshSize());
+        substrate = new Substrate(configuration.getMeshSizeX(), configuration.getMeshSizeY());
         substrate.createSubstrate(configuration.getSubstrate());
 
-        //TODO: calculate bond positions
+        System.out.println(">>> Calculate bond position");
         bondPositions = simulationUtils.calculateBondpositions(configuration.getKernel3D());
 
+        System.out.println(">>> Place seeds");
         simulationUtils.placeSeeds();
 
         //TODO: set iteration variables
@@ -112,12 +118,12 @@ public class SiOxDla3d {
         return walker;
     }
 
-    private boolean walkerIsTooFarOrBelowSurface(Walker walker) {
-        return walker.getPosition().getZ() < substrate.getFront() -substrate.getSpread() - 20 ||
+    private boolean walkerIsTooFarOrBelowSurface(final Walker walker) {
+        return walker.getPosition().getZ() < substrate.getFront() - substrate.getSpread() - 10 ||
                 walker.getPosition().getZ() >= substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY());
     }
 
-    private boolean walkerIsNearToSurface(Walker walker) {
+    private boolean walkerIsNearToSurface(final Walker walker) {
         return walker.getPosition().getZ() >= (substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY()) - configuration.getKernel3D().length * 0.866);
     }
 

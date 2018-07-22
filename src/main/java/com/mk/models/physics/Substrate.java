@@ -13,7 +13,9 @@ public class Substrate {
 
     public INDArray values; // 2D array
     private INDArray substrateArray;
-    int meshSize;
+    int meshSizeX;
+    int meshSizeY;
+    int meshSizeZ;
     int highestPoint;
     int front;
     int spread;
@@ -30,9 +32,14 @@ public class Substrate {
     List<Polygon> faces;
 
     public Substrate(int meshSize) {
-        this.meshSize = meshSize;
+       new Substrate(meshSize, meshSize);
+    }
+
+    public Substrate(final int meshSizeX, final int meshSizeY) {
+        this.meshSizeX = meshSizeX;
+        this.meshSizeY = meshSizeY;
         front = 0;
-        values = Nd4j.zeros(meshSize, meshSize);
+        values = Nd4j.zeros(meshSizeX, meshSizeX);
     }
 
     public int getValue(final int x, final int y) {
@@ -51,8 +58,8 @@ public class Substrate {
         }
 
         //  create values array
-        for (int x = 0; x < meshSize; x++) {
-            for (int y = 0; y < meshSize; y++) {
+        for (int x = 0; x < meshSizeX; x++) {
+            for (int y = 0; y < meshSizeY; y++) {
                 setZValue(x, y);
             }
         }
@@ -73,10 +80,10 @@ public class Substrate {
     }
 
     public INDArray createSubstrateArray() {
-        INDArray outArray = Nd4j.zeros(meshSize, meshSize, spread + 1);
+        INDArray outArray = Nd4j.zeros(meshSizeX, meshSizeY, spread + 1);
 
-        for (int x = 0; x < meshSize; x++) {
-            for (int y = 0; y < meshSize; y++) {
+        for (int x = 0; x < meshSizeX; x++) {
+            for (int y = 0; y < meshSizeY; y++) {
                 outArray.putScalar(x, y, getValue(x, y) - min + spread, 1);
             }
         }
@@ -87,10 +94,10 @@ public class Substrate {
 
         orientationMap = new ArrayList<>();
 
-        for (int x = 0; x < meshSize; x++) {
+        for (int x = 0; x < meshSizeX; x++) {
             List<Vector3D> orientationsY = new ArrayList<>();
 
-            for (int y = 0; y < meshSize; y++) {
+            for (int y = 0; y < meshSizeY; y++) {
 
                 double distanceSum = 0;
                 Vector3D orientation = new Vector3D(0, 0, 0);

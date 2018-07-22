@@ -23,25 +23,22 @@ public class SimulationUtils {
 
     public SimulationUtils(SiOxDla3d simulation) {
         this.sim = simulation;
-
     }
 
     public void placeSeeds() {
-        System.out.println("place seeds");
         int seedNumber = sim.configuration.getSeedNumber();
         Walker walker;
         int perRow = (int) Math.round(Math.sqrt(seedNumber));
-        int distance = (int) Math.round(sim.meshSize / perRow);
-        int x;
-        int y;
+        int distance = (int) Math.round(sim.configuration.getMeshSizeX() / perRow);
+        int x, y;
 
         for (int i = 0; i < seedNumber; i++) {
             x = (i % perRow) * distance + distance / 2;
             y = (int) Math.floor((i / perRow) * distance + distance / 2);
 
-            if (x > (sim.meshSize - 1) || y > (sim.meshSize - 1)) {
+            if (x > (sim.configuration.getMeshSizeX() - 1) || y > (sim.configuration.getMeshSizeY() - 1)) {
                 System.out.println("seed x or y out of bounds : " + x + ", " + y);
-                System.out.println("meshSize = " + sim.meshSize);
+                System.out.println("meshSize X & Y = " + sim.configuration.getMeshSizeX());
                 break;
             }
 
@@ -56,6 +53,7 @@ public class SimulationUtils {
                 int value = sim.substrate.getValue(xWalker, yWalker);
 
                 if (zWalker < (value - sim.getSubstrate().getSpread() - sim.getConfiguration().getSpawnOffset())) {
+                    System.out.println("zWalker = " + value + "  RESPAWN!");
                     walker = new Walker(sim.configuration, sim.substrate.getValue(x, y), x, y);
                 }
 
@@ -68,9 +66,13 @@ public class SimulationUtils {
         }
     }
 
-    public INDArray createMesh() {
-        int meshSize = sim.configuration.getMeshSize();
-        INDArray outArray = Nd4j.zeros(meshSize, meshSize, meshSize);
+    public INDArray createMesh(final int meshSize) {
+        return createMesh(meshSize, meshSize, meshSize);
+    }
+
+    public INDArray createMesh(final int meshSizeX, final int meshSizeY, final int meshSizeZ) {
+        System.out.println("x = " + meshSizeX +  " y = " + meshSizeY + " z = " + meshSizeZ);
+        INDArray outArray = Nd4j.zeros(meshSizeX, meshSizeY, meshSizeZ);
         return outArray;
     }
 

@@ -26,25 +26,25 @@ public class Walker {
     public Walker(Configuration configuration, int front) {
         perRow = (int) Math.round(Math.sqrt(configuration.getSectorNumber()));
         System.out.println("perRow = " + perRow + " sector no " +configuration.getSectorNumber());
-        distance = (int) Math.round(configuration.getMeshSize() / perRow);
+        distance = (int) Math.round(configuration.getMeshSizeX() / perRow);
 
         this.configuration = configuration;
         this.spawnZ = front - configuration.getSpawnOffset();
         this.border = configuration.getKernel().length/2 +1;
-        int randomX = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSize() - border);
-        int randomY = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSize() - border);
+        int randomX = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSizeX() - border);
+        int randomY = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSizeY() - border);
         this.position = new Position(randomX, randomY, spawnZ);
     }
 
     public Walker(Configuration configuration, int front, int sector) {
         perRow = (int) Math.round(Math.sqrt(configuration.getSectorNumber()));
-        distance = Math.round(configuration.getMeshSize() / perRow);
+        distance = Math.round(configuration.getMeshSizeX() / perRow);
 
         this.configuration = configuration;
         this.spawnZ = front - configuration.getSpawnOffset();
         this.border = configuration.getKernel3D().length/2 +1;
-        int randomX = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSize() - border);
-        int randomY = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSize() - border);
+        int randomX = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSizeX() - border);
+        int randomY = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSizeY() - border);
         this.position = new Position(randomX, randomY, spawnZ);
         this.sector = sector;
     }
@@ -58,8 +58,8 @@ public class Walker {
 
     public void respawn(Substrate substrate) {
         //TODO: rework respawn for evenly distributed random respawn
-        int randomX = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSize() - border);
-        int randomY = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSize() - border);
+        int randomX = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSizeX() - border);
+        int randomY = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSizeY() - border);
         spawnZ = substrate.getValue(randomX, randomY) - configuration.getSpawnOffset();
         this.position = new Position(randomX, randomY, spawnZ);
     }
@@ -68,6 +68,7 @@ public class Walker {
 
         //int x = (sector % perRow) * distance + distance / 2;
         //int y = (int) Math.floor((sector / perRow) * distance + distance / 2);
+        //System.out.println("sector = " + sector + "  perRow = " + perRow + "  border = " + border + "  distance = " + distance);
 
         int randomX = ThreadLocalRandom.current().nextInt((sector % perRow) * distance + border, (sector % perRow) * distance + distance - border);
         int randomY = ThreadLocalRandom.current().nextInt((int) (Math.floor((sector / perRow) * distance) + border), (int) (Math.floor((sector / perRow) * distance)  + distance - border));
@@ -79,7 +80,7 @@ public class Walker {
         //int direction = ThreadLocalRandom.current().nextInt(0, 5 + 1);
         //position.move(direction);
         position.moveRnd3d(zDrift);
-        int meshSize = configuration.getMeshSize();
+        int meshSize = configuration.getMeshSizeX();
 
         if (position.getY() > (meshSize - border)) position.setY(meshSize - border);
         if (position.getY() < border) position.setY(border);
@@ -91,7 +92,7 @@ public class Walker {
         //int direction = ThreadLocalRandom.current().nextInt(0, 5 + 1);
         //position.move(direction);
         position.moveRnd3d();
-        int meshSize = configuration.getMeshSize();
+        int meshSize = configuration.getMeshSizeX();
 
         if (position.getY() > (meshSize - border)) position.setY(meshSize - border);
         if (position.getY() < border) position.setY(border);
