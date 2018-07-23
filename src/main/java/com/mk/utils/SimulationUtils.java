@@ -11,6 +11,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -53,7 +54,6 @@ public class SimulationUtils {
                 int value = sim.substrate.getValue(xWalker, yWalker);
 
                 if (zWalker < (value - sim.getSubstrate().getSpread() - sim.getConfiguration().getSpawnOffset())) {
-                    System.out.println("zWalker = " + value + "  RESPAWN!");
                     walker = new Walker(sim.configuration, sim.substrate.getValue(x, y), x, y);
                 }
 
@@ -135,7 +135,7 @@ public class SimulationUtils {
         }
     }
 
-    public boolean walkerSticks(final Walker walker) {
+    public int[] walkerSticks(final Walker walker) {
         int xWalker = walker.getPosition().getX();
         int yWalker = walker.getPosition().getY();
 
@@ -143,17 +143,44 @@ public class SimulationUtils {
         MoellerHughesRotation rotator = new MoellerHughesRotation(new Vector3D(0, 0, 1), substrateNormal);
         rotateBondPositions(rotator);
 
-        double bondValue = calculateRotatedKernelOverlap(walker);
-        double rnd = ThreadLocalRandom.current().nextFloat() * Math.exp(bondValue);
+        List<int[]> positionsWithinDiffusionLength = calculatePositionsOnSurface(substrateNormal, sim.configuration.getDiffusionLength(), walker);
 
-        /*
-        if (bondValue > 0) {
-            System.out.println("bondValue = " + bondValue + "  rnd = " + rnd);
+        double bondValue = 0;
+
+        for (int[] position : positionsWithinDiffusionLength) {
+            bondValue = calculateRotatedKernelOverlap(position);
+            if (bondValue > 0) {
+                if (ThreadLocalRandom.current().nextFloat() * Math.exp(bondValue) > sim.getStickingProbability()) {
+                    return position;
+                }
+            }
         }
-        */
+        return new int[]{-1, -1, -1};
+    }
 
-        return rnd > sim.getStickingProbability();
-        //return bondValue > 0;
+    private List<int[]> calculatePositionsOnSurface(final Vector3D substrateNormal, final double diffusionLength, final Walker walker) {
+        final double halfProjectedDiffLength = diffusionLength * substrateNormal.dotProduct(new Vector3D(0, 0, 1)) / (substrateNormal.getNorm() * 2);
+        final int walkerX = walker.getPosition().getX();
+        final int walkerY = walker.getPosition().getY();
+
+        List<int[]> positions = new ArrayList<>();
+
+        int xStartValue = (int) Math.round(walkerX - halfProjectedDiffLength);
+        int xEndValue = (int) Math.round(walkerX + halfProjectedDiffLength);
+        int yStartValue = (int) Math.round(walkerY - halfProjectedDiffLength);
+        int yEndValue = (int) Math.round(walkerY + halfProjectedDiffLength);
+
+        if (xEndValue > (99 - sim.getBorder())) xEndValue = 99 - sim.getBorder();
+        if (yEndValue > (99 - sim.getBorder())) yEndValue = 99 - sim.getBorder();
+        if (xStartValue < sim.getBorder()) xStartValue = sim.getBorder();
+        if (yStartValue < sim.getBorder()) yStartValue = sim.getBorder();
+
+        for (int x = xStartValue; x <= xEndValue ; x++) {
+            for (int y = yStartValue; y <= yEndValue; y++) {
+                positions.add(new int[]{x, y, sim.getSubstrate().getValueWithFront(x, y)});
+            }
+        }
+        return positions;
     }
 
     public void rotateBondPositions(final double turnPol, final double turnAzi) {
@@ -176,6 +203,19 @@ public class SimulationUtils {
             int xBond = (int) Math.round(bondPosition.getX() + walkerPosition.getX());
             int yBond = (int) Math.round(bondPosition.getY() + walkerPosition.getY());
             int zBond = (int) Math.round(bondPosition.getZ() + walkerPosition.getZ());
+
+            sum += sim.getMesh().getInt(xBond, yBond, zBond);
+        }
+        return sum;
+    }
+
+    public double calculateRotatedKernelOverlap(final int[] position) {
+        double sum = 0;
+
+        for (BondPosition bondPosition : sim.getBondPositions()) {
+            int xBond = (int) Math.round(bondPosition.getX() + position[0]);
+            int yBond = (int) Math.round(bondPosition.getY() + position[1]);
+            int zBond = (int) Math.round(bondPosition.getZ() + position[2]);
 
             sum += sim.getMesh().getInt(xBond, yBond, zBond);
         }

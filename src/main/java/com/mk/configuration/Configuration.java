@@ -38,6 +38,7 @@ public class Configuration {
     private INDArray kernel3Dnd;
     private int zDrift;
     private int meshSizeZ;
+    private double diffusionLength;
 
     public Configuration(String configName) {
         this.configName = configName;
@@ -78,11 +79,12 @@ public class Configuration {
             ));
 
             setSeedNumber(500);
-            setSpawnOffset(5);
+            setSpawnOffset(10);
             setGrowthRatio(30);
-            setSectorNumber(16);
-            setStickingProbability(2);
+            setSectorNumber(32);
+            setStickingProbability(7);
             setZDrift(4);
+            setDiffusionLength(10);
 
             float[][][] kernel =
                     {
@@ -96,21 +98,21 @@ public class Configuration {
                             {
                                     {0, 0, 0, 0, 0},
                                     {0, 0, 1, 0, 0},
-                                    {0, 0, 1, 3, 0},
+                                    {0, 0, 1, 1, 0},
                                     {0, 0, 1, 0, 0},
                                     {0, 0, 0, 0, 0}
                             },
                             {
                                     {0, 0, 1, 0, 0},
-                                    {0, 0, 1, 3, 0},
-                                    {0, 0, 0, 6, 2},
-                                    {0, 0, 1, 3, 0},
+                                    {0, 0, 1, 1, 0},
+                                    {0, 0, 0, 4, 4},
+                                    {0, 0, 1, 1, 0},
                                     {0, 0, 1, 0, 0}
                             },
                             {
                                     {0, 0, 0, 0, 0},
                                     {0, 0, 1, 0, 0},
-                                    {0, 0, 1, 3, 0},
+                                    {0, 0, 1, 1, 0},
                                     {0, 0, 1, 0, 0},
                                     {0, 0, 0, 0, 0}
                             },
@@ -357,6 +359,10 @@ public class Configuration {
         System.out.println("    - configuration loaded");
     }
 
+    private void setDiffusionLength(int diffusionLength) {
+        this.diffusionLength = diffusionLength;
+    }
+
     private void setZDrift(int i) {
         zDrift = i;
     }
@@ -503,5 +509,9 @@ public class Configuration {
 
     public int getZdrift() {
         return zDrift;
+    }
+
+    public double getDiffusionLength() {
+        return diffusionLength;
     }
 }

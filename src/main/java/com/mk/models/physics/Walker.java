@@ -20,7 +20,7 @@ public class Walker {
     public Walker(Configuration configuration) {
         this.configuration = configuration;
         this.position = configuration.getWalkerStart();
-        this.border = configuration.getKernel3D().length/2 +1;
+        this.border = configuration.getKernel3D().length/2 +2;
     }
 
     public Walker(Configuration configuration, int front) {
@@ -30,7 +30,7 @@ public class Walker {
 
         this.configuration = configuration;
         this.spawnZ = front - configuration.getSpawnOffset();
-        this.border = configuration.getKernel().length/2 +1;
+        this.border = configuration.getKernel().length/2 +2;
         int randomX = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSizeX() - border);
         int randomY = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSizeY() - border);
         this.position = new Position(randomX, randomY, spawnZ);
@@ -42,7 +42,7 @@ public class Walker {
 
         this.configuration = configuration;
         this.spawnZ = front - configuration.getSpawnOffset();
-        this.border = configuration.getKernel3D().length/2 +1;
+        this.border = configuration.getKernel3D().length/2 +2;
         int randomX = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSizeX() - border);
         int randomY = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSizeY() - border);
         this.position = new Position(randomX, randomY, spawnZ);
@@ -52,7 +52,7 @@ public class Walker {
     public Walker(Configuration configuration, int front, int x, int y) {
         this.configuration = configuration;
         this.spawnZ = front - configuration.getSpawnOffset();
-        this.border = configuration.getKernel3D().length/2 +1;
+        this.border = configuration.getKernel3D().length/2 +2;
         this.position = new Position(x, y, spawnZ);
     }
 
@@ -69,6 +69,7 @@ public class Walker {
         //int x = (sector % perRow) * distance + distance / 2;
         //int y = (int) Math.floor((sector / perRow) * distance + distance / 2);
         //System.out.println("sector = " + sector + "  perRow = " + perRow + "  border = " + border + "  distance = " + distance);
+        //System.out.println("spawn y-boundaries = rnd(" + (Math.floor((sector / perRow) * distance) + border) + ", " + (Math.floor((sector / perRow) * distance)  + distance - border) + ")");
 
         int randomX = ThreadLocalRandom.current().nextInt((sector % perRow) * distance + border, (sector % perRow) * distance + distance - border);
         int randomY = ThreadLocalRandom.current().nextInt((int) (Math.floor((sector / perRow) * distance) + border), (int) (Math.floor((sector / perRow) * distance)  + distance - border));
@@ -77,8 +78,6 @@ public class Walker {
     }
 
     public void moveRnd(final int zDrift) {
-        //int direction = ThreadLocalRandom.current().nextInt(0, 5 + 1);
-        //position.move(direction);
         position.moveRnd3d(zDrift);
         int meshSize = configuration.getMeshSizeX();
 
@@ -102,6 +101,10 @@ public class Walker {
 
     public Position getPosition() {
         return position;
+    }
+
+    public void setPosition(final int x, final int y, final int z) {
+        position = new Position(x, y, z);
     }
 
     public void nextSector() {

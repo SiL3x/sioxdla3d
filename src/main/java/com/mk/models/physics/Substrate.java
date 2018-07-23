@@ -47,6 +47,9 @@ public class Substrate {
     }
 
     public int getValueWithFront(final int x, final int y) {
+        if (x > 99 || y > 99 || y < 0 || x < 0) {
+            System.out.println("pos = (" + x + ", " + y + ")");
+        }
         return values.getInt(x, y) - (min - front);
     }
 
