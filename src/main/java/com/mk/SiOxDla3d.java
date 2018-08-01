@@ -34,6 +34,7 @@ public class SiOxDla3d {
     public SimulationUtils simulationUtils;
 
     private boolean run = true;
+    private int border;
     private String name = "test";
 
 
@@ -62,6 +63,7 @@ public class SiOxDla3d {
 
         System.out.println(">>> Calculate bond position");
         bondPositions = simulationUtils.calculateBondpositions(configuration.getKernel3D());
+        border = (int) Math.round(configuration.getKernel3D().length * 0.8);
 
         System.out.println(">>> Place seeds");
         simulationUtils.placeSeeds();
@@ -97,7 +99,6 @@ public class SiOxDla3d {
             i++;
         }
 
-
         PlotMesh plotMesh = new PlotMesh();
         plotMesh.plot3d(mesh);
         AnalysisLauncher.open(plotMesh);
@@ -107,14 +108,20 @@ public class SiOxDla3d {
         //TODO: @Max Wie kann man die Walker position visualisieren???
         boolean notSticked = true;
         walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
+        int[] stickingPosition = new int[]{-1, -1, -1};
         //System.out.println("respawn_z = " + (substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset()));
 
         while (notSticked) {
             walker.moveRnd(configuration.getZdrift());
             if (walkerIsTooFarOrBelowSurface(walker)) walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
-            if (walkerIsNearToSurface(walker)) notSticked = !simulationUtils.walkerSticks(walker);
+
+            stickingPosition = simulationUtils.walkerSticks(walker);
+            if (stickingPosition[0] != -1) {
+                notSticked = false;
+            }
         }
         System.out.println("walker = " + (substrate.getValue(walker.getPosition().getX(), walker.getPosition().getY()) - walker.getPosition().getZ()));
+        walker.setPosition(stickingPosition[0], stickingPosition[1], stickingPosition[2]);
         return walker;
     }
 
@@ -124,12 +131,7 @@ public class SiOxDla3d {
     }
 
     private boolean walkerIsNearToSurface(final Walker walker) {
-        return walker.getPosition().getZ() >= (substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY()) - configuration.getKernel3D().length * 0.866);
-    }
-
-    public static void main( String[] args ) throws Exception {
-        System.out.println("### New DLA Simulation");
-        SiOxDla3d siOxDla3d = new SiOxDla3d();
+        return walker.getPosition().getZ() >= (substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY()) - configuration.getKernel3D().length * 0.6928);
     }
 
     public float[][][] getKernel3D() {
@@ -161,5 +163,15 @@ public class SiOxDla3d {
 
     public Configuration getConfiguration() {
         return configuration;
+    }
+
+    public int getBorder() {
+        return border;
+    }
+
+
+    public static void main( String[] args ) throws Exception {
+        System.out.println("### New DLA Simulation");
+        SiOxDla3d siOxDla3d = new SiOxDla3d();
     }
 }
