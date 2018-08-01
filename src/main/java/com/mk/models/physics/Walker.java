@@ -65,11 +65,7 @@ public class Walker {
     }
     public void respawn(int spawnZ) {
         //TODO: rework respawn for evenly distributed random respawn
-
-        //int x = (sector % perRow) * distance + distance / 2;
-        //int y = (int) Math.floor((sector / perRow) * distance + distance / 2);
-        //System.out.println("sector = " + sector + "  perRow = " + perRow + "  border = " + border + "  distance = " + distance);
-        //System.out.println("spawn y-boundaries = rnd(" + (Math.floor((sector / perRow) * distance) + border) + ", " + (Math.floor((sector / perRow) * distance)  + distance - border) + ")");
+        //TODO: use only borders on boundaries
 
         int randomX = ThreadLocalRandom.current().nextInt((sector % perRow) * distance + border, (sector % perRow) * distance + distance - border);
         int randomY = ThreadLocalRandom.current().nextInt((int) (Math.floor((sector / perRow) * distance) + border), (int) (Math.floor((sector / perRow) * distance)  + distance - border));
