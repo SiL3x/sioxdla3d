@@ -64,11 +64,20 @@ public class Walker {
         this.position = new Position(randomX, randomY, spawnZ);
     }
     public void respawn(int spawnZ) {
-        //TODO: rework respawn for evenly distributed random respawn
-        //TODO: use only borders on boundaries
+        //TODO: now sectors at the boundaries have a higher probality density
 
-        int randomX = ThreadLocalRandom.current().nextInt((sector % perRow) * distance + border, (sector % perRow) * distance + distance - border);
-        int randomY = ThreadLocalRandom.current().nextInt((int) (Math.floor((sector / perRow) * distance) + border), (int) (Math.floor((sector / perRow) * distance)  + distance - border));
+        int minX = (sector % perRow) * distance;
+        int maxX = (sector % perRow) * distance + distance;
+        int minY = (int) (Math.floor((sector / perRow) * distance));
+        int maxY = (int) (Math.floor((sector / perRow) * distance)  + distance);
+
+        if (minX < border) minX = border;
+        if (maxX > configuration.getMeshSizeX() - border) maxX = configuration.getMeshSizeX() - border;
+        if (minY < border) minY = border;
+        if (maxY > configuration.getMeshSizeY() - border) maxY = configuration.getMeshSizeY() - border;
+
+        int randomX = ThreadLocalRandom.current().nextInt(minX, maxX);
+        int randomY = ThreadLocalRandom.current().nextInt(minY, maxY);
 
         this.position = new Position(randomX, randomY, spawnZ);
     }
@@ -77,15 +86,13 @@ public class Walker {
         position.moveRnd3d(zDrift);
         int meshSize = configuration.getMeshSizeX();
 
-        if (position.getY() > (meshSize - border)) position.setY(meshSize - border);
         if (position.getY() < border) position.setY(border);
         if (position.getX() < border) position.setX(border);
         if (position.getX() > meshSize - border) position.setX(meshSize - border);
     }
 
     public void moveRnd() {
-        //int direction = ThreadLocalRandom.current().nextInt(0, 5 + 1);
-        //position.move(direction);
+        //TODO: clean up overloaded method
         position.moveRnd3d();
         int meshSize = configuration.getMeshSizeX();
 
