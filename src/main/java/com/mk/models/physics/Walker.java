@@ -63,6 +63,7 @@ public class Walker {
         spawnZ = substrate.getValue(randomX, randomY) - configuration.getSpawnOffset();
         this.position = new Position(randomX, randomY, spawnZ);
     }
+
     public void respawn(int spawnZ) {
         //TODO: now sectors at the boundaries have a higher probality density
 
@@ -89,6 +90,7 @@ public class Walker {
         if (position.getY() < border) position.setY(border);
         if (position.getX() < border) position.setX(border);
         if (position.getX() > meshSize - border) position.setX(meshSize - border);
+        if (position.getY() > meshSize - border) position.setY(meshSize - border);
     }
 
     public void moveRnd() {
