@@ -79,7 +79,7 @@ public class Configuration {
             ));
 
             setSeedNumber(500);
-            setSpawnOffset(30);
+            setSpawnOffset(10);
             setGrowthRatio(30);
             setSectorNumber(32);
             setStickingProbability(7);

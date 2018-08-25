@@ -12,6 +12,7 @@ import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -21,6 +22,8 @@ import static com.mk.utils.MathUtils.distance;
 public class SimulationUtils {
 
     private SiOxDla3d sim;
+    final Vector3D UNITX = new Vector3D(1, 0, 0);
+    final Vector3D UNITY = new Vector3D(0, 1, 0);
 
     public SimulationUtils(SiOxDla3d simulation) {
         this.sim = simulation;
@@ -145,6 +148,8 @@ public class SimulationUtils {
 
         List<int[]> positionsWithinDiffusionLength = calculatePositionsOnSurface(substrateNormal, sim.configuration.getDiffusionLength(), walker);
 
+        Collections.shuffle(positionsWithinDiffusionLength);
+
         double bondValue = 0;
 
         for (int[] position : positionsWithinDiffusionLength) {
@@ -159,16 +164,24 @@ public class SimulationUtils {
     }
 
     private List<int[]> calculatePositionsOnSurface(final Vector3D substrateNormal, final double diffusionLength, final Walker walker) {
-        final double halfProjectedDiffLength = diffusionLength * substrateNormal.dotProduct(new Vector3D(0, 0, 1)) / (substrateNormal.getNorm() * 2);
+
+        final double projectionX = substrateNormal
+                .subtract(UNITX.scalarMultiply(substrateNormal.dotProduct(UNITX)))
+                .getNorm();
+
+        final double projectionY = substrateNormal
+                .subtract(UNITY.scalarMultiply(substrateNormal.dotProduct(UNITY)))
+                .getNorm();
+
         final int walkerX = walker.getPosition().getX();
         final int walkerY = walker.getPosition().getY();
 
         List<int[]> positions = new ArrayList<>();
 
-        int xStartValue = (int) Math.round(walkerX - halfProjectedDiffLength);
-        int xEndValue = (int) Math.round(walkerX + halfProjectedDiffLength);
-        int yStartValue = (int) Math.round(walkerY - halfProjectedDiffLength);
-        int yEndValue = (int) Math.round(walkerY + halfProjectedDiffLength);
+        int xStartValue = (int) Math.round(walkerX - projectionX * diffusionLength);
+        int xEndValue = (int) Math.round(walkerX + projectionX * diffusionLength);
+        int yStartValue = (int) Math.round(walkerY - projectionY * diffusionLength);
+        int yEndValue = (int) Math.round(walkerY + projectionY * diffusionLength);
 
         if (xEndValue > (99 - sim.getBorder())) xEndValue = 99 - sim.getBorder();
         if (yEndValue > (99 - sim.getBorder())) yEndValue = 99 - sim.getBorder();
