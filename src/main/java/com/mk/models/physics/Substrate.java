@@ -76,7 +76,7 @@ public class Substrate {
 
         substrateArray = createSubstrateArray();
 
-        calculateOrientationMap();
+        calculateOrientationMapUnsmoothed();
 
         //  check if all mesh sides are safe, by checking if all values[x, y] are set
         if (max == 0) System.out.println("!!! ERROR: Substrate not completely covered by polygons");
@@ -123,6 +123,34 @@ public class Substrate {
                                 .add(face.normal.scalarMultiply((distanceSum - face.distanceToPoint(point)) / distanceSum)); // removed 1- face.distance...
                     }
                 }
+                orientationsY.add(orientation);
+            }
+            orientationMap.add(orientationsY);
+        }
+    }
+
+    public void calculateOrientationMapUnsmoothed() {
+        orientationMap = new ArrayList<>();
+        Vector3D orientation = new Vector3D(0, 0, 0);
+
+        for (int x = 0; x < meshSizeX; x++) {
+            List<Vector3D> orientationsY = new ArrayList<>();
+
+            for (int y = 0; y < meshSizeY; y++) {
+                Vector3D point = new Vector3D(x, y, this.getValue(x, y));
+
+                if (faces.size() == 1) {
+                    orientation = orientation.add(faces.get(0).normal);
+                } else {
+                    double distance = 9999;
+                    for (Polygon face : faces) {
+                        if (face.distanceToPoint(point) < distance) {
+                            distance = face.distanceToPoint(point);
+                            orientation = face.normal;
+                        }
+                    }
+                }
+                //System.out.println("point = " + point + "   orientation = " + orientation);
                 orientationsY.add(orientation);
             }
             orientationMap.add(orientationsY);
