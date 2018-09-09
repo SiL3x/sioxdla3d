@@ -146,10 +146,11 @@ public class Substrate {
                     for (Polygon face : faces) {
                         if (face.distanceToPoint(point) < distance) {
                             distance = face.distanceToPoint(point);
-                            orientation = orientation.add(face.normal);
+                            orientation = face.normal;
                         }
                     }
                 }
+                //System.out.println("point = " + point + "   orientation = " + orientation);
                 orientationsY.add(orientation);
             }
             orientationMap.add(orientationsY);

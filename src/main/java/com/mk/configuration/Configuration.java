@@ -66,23 +66,23 @@ public class Configuration {
 
             setSubstrate(Arrays.asList(
                     Arrays.asList(
-                            new Vector3D(0 , 0, 130),
-                            new Vector3D(99, 0, 130),
+                            new Vector3D(0 , 0, 110),
+                            new Vector3D(99, 0, 110),
                             new Vector3D(0, 49, 160),
                             new Vector3D(99, 49, 160)
                     ),
                     Arrays.asList(
                             new Vector3D(0, 49, 160),
                             new Vector3D(99, 49, 160),
-                            new Vector3D(0, 99, 130),
-                            new Vector3D(99, 99, 130))
+                            new Vector3D(0, 99, 110),
+                            new Vector3D(99, 99, 110))
             ));
 
             setSeedNumber(500);
             setSpawnOffset(10);
             setGrowthRatio(30);
             setSectorNumber(32);
-            setStickingProbability(7);
+            setStickingProbability(6);
             setZDrift(4);
             setDiffusionLength(10);
 
@@ -91,35 +91,35 @@ public class Configuration {
                             {
                                     {0, 0, 0, 0, 0},
                                     {0, 0, 0, 0, 0},
-                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 0, 0},
                                     {0, 0, 0, 0, 0},
                                     {0, 0, 0, 0, 0}
                             },
                             {
                                     {0, 0, 0, 0, 0},
-                                    {0, 0, 1, 0, 0},
-                                    {0, 0, 1, 1, 0},
-                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 6, 6},
+                                    {0, 0, 0, 0, 0},
                                     {0, 0, 0, 0, 0}
                             },
                             {
-                                    {0, 0, 1, 0, 0},
-                                    {0, 0, 1, 1, 0},
-                                    {0, 0, 0, 4, 4},
-                                    {0, 0, 1, 1, 0},
-                                    {0, 0, 1, 0, 0}
-                            },
-                            {
                                     {0, 0, 0, 0, 0},
-                                    {0, 0, 1, 0, 0},
-                                    {0, 0, 1, 1, 0},
-                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 2, 0},
+                                    {0, 0, 0, 6, 6},
+                                    {0, 0, 0, 2, 0},
                                     {0, 0, 0, 0, 0}
                             },
                             {
                                     {0, 0, 0, 0, 0},
                                     {0, 0, 0, 0, 0},
-                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 6, 6},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0},
                                     {0, 0, 0, 0, 0},
                                     {0, 0, 0, 0, 0}
                             }
@@ -358,6 +358,8 @@ public class Configuration {
 
         System.out.println("    - configuration loaded");
     }
+
+
 
     private void setDiffusionLength(int diffusionLength) {
         this.diffusionLength = diffusionLength;
