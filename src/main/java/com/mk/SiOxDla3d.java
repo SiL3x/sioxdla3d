@@ -35,7 +35,8 @@ public class SiOxDla3d {
 
     private boolean run = true;
     private int border;
-    private String name = "test";
+    //private String name = "test";
+    private String name = "realistic";
 
 
     public SiOxDla3d() throws Exception {
@@ -67,7 +68,9 @@ public class SiOxDla3d {
 
         System.out.println(">>> Place seeds");
         simulationUtils.placeSeeds();
+        System.out.println("<<< seeds placed");
 
+        /*
         //TODO: set iteration variables
         int i = 0;
         int sticked = 0;
@@ -79,6 +82,8 @@ public class SiOxDla3d {
         }
 
         while (run) {
+
+            run = false;
 
             List<Position> positions = walkers.parallelStream()
                     .map(w -> spawnMoveAndStick(w).getPosition())
@@ -98,9 +103,14 @@ public class SiOxDla3d {
             if (substrate.getFront() <= 30 + substrate.getSpread()) run = false;
             i++;
         }
-
+        */
+        System.out.println(">>> Create mesh");
         PlotMesh plotMesh = new PlotMesh();
+
+        System.out.println(">>> Plot mesh");
         plotMesh.plot3d(mesh);
+
+        System.out.println(">>> Open mesh");
         AnalysisLauncher.open(plotMesh);
     }
 

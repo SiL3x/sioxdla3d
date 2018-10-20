@@ -39,7 +39,7 @@ public class Edge extends Line {
 
     public boolean intersects(Line line) {
         if (this.intersection(line) == null) return false;
-        if (this.edgeDistance(this.intersection(line)) > 1e-6 ) {
+        if (this.edgeDistance(this.intersection(line)) > 1e-6) { //1e-6
             return false;
         }
         return true;
