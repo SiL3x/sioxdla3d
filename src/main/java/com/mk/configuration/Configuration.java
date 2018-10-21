@@ -356,6 +356,71 @@ public class Configuration {
             setKernel3D(kernel);
         }
 
+        if (name == "1000_large_test") {
+            setMeshSize(1000, 1000, 1000);
+
+            setSubstrate(Arrays.asList(
+                    Arrays.asList(
+                            new Vector3D(0 , 0, 990),
+                            new Vector3D(999, 0, 990),
+                            new Vector3D(0, 999, 990)
+                    ),
+                    Arrays.asList(
+                            new Vector3D(0 , 999, 990),
+                            new Vector3D(999, 999, 990),
+                            new Vector3D(999, 0, 990)
+                    )
+            ));
+
+
+            setSeedNumber(5000);
+            setSpawnOffset(20);
+            setGrowthRatio(500);
+            setSectorNumber(64);
+            setStickingProbability(2);
+
+            float[][][] kernel =
+                    {
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 0, 4, 2},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            }
+                    };
+            setKernel3D(kernel);
+        }
+
+
 
         if (name == "realistic") {
             setMeshSize(1000, 1000, 1000);
