@@ -183,8 +183,8 @@ public class SimulationUtils {
         int yStartValue = (int) Math.round(walkerY - projectionY * diffusionLength);
         int yEndValue = (int) Math.round(walkerY + projectionY * diffusionLength);
 
-        if (xEndValue > (99 - sim.getBorder())) xEndValue = 99 - sim.getBorder();
-        if (yEndValue > (99 - sim.getBorder())) yEndValue = 99 - sim.getBorder();
+        if (xEndValue > (sim.configuration.getMeshSizeX() - 1 - sim.getBorder())) xEndValue = sim.configuration.getMeshSizeX() - sim.getBorder();
+        if (yEndValue > (sim.configuration.getMeshSizeY() - sim.getBorder())) yEndValue = sim.configuration.getMeshSizeY() - sim.getBorder();
         if (xStartValue < sim.getBorder()) xStartValue = sim.getBorder();
         if (yStartValue < sim.getBorder()) yStartValue = sim.getBorder();
 
