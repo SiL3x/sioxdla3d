@@ -128,7 +128,7 @@ public class Configuration {
         }
 
         if (name == "test2") {
-            setMeshSize(100);
+            setMeshSize(100, 100, 100);
 
             setSubstrate(
                     Arrays.asList(

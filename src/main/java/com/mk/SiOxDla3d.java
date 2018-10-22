@@ -35,8 +35,8 @@ public class SiOxDla3d {
 
     private boolean run = true;
     private int border;
-    //private String name = "test";
-    private String name = "1000_large_test";   //"realistic";
+    private String name = "test2";
+    //private String name = "1000_large_test";   //"realistic";
 
 
     public SiOxDla3d() throws Exception {
@@ -83,7 +83,7 @@ public class SiOxDla3d {
 
         while (run) {
 
-            run = false;
+            //run = false;
 
             System.out.println(">>> Start parallel stream - Iteration = " + i);
             List<Position> positions = walkers.parallelStream()
@@ -100,7 +100,7 @@ public class SiOxDla3d {
             simulationUtils.moveGrowthFront();
 
             //TODO: check break conditions (number of crystallites, front, no of iterations)
-            if (i > 1e3) run = false;
+            if (i > 1e5) run = false;
             if (substrate.getFront() <= 30 + substrate.getSpread()) run = false;
             i++;
         }
