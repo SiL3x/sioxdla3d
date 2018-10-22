@@ -122,6 +122,7 @@ public class SiOxDla3d {
         //System.out.println("respawn_z = " + (substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset()));
 
         int i = 0;
+
         while (notSticked) {
             walker.moveRnd(configuration.getZdrift());
             if (walkerIsTooFarOrBelowSurface(walker)) walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
@@ -131,9 +132,12 @@ public class SiOxDla3d {
                 notSticked = false;
             }
 
-            if (i == 1e5) {
+            if (i == 1000) {
+                System.out.println("killed a walker");
                 return new Walker(configuration, -1, -1, -1);
             }
+            //System.out.println("i = " + i);
+            i++;
         }
         System.out.println("walker = " + (substrate.getValue(walker.getPosition().getX(), walker.getPosition().getY()) - walker.getPosition().getZ()));
         walker.setPosition(stickingPosition[0], stickingPosition[1], stickingPosition[2]);

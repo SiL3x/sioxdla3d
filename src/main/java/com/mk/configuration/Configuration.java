@@ -156,7 +156,7 @@ public class Configuration {
             setSeedNumber(100);
             setSpawnOffset(15);
             setGrowthRatio(20);
-            setSectorNumber(16);
+            setSectorNumber(64);
             setStickingProbability(3);
 
             float[][][] kernel =
