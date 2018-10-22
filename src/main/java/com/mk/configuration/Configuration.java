@@ -158,6 +158,8 @@ public class Configuration {
             setGrowthRatio(20);
             setSectorNumber(64);
             setStickingProbability(3);
+            setZDrift(4);
+            setDiffusionLength(10);
 
             float[][][] kernel =
                     {
