@@ -242,7 +242,9 @@ public class Configuration {
             setSpawnOffset(15);
             setGrowthRatio(100);
             setSectorNumber(64);
-            setStickingProbability(3);
+            setStickingProbability(1);
+            setZDrift(4);
+            setDiffusionLength(20);
 
             float[][][] kernel =
                     {

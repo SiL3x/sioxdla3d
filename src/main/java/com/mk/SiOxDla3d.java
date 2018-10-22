@@ -100,7 +100,7 @@ public class SiOxDla3d {
 
             //TODO: check break conditions (number of crystallites, front, no of iterations)
             if (i > 1e5) run = false;
-            if (substrate.getFront() <= 30 + substrate.getSpread()) run = false;
+            if (substrate.getFront() <= 850 + substrate.getSpread()) run = false;
             i++;
         }
 
