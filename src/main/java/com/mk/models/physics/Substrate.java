@@ -47,9 +47,6 @@ public class Substrate {
     }
 
     public int getValueWithFront(final int x, final int y) {
-        if (x > 99 || y > 99 || y < 0 || x < 0) {
-            System.out.println("pos = (" + x + ", " + y + ")");
-        }
         return values.getInt(x, y) - (min - front);
     }
 
@@ -64,6 +61,7 @@ public class Substrate {
         for (int x = 0; x < meshSizeX; x++) {
             for (int y = 0; y < meshSizeY; y++) {
                 setZValue(x, y);
+                if (getValue(x, y) < 718) System.out.println("x, y = " + x + ", " + y + "   z = " + getValue(x, y));
             }
         }
 
@@ -72,7 +70,7 @@ public class Substrate {
         front = min;
         highestPoint = max;
         spread = min - max;
-        System.out.println("front = " + front + "  spread = " + spread);
+        System.out.println("front = " + front + "  min = " + min + "  max = " + max + "  spread = " + spread);
 
         substrateArray = createSubstrateArray();
 
@@ -166,7 +164,9 @@ public class Substrate {
             intersection = polygon.plane.intersection(line);
 
             if (polygon.isInPolygon(intersection)) {
+                //System.out.println("i = " + i + "   x,y = " + x + ", " + y);
                 values.putScalar(x, y, (int) Math.round(intersection.getZ()));
+                if ((int) Math.round(intersection.getZ()) < 700) System.out.println("face " + polygon);
                 break;
             }
         }

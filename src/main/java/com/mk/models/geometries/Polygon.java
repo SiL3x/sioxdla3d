@@ -30,6 +30,7 @@ public class Polygon {
         for (int i = 0; i < (vectors.size() - 1); i++) {
             Vector3D vector = sortedVectors.get(0);
             Collections.sort(sortedVectors, (a, b) -> a.distance(vector) < b.distance(vector) ? -1 : a.distance(vector) == b.distance(vector) ? 0 : 1);
+            //System.out.println("p1 = " + sortedVectors.get(0) + "   p2 = " + sortedVectors.get(1));
             borders.add(new Edge(sortedVectors.get(0), sortedVectors.get(1), 0.05));
             sortedVectors.remove(0);
         }
@@ -75,18 +76,43 @@ public class Polygon {
 
         int crossCount = 0;
         Vector3D edge1 = vectors.get(0).subtract(vectors.get(1));
-        Line lineToCheck = new Line(vector3D, vector3D.add(edge1), 0.005);
-        double abscissa = lineToCheck.getAbscissa(vector3D);
+        Vector3D edge2 = vectors.get(1).subtract(vectors.get(2));
+        Line lineToCheck = new Line(vector3D, vector3D.add(edge1).add(edge2), 0.01);
+        //System.out.println("Line: direction = " + lineToCheck.getDirection() + "   origin = " + lineToCheck.getOrigin());
+        Double abscissa = lineToCheck.getAbscissa(vector3D);
+        List<Vector3D> intersections =  new ArrayList<>();
+        //System.out.println("abscissa = " + abscissa);
 
         for (Edge edge : edges) {
             if (edge.isOnEdge(vector3D)) return true;
 
             if (edge.intersects(lineToCheck)) {
-                if (abscissa <= lineToCheck.getAbscissa(lineToCheck.intersection(edge))) crossCount++;
+                //System.out.println("intersects and lineToCheck.getAbscissa..." + (lineToCheck.getAbscissa(lineToCheck.intersection(edge))) + " at = " + lineToCheck.pointAt(lineToCheck.getAbscissa(lineToCheck.intersection(edge))));
+                //if (abscissa <= lineToCheck.getAbscissa(lineToCheck.intersection(edge))) crossCount++;
+                //if (lineToCheck.getAbscissa(lineToCheck.intersection(edge)) >= 0) crossCount++;
+                Double intersectionAbscissa = lineToCheck.getAbscissa(lineToCheck.intersection(edge));
+                Vector3D intersectionOnEdge = lineToCheck.intersection(edge);
+
+                if ( intersectionAbscissa > abscissa && !listContains(intersections, intersectionOnEdge)) {
+                    intersections.add(intersectionOnEdge);
+                    //System.out.println("intersectionAbscissas = " + intersections);
+                    crossCount++;
+                }
+            }
+        }
+        //System.out.println("crossCount = " + crossCount);
+        if (crossCount % 2 == 0) return false;
+        else return true;
+    }
+
+    private boolean listContains(List<Vector3D> list, Vector3D value) {
+        for (Vector3D valueInList : list) {
+            //System.out.println("in List = " + valueInList + "   value = " + value + " equal? " + (valueInList.equals(value)));
+            if (valueInList.equals(value)) {
+                return true;
             }
         }
 
-        if (crossCount % 2 == 0) return false;
-        else return true;
+        return false;
     }
 }

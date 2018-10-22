@@ -42,8 +42,12 @@ class PolygonTest {
 
         Vector3D point = new Vector3D(0, 0, 0);
         Assert.assertTrue(polygon.isInPolygon(point));
+    }
 
-        point = new Vector3D(3, 3, 0);
+    @Test void isNotInPolygon() {
+        createPolygon();
+
+        Vector3D point = new Vector3D(3, 3, 0);
         Assert.assertFalse(polygon.isInPolygon(point));
     }
 
@@ -103,6 +107,7 @@ class PolygonTest {
         final Line line = new Line(new Vector3D(10, 10, 0), new Vector3D(10, 10, 1), 0.05);
 
         Vector3D intersection = polygon.plane.intersection(line);
+        //System.out.println("intersection = " + intersection);
         Assert.assertTrue(polygon.isInPolygon(intersection));
 
         //Assert.assertTrue(polygon.isInPolygon(new Vector3D(0, 0, 90)));
@@ -113,5 +118,38 @@ class PolygonTest {
     }
 
 
+    @Test
+    public void isIntersectionInFace() {
+        final Line line = new Line(new Vector3D(50, 50, 0), new Vector3D(50, 50, 1), 0.05);
 
+        Polygon face = new Polygon(
+                Arrays.asList( // 1
+                new Vector3D(0 , 0, 990),
+                new Vector3D(300, 0, 990),
+                new Vector3D(130, 237, 910),
+                new Vector3D(0 , 232, 910)
+                )
+        );
+
+        Vector3D intersection = face.plane.intersection(line);
+        //System.out.println("intersection = " + intersection);
+        //System.out.println("face.isIntersectionInFace(intersection); = " + face.isInPolygon(intersection));
+    }
+
+    @Test
+    public void determineZfromFace() {
+        Polygon face = new Polygon(
+                Arrays.asList(
+                        new Vector3D(83 , 375, 888),
+                        new Vector3D(280, 572, 746),
+                        new Vector3D(288, 622, 735)
+                )
+        );
+
+        final Line line = new Line(new Vector3D(705, 997, 0), new Vector3D(705, 997, 1), 0.05);
+        Vector3D intersection = face.plane.intersection(line);
+
+        //System.out.println("intersection = " + intersection + "   is in polygon: " + face.isInPolygon(intersection));
+        //x, y = 705, 997   z = 440
+    }
 }
