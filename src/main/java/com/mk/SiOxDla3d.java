@@ -91,10 +91,9 @@ public class SiOxDla3d {
                     .collect(toList());
 
             for (Position position : positions) {
-                mesh.putScalar(
-                        position.getX(),
-                        position.getY(),
-                        position.getZ(), 1);
+                if (position.getX() != -1) {
+                    mesh.putScalar(position.getX(), position.getY(), position.getZ(), 1);
+                }
             }
 
             simulationUtils.moveGrowthFront();
@@ -122,16 +121,23 @@ public class SiOxDla3d {
         int[] stickingPosition = new int[]{-1, -1, -1};
         //System.out.println("respawn_z = " + (substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset()));
 
+        int i = 0;
+
         while (notSticked) {
-            //System.out.println( (substrate.getValue(walker.getPosition().getX(), walker.getPosition().getY()) - walker.getPosition().getZ()));
             walker.moveRnd(configuration.getZdrift());
-            //if (walkerIsTooFarOrBelowSurface(walker)) walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
             if (walkerIsTooFarOrBelowSurface(walker)) walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
 
             stickingPosition = simulationUtils.walkerSticks(walker);
             if (stickingPosition[0] != -1) {
                 notSticked = false;
             }
+
+            if (i == 1000) {
+                System.out.println("killed a walker");
+                return new Walker(configuration, -1, -1, -1);
+            }
+            //System.out.println("i = " + i);
+            i++;
         }
         System.out.println("walker = " + (substrate.getValue(walker.getPosition().getX(), walker.getPosition().getY()) - walker.getPosition().getZ()));
         walker.setPosition(stickingPosition[0], stickingPosition[1], stickingPosition[2]);
