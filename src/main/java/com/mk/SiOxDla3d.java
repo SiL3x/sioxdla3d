@@ -145,7 +145,9 @@ public class SiOxDla3d {
     }
 
     private boolean walkerIsTooFarOrBelowSurface(final Walker walker) {
-        return walker.getPosition().getZ() < substrate.getFront() - substrate.getSpread() - 10 ||
+        //System.out.println("too far or below surface... z = " + walker.getPosition().getZ() + "  front-spread = " + (substrate.getFront() -substrate.getSpread() - configuration.getSpawnOffset() - 10) +
+        //"  valueWithFront = " + substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY()));
+        return walker.getPosition().getZ() < (substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset() - 10) ||
                 walker.getPosition().getZ() >= substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY());
     }
 

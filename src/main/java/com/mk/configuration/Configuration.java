@@ -236,9 +236,9 @@ public class Configuration {
                     )*/
             );
 
-            setSeedNumber(100);
+            setSeedNumber(2000);
             setSpawnOffset(15);
-            setGrowthRatio(20);
+            setGrowthRatio(100);
             setSectorNumber(64);
             setStickingProbability(3);
 
