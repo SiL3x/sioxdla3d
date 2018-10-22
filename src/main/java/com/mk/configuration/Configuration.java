@@ -200,6 +200,89 @@ public class Configuration {
             setKernel3D(kernel);
         }
 
+        if (name == "test3") {
+            setMeshSize(1000, 1000, 1000);
+
+            setSubstrate(
+                    Arrays.asList(
+                            Arrays.asList(
+                                    new Vector3D(0, 0, 990),
+                                    new Vector3D(999, 0, 990),
+                                    new Vector3D(0, 999, 990),
+                                    new Vector3D(999, 999, 990)
+                            )
+                    )
+
+                    /*
+                    Arrays.asList(
+                            Arrays.asList(
+                                    new Vector3D(0, 0, 70),
+                                    new Vector3D(99, 0, 70),
+                                    new Vector3D(0, 32, 90),
+                                    new Vector3D(99, 32, 90)
+                            ),
+                            Arrays.asList(
+                                    new Vector3D(0, 32, 90),
+                                    new Vector3D(99, 32, 90),
+                                    new Vector3D(0, 65, 70),
+                                    new Vector3D(99, 65, 70)
+                            ),
+                            Arrays.asList(
+                                    new Vector3D(0, 65, 70),
+                                    new Vector3D(99, 65, 70),
+                                    new Vector3D(0, 99, 90),
+                                    new Vector3D(99, 99, 90)
+                            )
+                    )*/
+            );
+
+            setSeedNumber(100);
+            setSpawnOffset(15);
+            setGrowthRatio(20);
+            setSectorNumber(64);
+            setStickingProbability(3);
+
+            float[][][] kernel =
+                    {
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 1, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 1, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 0, 6, 4},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 1, 2, 0},
+                                    {0, 0, 0, 0, 0}
+                            },
+                            {
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 1, 1, 0},
+                                    {0, 0, 0, 0, 0},
+                                    {0, 0, 0, 0, 0}
+                            }
+                    };
+            setKernel3D(kernel);
+        }
+
         if (name == "large_test") {
             setMeshSize(150);
 

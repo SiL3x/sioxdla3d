@@ -35,7 +35,7 @@ public class SiOxDla3d {
 
     private boolean run = true;
     private int border;
-    private String name = "test2";
+    private String name = "test3";
     //private String name = "1000_large_test";   //"realistic";
 
 
