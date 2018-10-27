@@ -40,9 +40,12 @@ public class SiOxDla3d {
 
 
     public SiOxDla3d() throws Exception {
+        double time = System.currentTimeMillis();
+        System.out.println(">>> Start time : " + time);
         simulationUtils = new SimulationUtils(this);
         int cores = Runtime.getRuntime().availableProcessors();
         System.out.println(">>> Cores detected : " + cores);
+        //System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "32");
 
         ForkJoinPool commonPool = ForkJoinPool.commonPool();
         System.out.println(">>> Thread pool : " + commonPool.getParallelism());
@@ -100,9 +103,11 @@ public class SiOxDla3d {
 
             //TODO: check break conditions (number of crystallites, front, no of iterations)
             if (i > 1e5) run = false;
-            if (substrate.getFront() <= 850 + substrate.getSpread()) run = false;
+            if (substrate.getFront() <= 975 + substrate.getSpread()) run = false;
             i++;
         }
+
+        System.out.println(">>> Computing time = "  + (System.currentTimeMillis() - time));
 
         System.out.println(">>> Create mesh");
         PlotMesh plotMesh = new PlotMesh();

@@ -241,7 +241,7 @@ public class Configuration {
             setSeedNumber(2000);
             setSpawnOffset(15);
             setGrowthRatio(100);
-            setSectorNumber(64);
+            setSectorNumber(256);
             setStickingProbability(1);
             setZDrift(4);
             setDiffusionLength(20);
