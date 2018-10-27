@@ -12,6 +12,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.util.ArrayUtil;
 
+import org.nd4j.linalg.api.buffer.DataBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
@@ -40,6 +41,8 @@ public class SiOxDla3d {
 
 
     public SiOxDla3d() throws Exception {
+        Nd4j.setDataType(DataBuffer.Type.FLOAT);
+
         double time = System.currentTimeMillis();
         System.out.println(">>> Start time : " + time);
         simulationUtils = new SimulationUtils(this);
@@ -144,7 +147,7 @@ public class SiOxDla3d {
             //System.out.println("i = " + i);
             i++;
         }
-        System.out.println("walker = " + (substrate.getValue(walker.getPosition().getX(), walker.getPosition().getY()) - walker.getPosition().getZ()));
+        //System.out.println("walker = " + (substrate.getValue(walker.getPosition().getX(), walker.getPosition().getY()) - walker.getPosition().getZ()));
         walker.setPosition(stickingPosition[0], stickingPosition[1], stickingPosition[2]);
         return walker;
     }

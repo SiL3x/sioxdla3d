@@ -142,29 +142,40 @@ public class SimulationUtils {
         int xWalker = walker.getPosition().getX();
         int yWalker = walker.getPosition().getY();
 
+        double startTime = System.nanoTime();
+
         Vector3D substrateNormal = sim.substrate.getOrientation(xWalker, yWalker);
         MoellerHughesRotation rotator = new MoellerHughesRotation(new Vector3D(0, 0, 1), substrateNormal);
-        rotateBondPositions(rotator);
+        rotateBondPositions(rotator);  // 1,2 ms
 
-        List<int[]> positionsWithinDiffusionLength = calculatePositionsOnSurface(substrateNormal, sim.configuration.getDiffusionLength(), walker);
+        double timeRotation = (System.nanoTime() - startTime) / 1e6;
+
+        startTime = System.nanoTime();
+        List<int[]> positionsWithinDiffusionLength = calculatePositionsOnSurface(substrateNormal, sim.configuration.getDiffusionLength(), walker); // 869 ms
+        double timePositionOnSurface = (System.nanoTime() - startTime) / 1e6;
 
         Collections.shuffle(positionsWithinDiffusionLength);
 
+        startTime = System.nanoTime();
         double bondValue = 0;
 
         for (int[] position : positionsWithinDiffusionLength) {
             bondValue = calculateRotatedKernelOverlap(position);
             if (bondValue > 0) {
-                if (ThreadLocalRandom.current().nextFloat() * Math.exp(bondValue) > sim.getStickingProbability()) {
+                if (ThreadLocalRandom.current().nextFloat() * Math.exp(bondValue) > sim.getStickingProbability()) { // 2,2 ms
+                    System.out.println("t_rot \t" + timeRotation + "\t t_positions \t" + timePositionOnSurface + "\t t_overlap \t" + (System.nanoTime() - startTime) / 1e6);
+
                     return position;
                 }
             }
         }
+        System.out.println("t_rot \t" + timeRotation + "\t t_positions \t" + timePositionOnSurface + "\t t_overlap \t" + (System.nanoTime() - startTime) / 1e6);
+
         return new int[]{-1, -1, -1};
     }
 
     private List<int[]> calculatePositionsOnSurface(final Vector3D substrateNormal, final double diffusionLength, final Walker walker) {
-
+        //TODO: Change from rectangular to circle
         final double projectionX = substrateNormal
                 .subtract(UNITX.scalarMultiply(substrateNormal.dotProduct(UNITX)))
                 .getNorm();
