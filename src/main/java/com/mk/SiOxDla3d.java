@@ -103,11 +103,14 @@ public class SiOxDla3d {
 
             //TODO: check break conditions (number of crystallites, front, no of iterations)
             if (i > 1e5) run = false;
-            if (substrate.getFront() <= 975 + substrate.getSpread()) run = false;
+            if (substrate.getFront() <= 989 + substrate.getSpread()) run = false;
             i++;
         }
 
         System.out.println(">>> Computing time = "  + (System.currentTimeMillis() - time));
+
+        System.out.println(">>> Saving INDarray");
+        Nd4j.writeTxt(mesh, "out.txt");
 
         System.out.println(">>> Create mesh");
         PlotMesh plotMesh = new PlotMesh();
