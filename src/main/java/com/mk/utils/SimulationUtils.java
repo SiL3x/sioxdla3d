@@ -142,40 +142,34 @@ public class SimulationUtils {
         int xWalker = walker.getPosition().getX();
         int yWalker = walker.getPosition().getY();
 
-        double startTime = System.nanoTime();
+
 
         Vector3D substrateNormal = sim.substrate.getOrientation(xWalker, yWalker);
         MoellerHughesRotation rotator = new MoellerHughesRotation(new Vector3D(0, 0, 1), substrateNormal);
         rotateBondPositions(rotator);  // 1,2 ms
 
-        double timeRotation = (System.nanoTime() - startTime) / 1e6;
-
-        startTime = System.nanoTime();
         List<int[]> positionsWithinDiffusionLength = calculatePositionsOnSurface(substrateNormal, sim.configuration.getDiffusionLength(), walker); // 869 ms
-        double timePositionOnSurface = (System.nanoTime() - startTime) / 1e6;
 
         Collections.shuffle(positionsWithinDiffusionLength);
 
-        startTime = System.nanoTime();
         double bondValue = 0;
 
         for (int[] position : positionsWithinDiffusionLength) {
             bondValue = calculateRotatedKernelOverlap(position);
             if (bondValue > 0) {
                 if (ThreadLocalRandom.current().nextFloat() * Math.exp(bondValue) > sim.getStickingProbability()) { // 2,2 ms
-                    System.out.println("t_rot \t" + timeRotation + "\t t_positions \t" + timePositionOnSurface + "\t t_overlap \t" + (System.nanoTime() - startTime) / 1e6);
-
                     return position;
                 }
             }
         }
-        System.out.println("t_rot \t" + timeRotation + "\t t_positions \t" + timePositionOnSurface + "\t t_overlap \t" + (System.nanoTime() - startTime) / 1e6);
 
         return new int[]{-1, -1, -1};
     }
 
     private List<int[]> calculatePositionsOnSurface(final Vector3D substrateNormal, final double diffusionLength, final Walker walker) {
         //TODO: Change from rectangular to circle
+
+
         final double projectionX = substrateNormal
                 .subtract(UNITX.scalarMultiply(substrateNormal.dotProduct(UNITX)))
                 .getNorm();
@@ -194,16 +188,45 @@ public class SimulationUtils {
         int yStartValue = (int) Math.round(walkerY - projectionY * diffusionLength);
         int yEndValue = (int) Math.round(walkerY + projectionY * diffusionLength);
 
+        //System.out.println("x : {" + xStartValue + ", " + xEndValue + "}       y : {" + yStartValue + ", " + yEndValue + "}");
+
         if (xEndValue > (sim.configuration.getMeshSizeX() - 1 - sim.getBorder())) xEndValue = sim.configuration.getMeshSizeX() - sim.getBorder();
         if (yEndValue > (sim.configuration.getMeshSizeY() - sim.getBorder())) yEndValue = sim.configuration.getMeshSizeY() - sim.getBorder();
         if (xStartValue < sim.getBorder()) xStartValue = sim.getBorder();
         if (yStartValue < sim.getBorder()) yStartValue = sim.getBorder();
 
+
+        Substrate substrate = sim.getSubstrate();
+
+        double time1;
+        double time2;
+        double time3;
+        double time4;
+
+        double t_GetValue = 0;
+        double t_createList = 0;
+        double t_addList = 0;
+        int i = 0;
+
         for (int x = xStartValue; x <= xEndValue ; x++) {
             for (int y = yStartValue; y <= yEndValue; y++) {
-                positions.add(new int[]{x, y, sim.getSubstrate().getValueWithFront(x, y)});
+                time1 = System.nanoTime();
+                int value = substrate.getValueWithFront(x, y);
+                time2 = System.nanoTime();
+                int[] new_list = new int[]{x, y, value};
+                time3 = System.nanoTime();
+                positions.add(new_list);
+                time4 = System.nanoTime();
+
+                t_GetValue += (time2 - time1)/1e6;
+                t_createList += (time3 - time2)/1e6;
+                t_addList += (time4 - time3)/1e6;
+                i++;
             }
         }
+
+
+        System.out.println("getValue \t " + t_GetValue + "\t create \t" + t_createList + "\t add \t" + t_addList + "\t iterations \t" + i);
         return positions;
     }
 
