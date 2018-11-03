@@ -112,6 +112,7 @@ public class SiOxDla3d {
         System.out.println(">>> Saving INDarray");
         Nd4j.writeTxt(mesh, "out.txt");
 
+        /*
         System.out.println(">>> Create mesh");
         PlotMesh plotMesh = new PlotMesh();
 
@@ -120,6 +121,7 @@ public class SiOxDla3d {
 
         System.out.println(">>> Open mesh");
         AnalysisLauncher.open(plotMesh);
+        */
     }
 
     private Walker spawnMoveAndStick(Walker walker) {
