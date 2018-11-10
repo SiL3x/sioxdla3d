@@ -12,7 +12,9 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.util.ArrayUtil;
 
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
@@ -113,8 +115,11 @@ public class SiOxDla3d {
 
         System.out.println(">>> Saving INDarray");
         //Nd4j.writeTxt(mesh, "out.txt");
-        File file = new File("out.dat");
-        writeArrayToDisk(mesh, file);
+        //File file = new File("out.dat");
+        //writeArrayToDisk(mesh, file);
+
+        DataOutputStream sWrite = new DataOutputStream(new FileOutputStream(new File("tmp.bin")));
+        Nd4j.write(mesh, sWrite);
 
         /*
         System.out.println(">>> Create mesh");
