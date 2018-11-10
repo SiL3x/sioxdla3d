@@ -12,11 +12,13 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.util.ArrayUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 
 import static java.util.stream.Collectors.toList;
+import static org.nd4j.serde.binary.BinarySerde.writeArrayToDisk;
 
 /**
  * Diffusion limited aggregation model in 3D
@@ -103,14 +105,16 @@ public class SiOxDla3d {
 
             //TODO: check break conditions (number of crystallites, front, no of iterations)
             if (i > 1e5) run = false;
-            if (substrate.getFront() <= 989 + substrate.getSpread()) run = false;
+            if (substrate.getFront() <= 800 + substrate.getSpread()) run = false;
             i++;
         }
 
         System.out.println(">>> Computing time = "  + (System.currentTimeMillis() - time));
 
         System.out.println(">>> Saving INDarray");
-        Nd4j.writeTxt(mesh, "out.txt");
+        //Nd4j.writeTxt(mesh, "out.txt");
+        File file = new File("out.dat");
+        writeArrayToDisk(mesh, file);
 
         /*
         System.out.println(">>> Create mesh");
@@ -204,6 +208,10 @@ public class SiOxDla3d {
 
     public static void main( String[] args ) throws Exception {
         System.out.println("### New DLA Simulation");
-        SiOxDla3d siOxDla3d = new SiOxDla3d();
+        if (System.getProperty("outfile") != null) {
+            String outFile = System.getProperty("outfile");
+            SiOxDla3d siOxDla3d = new SiOxDla3d();
+        }
+
     }
 }
