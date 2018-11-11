@@ -10,12 +10,14 @@ import com.mk.utils.SimulationUtils;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.indexing.NDArrayIndex;
 import org.nd4j.linalg.util.ArrayUtil;
 import org.nd4j.serde.binary.BinarySerde;
 
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
@@ -118,8 +120,9 @@ public class SiOxDla3d {
 
         System.out.println(">>> Saving INDarray");
         //Nd4j.writeTxt(mesh, "out.txt");
-        //File file = new File("out.dat");
-        //writeArrayToDisk(mesh, file);
+
+        saveMesh();
+        /* Same byteBufferSize Problem
         System.out.println("  >>> Writing to ByteBuffer");
         ByteBuffer buffer = BinarySerde.toByteBuffer(mesh);
 
@@ -127,6 +130,7 @@ public class SiOxDla3d {
         FileChannel fc = new FileOutputStream("data.txt").getChannel();
         fc.write(buffer);
         fc.close();
+        */
 
         //DataOutputStream sWrite = new DataOutputStream(new FileOutputStream(new File("tmp.bin")));
         //Nd4j.write(mesh, sWrite);
@@ -142,6 +146,20 @@ public class SiOxDla3d {
         System.out.println(">>> Open mesh");
         AnalysisLauncher.open(plotMesh);
         */
+    }
+
+    private void saveMesh() {
+        INDArray small = mesh.get(
+                NDArrayIndex.interval(0, configuration.getMeshSizeX()),
+                NDArrayIndex.interval(0, configuration.getMeshSizeY()),
+                NDArrayIndex.interval(0, 30)
+        );
+        File file = new File("out.dat");
+        try {
+            writeArrayToDisk(small, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private Walker spawnMoveAndStick(Walker walker) {
