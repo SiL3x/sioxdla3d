@@ -95,7 +95,7 @@ public class SiOxDla3d {
 
         while (run) {
 
-            //run = false;
+            run = false;
 
             System.out.println(">>> Start parallel stream - Iteration = " + i);
             List<Position> positions = walkers.parallelStream()
@@ -120,8 +120,12 @@ public class SiOxDla3d {
 
         System.out.println(">>> Saving INDarray");
         //Nd4j.writeTxt(mesh, "out.txt");
+        System.out.println("  >>> saving slice z = {0, 499}");
+        saveMesh(0, 499);
+        System.out.println("  >>> saving slice z = {500, 999}");
+        saveMesh(500, 999);
 
-        saveMesh();
+
         /* Same byteBufferSize Problem
         System.out.println("  >>> Writing to ByteBuffer");
         ByteBuffer buffer = BinarySerde.toByteBuffer(mesh);
@@ -148,16 +152,18 @@ public class SiOxDla3d {
         */
     }
 
-    private void saveMesh() {
+    private void saveMesh(int from, int to) throws IOException {
         INDArray small = mesh.get(
                 NDArrayIndex.interval(0, configuration.getMeshSizeX()),
                 NDArrayIndex.interval(0, configuration.getMeshSizeY()),
-                NDArrayIndex.interval(0, 30)
+                NDArrayIndex.interval(from, to)
         );
-        File file = new File("out.dat");
+        File file = new File(System.getProperty("user.home") + "/output/" + String.format("out_%d-%d.dat", from, to));
+        file.createNewFile();
         try {
             writeArrayToDisk(small, file);
         } catch (IOException e) {
+            System.out.println("e = " + e);
             e.printStackTrace();
         }
     }
