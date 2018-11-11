@@ -11,10 +11,13 @@ import org.jzy3d.analysis.AnalysisLauncher;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.util.ArrayUtil;
+import org.nd4j.serde.binary.BinarySerde;
 
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
@@ -117,9 +120,17 @@ public class SiOxDla3d {
         //Nd4j.writeTxt(mesh, "out.txt");
         //File file = new File("out.dat");
         //writeArrayToDisk(mesh, file);
+        System.out.println("  >>> Writing to ByteBuffer");
+        ByteBuffer buffer = BinarySerde.toByteBuffer(mesh);
 
-        DataOutputStream sWrite = new DataOutputStream(new FileOutputStream(new File("tmp.bin")));
-        Nd4j.write(mesh, sWrite);
+        System.out.println("  >>> Writing ByteBuffer to file");
+        FileChannel fc = new FileOutputStream("data.txt").getChannel();
+        fc.write(buffer);
+        fc.close();
+
+        //DataOutputStream sWrite = new DataOutputStream(new FileOutputStream(new File("tmp.bin")));
+        //Nd4j.write(mesh, sWrite);
+
 
         /*
         System.out.println(">>> Create mesh");
@@ -217,6 +228,6 @@ public class SiOxDla3d {
             String outFile = System.getProperty("outfile");
             SiOxDla3d siOxDla3d = new SiOxDla3d();
         }
-
+        SiOxDla3d siOxDla3d = new SiOxDla3d();
     }
 }
