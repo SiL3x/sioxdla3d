@@ -95,7 +95,7 @@ public class SiOxDla3d {
 
         while (run) {
 
-            run = false;
+            //run = false;
 
             System.out.println(">>> Start parallel stream - Iteration = " + i);
             List<Position> positions = walkers.parallelStream()
