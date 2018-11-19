@@ -10,13 +10,22 @@ import com.mk.utils.SimulationUtils;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.indexing.NDArrayIndex;
 import org.nd4j.linalg.util.ArrayUtil;
+import org.nd4j.serde.binary.BinarySerde;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 
 import static java.util.stream.Collectors.toList;
+import static org.nd4j.serde.binary.BinarySerde.writeArrayToDisk;
 
 /**
  * Diffusion limited aggregation model in 3D
@@ -103,12 +112,19 @@ public class SiOxDla3d {
 
             //TODO: check break conditions (number of crystallites, front, no of iterations)
             if (i > 1e5) run = false;
-            if (substrate.getFront() <= 975 + substrate.getSpread()) run = false;
+            if (substrate.getFront() <= 800 + substrate.getSpread()) run = false;
             i++;
         }
 
         System.out.println(">>> Computing time = "  + (System.currentTimeMillis() - time));
 
+        System.out.println(">>> Saving INDarray");
+        System.out.println("  >>> saving slice z = {0, 499}");
+        saveMesh(0, 499);
+        System.out.println("  >>> saving slice z = {500, 999}");
+        saveMesh(500, 999);
+
+        /*
         System.out.println(">>> Create mesh");
         PlotMesh plotMesh = new PlotMesh();
 
@@ -117,6 +133,23 @@ public class SiOxDla3d {
 
         System.out.println(">>> Open mesh");
         AnalysisLauncher.open(plotMesh);
+        */
+    }
+
+    private void saveMesh(int from, int to) throws IOException {
+        INDArray small = mesh.get(
+                NDArrayIndex.interval(0, configuration.getMeshSizeX()),
+                NDArrayIndex.interval(0, configuration.getMeshSizeY()),
+                NDArrayIndex.interval(from, to)
+        );
+        File file = new File(System.getProperty("user.home") + "/output/" + String.format("out_%d-%d.dat", from, to));
+        file.createNewFile();
+        try {
+            writeArrayToDisk(small, file);
+        } catch (IOException e) {
+            System.out.println("e = " + e);
+            e.printStackTrace();
+        }
     }
 
     private Walker spawnMoveAndStick(Walker walker) {
@@ -199,6 +232,10 @@ public class SiOxDla3d {
 
     public static void main( String[] args ) throws Exception {
         System.out.println("### New DLA Simulation");
+        if (System.getProperty("outfile") != null) {
+            String outFile = System.getProperty("outfile");
+            SiOxDla3d siOxDla3d = new SiOxDla3d();
+        }
         SiOxDla3d siOxDla3d = new SiOxDla3d();
     }
 }

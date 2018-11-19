@@ -138,7 +138,7 @@ public class Substrate {
                 Vector3D point = new Vector3D(x, y, this.getValue(x, y));
 
                 if (faces.size() == 1) {
-                    orientation = orientation.add(faces.get(0).normal);
+                    orientation = faces.get(0).normal;
                 } else {
                     double distance = 9999;
                     for (Polygon face : faces) {

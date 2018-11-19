@@ -107,7 +107,8 @@ public class SimulationUtils {
         INDArray subArray = sim.mesh.get(
                 NDArrayIndex.interval(xWalker - 1, xWalker + 1),
                 NDArrayIndex.interval(yWalker - 1, yWalker + 1),
-                NDArrayIndex.interval(zWalker - 1, zWalker + 1));
+                NDArrayIndex.interval(zWalker - 1, zWalker + 1)
+        );
 
         if ((int) subArray.sumNumber().intValue() > 0) {
             sim.mesh.putScalar(xWalker, yWalker, zWalker, 1);
