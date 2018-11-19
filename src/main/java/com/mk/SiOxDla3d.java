@@ -119,26 +119,10 @@ public class SiOxDla3d {
         System.out.println(">>> Computing time = "  + (System.currentTimeMillis() - time));
 
         System.out.println(">>> Saving INDarray");
-        //Nd4j.writeTxt(mesh, "out.txt");
         System.out.println("  >>> saving slice z = {0, 499}");
         saveMesh(0, 499);
         System.out.println("  >>> saving slice z = {500, 999}");
         saveMesh(500, 999);
-
-
-        /* Same byteBufferSize Problem
-        System.out.println("  >>> Writing to ByteBuffer");
-        ByteBuffer buffer = BinarySerde.toByteBuffer(mesh);
-
-        System.out.println("  >>> Writing ByteBuffer to file");
-        FileChannel fc = new FileOutputStream("data.txt").getChannel();
-        fc.write(buffer);
-        fc.close();
-        */
-
-        //DataOutputStream sWrite = new DataOutputStream(new FileOutputStream(new File("tmp.bin")));
-        //Nd4j.write(mesh, sWrite);
-
 
         /*
         System.out.println(">>> Create mesh");

@@ -244,7 +244,7 @@ public class Configuration {
             setSectorNumber(256);
             setStickingProbability(1);
             setZDrift(4);
-            setDiffusionLength(20);
+            setDiffusionLength(50);
 
             float[][][] kernel =
                     {
