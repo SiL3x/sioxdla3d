@@ -7,6 +7,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Substrate {
@@ -112,11 +113,6 @@ public class Substrate {
                     orientation = orientation.add(faces.get(0).normal);
                 } else {
                     for (Polygon face : faces) {
-                        /*
-                        System.out.println("point = " + point + "  face.normal = " + face.normal + "  scaled = " + face.normal.scalarMultiply(face.distanceToPoint(point) / distanceSum) +
-                        "  distSum = " + distanceSum + "  dist = " + face.distanceToPoint(point));
-                        */
-
                         orientation = orientation
                                 .add(face.normal.scalarMultiply((distanceSum - face.distanceToPoint(point)) / distanceSum)); // removed 1- face.distance...
                     }
@@ -148,7 +144,6 @@ public class Substrate {
                         }
                     }
                 }
-                //System.out.println("point = " + point + "   orientation = " + orientation);
                 orientationsY.add(orientation);
             }
             orientationMap.add(orientationsY);
@@ -156,20 +151,23 @@ public class Substrate {
     }
 
     private void setZValue(final int x, final int y) {
-
         final Line line = new Line(new Vector3D(x, y, 0), new Vector3D(x, y, 1), 0.05);
         Vector3D intersection;
+        int i = 0;
+        ArrayList<Integer> intersections = new ArrayList<>();
 
         for (Polygon polygon : faces) {
             intersection = polygon.plane.intersection(line);
 
             if (polygon.isInPolygon(intersection)) {
-                //System.out.println("i = " + i + "   x,y = " + x + ", " + y);
-                values.putScalar(x, y, (int) Math.round(intersection.getZ()));
-                if ((int) Math.round(intersection.getZ()) < 700) System.out.println("face " + polygon);
-                break;
+                i++;
+                //if ((int) Math.round(intersection.getZ()) < 700) System.out.println("face " + polygon);
+                intersections.add((int) Math.round(intersection.getZ()));
+                //break;
             }
         }
+        values.putScalar(x, y, Collections.max(intersections));
+        //if (i != 1) { System.out.println("i = " + i + "  at = " + x + ", " + y + " intersections = " + intersections); }
     }
 
     public INDArray getValues() {
