@@ -17,7 +17,11 @@ public class MeasurementDisplay {
     File[] files;
 
     public  MeasurementDisplay() throws Exception {
-        String directory = "/home/max/dev/projects/3d-dla-output/20181111_eater_diff_50/";
+        //String directory = "/home/max/dev/projects/3d-dla-output/20181123_karlsruhe_10/"; // 10er
+        //String directory = "/home/max/dev/projects/3d-dla-output/20181111_karlsruhe_diff_20"; // 20
+        //String directory = "/home/max/dev/projects/3d-dla-output/20181111_eater_diff_50"; // 50
+        //String directory = "/home/max/dev/projects/3d-dla-output/20181122_karlsruhe_100"; // 100
+        String directory = "/home/max/dev/projects/3d-dla-output/20181201_karlsruhe"; // 100
 
         loadFiles(directory);
 /*

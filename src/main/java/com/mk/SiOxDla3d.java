@@ -44,7 +44,7 @@ public class SiOxDla3d {
 
     private boolean run = true;
     private int border;
-    private String name = "test3";
+    private String name = "test4";
     //private String name = "1000_large_test";   //"realistic";
 
 
@@ -111,8 +111,14 @@ public class SiOxDla3d {
             simulationUtils.moveGrowthFront();
 
             //TODO: check break conditions (number of crystallites, front, no of iterations)
-            if (i > 1e5) run = false;
-            if (substrate.getFront() <= 800 + substrate.getSpread()) run = false;
+            if (i > 1e5) {
+                System.out.println("<<< stopped after " + i + " iterations");
+                run = false;
+            }
+            if (substrate.getFront() <= 600 + substrate.getSpread()) {
+                System.out.println("<<< stopped because because front is at " + substrate.getFront());
+                run = false;
+            }
             i++;
         }
 
