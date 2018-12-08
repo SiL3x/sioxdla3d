@@ -10,14 +10,11 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.NDArrayIndex;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static com.mk.utils.MathUtils.distance;
 
 public class SimulationUtils {
 
@@ -30,10 +27,10 @@ public class SimulationUtils {
     }
 
     public void placeSeeds() {
-        int seedNumber = sim.configuration.getSeedNumber();
+        final int seedNumber = sim.configuration.getSeedNumber();
+        final int perRow = (int) Math.round(Math.sqrt(seedNumber));
+        final int distance = (int) Math.round(sim.configuration.getMeshSizeX() / perRow);
         Walker walker;
-        int perRow = (int) Math.round(Math.sqrt(seedNumber));
-        int distance = (int) Math.round(sim.configuration.getMeshSizeX() / perRow);
         int x, y;
 
         for (int i = 0; i < seedNumber; i++) {
@@ -69,50 +66,16 @@ public class SimulationUtils {
         }
     }
 
-    public INDArray createMesh(final int meshSize) {
-        return createMesh(meshSize, meshSize, meshSize);
-    }
-
     public INDArray createMesh(final int meshSizeX, final int meshSizeY, final int meshSizeZ) {
         System.out.println("x = " + meshSizeX +  " y = " + meshSizeY + " z = " + meshSizeZ);
         INDArray outArray = Nd4j.zeros(meshSizeX, meshSizeY, meshSizeZ);
         return outArray;
     }
 
-    public Configuration loadConfiguration(String name) {
+    public Configuration loadConfiguration(final String name) {
         sim.configuration = new Configuration(name);
         //TODO: load configuration from resources
         return sim.configuration;
-    }
-
-    public void moveSeed() {
-        //TODO: Take substrate into account
-        int xWalker = sim.walker.getPosition().getX();
-        int yWalker = sim.walker.getPosition().getY();
-        int zWalker = sim.walker.getPosition().getZ();
-        int zBorder = sim.substrate.getHighestPoint();
-
-        sim.walker.moveRnd();
-
-        if (zWalker < (zBorder - 30)) sim.walker.respawn(sim.substrate);
-        if (zWalker < 0) sim.walker.respawn(sim.substrate);
-    }
-
-    public void calculateSticking() {
-        //TODO: implement calculate sticking with kernel
-        int xWalker = sim.walker.getPosition().getX();
-        int yWalker = sim.walker.getPosition().getY();
-        int zWalker = sim.walker.getPosition().getZ();
-
-        INDArray subArray = sim.mesh.get(
-                NDArrayIndex.interval(xWalker - 1, xWalker + 1),
-                NDArrayIndex.interval(yWalker - 1, yWalker + 1),
-                NDArrayIndex.interval(zWalker - 1, zWalker + 1)
-        );
-
-        if ((int) subArray.sumNumber().intValue() > 0) {
-            sim.mesh.putScalar(xWalker, yWalker, zWalker, 1);
-        }
     }
 
     public void moveGrowthFront() {
@@ -127,9 +90,7 @@ public class SimulationUtils {
                     NDArrayIndex.all(),
                     NDArrayIndex.all(),
                     NDArrayIndex.interval(i, i + substrate.getSpread() + 1)).dup();
-
             sum = subArray.muli(substrate.getSubstrateArray()).sumNumber().intValue();
-            //System.out.println("i = " + i + "  z = " + (i + substrate.getSpread()) + "  sum = " + sum);
 
             if (sum >= sim.getConfiguration().getGrowthRatio()) {
                 substrate.setFront(i + substrate.getSpread() - 1);
@@ -140,8 +101,8 @@ public class SimulationUtils {
     }
 
     public int[] walkerSticks(final Walker walker) {
-        int xWalker = walker.getPosition().getX();
-        int yWalker = walker.getPosition().getY();
+        final int xWalker = walker.getPosition().getX();
+        final int yWalker = walker.getPosition().getY();
 
         Vector3D substrateNormal = sim.substrate.getOrientation(xWalker, yWalker);
         MoellerHughesRotation rotator = new MoellerHughesRotation(new Vector3D(0, 0, 1), substrateNormal);
@@ -214,9 +175,9 @@ public class SimulationUtils {
         Position walkerPosition = walker.getPosition();
 
         for (BondPosition bondPosition : sim.getBondPositions()) {
-            int xBond = (int) Math.round(bondPosition.getX() + walkerPosition.getX());
-            int yBond = (int) Math.round(bondPosition.getY() + walkerPosition.getY());
-            int zBond = (int) Math.round(bondPosition.getZ() + walkerPosition.getZ());
+            final int xBond = (int) Math.round(bondPosition.getX() + walkerPosition.getX());
+            final int yBond = (int) Math.round(bondPosition.getY() + walkerPosition.getY());
+            final int zBond = (int) Math.round(bondPosition.getZ() + walkerPosition.getZ());
 
             sum += sim.getMesh().getInt(xBond, yBond, zBond);
         }
@@ -227,9 +188,9 @@ public class SimulationUtils {
         double sum = 0;
 
         for (BondPosition bondPosition : sim.getBondPositions()) {
-            int xBond = (int) Math.round(bondPosition.getX() + position[0]);
-            int yBond = (int) Math.round(bondPosition.getY() + position[1]);
-            int zBond = (int) Math.round(bondPosition.getZ() + position[2]);
+            final int xBond = (int) Math.round(bondPosition.getX() + position[0]);
+            final int yBond = (int) Math.round(bondPosition.getY() + position[1]);
+            final int zBond = (int) Math.round(bondPosition.getZ() + position[2]);
 
             sum += sim.getMesh().getInt(xBond, yBond, zBond);
         }
@@ -239,8 +200,8 @@ public class SimulationUtils {
     public List<BondPosition> calculateBondpositions(final float[][][] kernel) {
         List<BondPosition> bondPositions = new LinkedList<>();
 
-        int length = kernel.length;
-        int half = (int) Math.floor(length / 2);
+        final int length = kernel.length;
+        final int half = (int) Math.floor(length / 2);
 
         for (int x = 0; x < length; x++) {
             for (int y = 0; y < length; y++) {

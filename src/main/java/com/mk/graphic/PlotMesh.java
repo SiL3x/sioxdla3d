@@ -8,10 +8,8 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.nd4j.linalg.api.ndarray.INDArray;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class PlotMesh extends AbstractAnalysis{
     public Coord3d[] points;
@@ -22,7 +20,7 @@ public class PlotMesh extends AbstractAnalysis{
     public void init() throws Exception {
     }
 
-    public void plot3d(INDArray array) {
+    public void plot3d(final INDArray array) {
         int[] size = array.shape();
         List<Coord3d> pointList = new ArrayList<>();
 
@@ -39,7 +37,7 @@ public class PlotMesh extends AbstractAnalysis{
         System.out.println("pointList.size() = " + pointList.size());
 
         points = new Coord3d[pointList.size() + 4];
-        Color plotColor = new Color(1, 1, 1, (float) 0.3);
+        final Color plotColor = new Color(1, 1, 1, (float) 0.3);
 
         int i = 0;
         for (Coord3d coord3d : pointList) {
@@ -67,37 +65,8 @@ public class PlotMesh extends AbstractAnalysis{
         chart.getScene().add(scatter);
     }
 
-    public void createData() {
-
-        int size = 500000;
-        float x;
-        float y;
-        float z;
-        float a;
-
-        points = new Coord3d[size];
-        colors = new Color[size];
-
-        Random r = new Random();
-        r.setSeed(0);
-
-        for(int i=0; i<size; i++){
-            x = r.nextFloat() - 0.5f;
-            y = r.nextFloat() - 0.5f;
-            z = r.nextFloat() - 0.5f;
-            points[i] = new Coord3d(x, y, z);
-            a = 0.25f;
-            colors[i] = new Color(x, y, z, a);
-        }
-    }
-
     public void createData2() {
-
         int size = 5;
-        float x;
-        float y;
-        float z;
-        float a;
 
         points = new Coord3d[size];
         colors = new Color[size];

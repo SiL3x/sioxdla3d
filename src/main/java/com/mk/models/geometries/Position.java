@@ -1,7 +1,6 @@
 package com.mk.models.geometries;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Position {
@@ -22,25 +21,22 @@ public class Position {
 
     public void moveRnd3d(final double zDrift) {
         int[] nextMove = {0, 0, 0};
-
         int rnd;
+
         for (int i = 0; i < 3; i++) {
             rnd = ThreadLocalRandom.current().nextInt(0, 5 + 1);
-
             if (rnd == 0) nextMove[i] = -1;
             if (rnd == 1) nextMove[i] = 0;
             if (rnd == 2) nextMove[i] = 1;
         }
-
         nextMove[2] = drift(nextMove[2], zDrift);
-
         vector3D = vector3D.add(new Vector3D(nextMove[0], nextMove[1], nextMove[2]));
     }
 
     public void moveRnd3d() {
         int[] nextMove = {0, 0, 0};
-
         int rnd;
+
         for (int i = 0; i < 3; i++) {
             rnd = ThreadLocalRandom.current().nextInt(0, 5 + 1);
 
@@ -58,15 +54,15 @@ public class Position {
         return i;
     }
 
-    public void setX(int xNew) {
+    public void setX(final int xNew) {
         vector3D = new Vector3D(xNew, vector3D.getY(), vector3D.getZ());
     }
 
-    public void setY(int yNew) {
+    public void setY(final int yNew) {
         vector3D = new Vector3D(vector3D.getX(), yNew, vector3D.getZ());
     }
 
-    public void setZ(int zNew) {
+    public void setZ(final int zNew) {
         vector3D = new Vector3D(vector3D.getX(), vector3D.getY(), zNew);
     }
 

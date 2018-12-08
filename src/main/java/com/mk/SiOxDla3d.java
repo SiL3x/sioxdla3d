@@ -85,7 +85,6 @@ public class SiOxDla3d {
 
         //TODO: set iteration variables
         int i = 0;
-        int sticked = 0;
 
         List<Walker> walkers = new ArrayList<>();
 
@@ -115,7 +114,7 @@ public class SiOxDla3d {
                 System.out.println("<<< stopped after " + i + " iterations");
                 run = false;
             }
-            if (substrate.getFront() <= 600 + substrate.getSpread()) {
+            if (substrate.getFront() <= 750 + substrate.getSpread()) {
                 System.out.println("<<< stopped because because front is at " + substrate.getFront());
                 run = false;
             }
@@ -123,7 +122,6 @@ public class SiOxDla3d {
         }
 
         System.out.println(">>> Computing time = "  + (System.currentTimeMillis() - time));
-
         System.out.println(">>> Saving INDarray");
         System.out.println("  >>> saving slice z = {0, 499}");
         saveMesh(0, 499);
@@ -162,9 +160,8 @@ public class SiOxDla3d {
         //TODO: @Max Wie kann man die Walker position visualisieren???
         boolean notSticked = true;
         walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
-        int[] stickingPosition = new int[]{-1, -1, -1};
-        //System.out.println("respawn_z = " + (substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset()));
 
+        int[] stickingPosition = new int[]{-1, -1, -1};
         int i = 0;
 
         while (notSticked) {
@@ -180,7 +177,6 @@ public class SiOxDla3d {
                 System.out.println("killed a walker");
                 return new Walker(configuration, -1, -1, -1);
             }
-            //System.out.println("i = " + i);
             i++;
         }
         System.out.println("walker = " + (substrate.getValue(walker.getPosition().getX(), walker.getPosition().getY()) - walker.getPosition().getZ()));
@@ -189,14 +185,12 @@ public class SiOxDla3d {
     }
 
     private boolean walkerIsTooFarOrBelowSurface(final Walker walker) {
-        //if (walker.getPosition().getZ() > 989) System.out.println("walker.getPosition().getZ() = " + walker.getPosition().getZ());
-        //System.out.println("too far or below surface... z = " + walker.getPosition().getZ() + "  front-spread = " + (substrate.getFront() -substrate.getSpread() - configuration.getSpawnOffset() - 10) +
-        //"  valueWithFront = " + substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY()));
         return walker.getPosition().getZ() < (substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset() - 10) ||
                 walker.getPosition().getZ() >= substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY());
     }
 
     private boolean walkerIsNearToSurface(final Walker walker) {
+        // TODO: check why this isn't used
         return walker.getPosition().getZ() >= (substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY()) - configuration.getKernel3D().length * 0.6928);
     }
 
@@ -205,9 +199,10 @@ public class SiOxDla3d {
     }
 
     public INDArray getKernel3Dnd() {
-        float[][][] kernel = getKernel3D();
-        float[] flatKernel = ArrayUtil.flattenFloatArray(kernel);
-        int[] shape = {kernel.length, kernel.length, kernel.length};
+        final float[][][] kernel = getKernel3D();
+        final float[] flatKernel = ArrayUtil.flattenFloatArray(kernel);
+        final int[] shape = {kernel.length, kernel.length, kernel.length};
+
         return  Nd4j.create(flatKernel, shape, 'c');
     }
 
@@ -235,10 +230,10 @@ public class SiOxDla3d {
         return border;
     }
 
-
     public static void main( String[] args ) throws Exception {
         System.out.println("### New DLA Simulation");
         if (System.getProperty("outfile") != null) {
+            // TODO: implement command line arguments
             String outFile = System.getProperty("outfile");
             SiOxDla3d siOxDla3d = new SiOxDla3d();
         }

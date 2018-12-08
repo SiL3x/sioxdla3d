@@ -107,10 +107,7 @@ class PolygonTest {
         final Line line = new Line(new Vector3D(10, 10, 0), new Vector3D(10, 10, 1), 0.05);
 
         Vector3D intersection = polygon.plane.intersection(line);
-        //System.out.println("intersection = " + intersection);
         Assert.assertTrue(polygon.isInPolygon(intersection));
-
-        //Assert.assertTrue(polygon.isInPolygon(new Vector3D(0, 0, 90)));
 
         Assert.assertTrue(polygon.isInPolygon(new Vector3D(0, 10, 90)));
         Assert.assertTrue(polygon.isInPolygon(new Vector3D(10, 0, 90)));
@@ -132,8 +129,6 @@ class PolygonTest {
         );
 
         Vector3D intersection = face.plane.intersection(line);
-        //System.out.println("intersection = " + intersection);
-        //System.out.println("face.isIntersectionInFace(intersection); = " + face.isInPolygon(intersection));
     }
 
     @Test
@@ -150,7 +145,6 @@ class PolygonTest {
         Vector3D intersection = face.plane.intersection(line);
 
         //System.out.println("intersection = " + intersection + "   is in polygon: " + face.isInPolygon(intersection));
-        //x, y = 705, 997   z = 440
     }
 
     @Test
@@ -166,6 +160,5 @@ class PolygonTest {
         final Line line = new Line(new Vector3D(963, 0, 0), new Vector3D(963, 0, 990), 0.05);
         Vector3D intersection = face.plane.intersection(line);
         Assert.assertFalse(face.isInPolygon(intersection));
-        System.out.println("intersection = " + intersection + "   is in polygon: " + face.isInPolygon(intersection));
     }
 }

@@ -23,7 +23,7 @@ public class Walker {
         this.border = configuration.getKernel3D().length/2 +2;
     }
 
-    public Walker(Configuration configuration, int front) {
+    public Walker(final Configuration configuration, final int front) {
         perRow = (int) Math.round(Math.sqrt(configuration.getSectorNumber()));
         System.out.println("perRow = " + perRow + " sector no " +configuration.getSectorNumber());
         distance = (int) Math.round(configuration.getMeshSizeX() / perRow);
@@ -110,16 +110,5 @@ public class Walker {
 
     public void setPosition(final int x, final int y, final int z) {
         position = new Position(x, y, z);
-    }
-
-    public void nextSector() {
-        sector++;
-        if (sector >= configuration.getSectorNumber()) {
-            sector = sector % configuration.getSectorNumber();
-        }
-    }
-
-    public int getSector() {
-        return sector;
     }
 }
