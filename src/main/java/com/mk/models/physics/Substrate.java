@@ -69,7 +69,8 @@ public class Substrate {
 
         substrateArray = createSubstrateArray();
 
-        calculateOrientationMapUnsmoothed();
+        //calculateOrientationMapUnsmoothed();
+        calculateOrientationMapSquaredSmooth();
 
         //  check if all mesh sides are safe, by checking if all values[x, y] are set
         if (max == 0) System.out.println("!!! ERROR: Substrate not completely covered by polygons");
@@ -87,14 +88,12 @@ public class Substrate {
     }
 
     public void calculateOrientationMap() {
-
         orientationMap = new ArrayList<>();
 
         for (int x = 0; x < meshSizeX; x++) {
             List<Vector3D> orientationsY = new ArrayList<>();
 
             for (int y = 0; y < meshSizeY; y++) {
-
                 double distanceSum = 0;
                 Vector3D orientation = new Vector3D(0, 0, 0);
                 final Vector3D point = new Vector3D(x, y, this.getValue(x, y) - 1);
@@ -116,6 +115,36 @@ public class Substrate {
             orientationMap.add(orientationsY);
         }
     }
+
+    public void calculateOrientationMapSquaredSmooth() {
+        orientationMap = new ArrayList<>();
+
+        for (int x = 0; x < meshSizeX; x++) {
+            List<Vector3D> orientationsY = new ArrayList<>();
+
+            for (int y = 0; y < meshSizeY; y++) {
+                double distanceSum = 0;
+                Vector3D orientation = new Vector3D(0, 0, 0);
+                final Vector3D point = new Vector3D(x, y, this.getValue(x, y) - 1);
+
+                for (Polygon face : faces) {
+                    distanceSum += face.distanceToPoint(point) * face.distanceToPoint(point);
+                }
+
+                if (faces.size() == 1) {
+                    orientation = orientation.add(faces.get(0).normal);
+                } else {
+                    for (Polygon face : faces) {
+                        orientation = orientation
+                                .add(face.normal.scalarMultiply((distanceSum - (face.distanceToPoint(point) * face.distanceToPoint(point))) / distanceSum)); // removed 1- face.distance...
+                    }
+                }
+                orientationsY.add(orientation);
+            }
+            orientationMap.add(orientationsY);
+        }
+    }
+
 
     public void calculateOrientationMapUnsmoothed() {
         orientationMap = new ArrayList<>();
