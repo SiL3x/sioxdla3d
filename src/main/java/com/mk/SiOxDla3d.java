@@ -114,7 +114,7 @@ public class SiOxDla3d {
                 System.out.println("<<< stopped after " + i + " iterations");
                 run = false;
             }
-            if (substrate.getFront() <= 750 + substrate.getSpread()) {
+            if (substrate.getFront() <= 650 + substrate.getSpread()) {
                 System.out.println("<<< stopped because because front is at " + substrate.getFront());
                 run = false;
             }
