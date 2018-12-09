@@ -39,6 +39,7 @@ public class Configuration {
     private int zDrift;
     private int meshSizeZ;
     private double diffusionLength;
+    private int stopHeight;
 
     public Configuration(String configName) {
         this.configName = configName;
@@ -327,6 +328,7 @@ public class Configuration {
             setStickingProbability(1);
             setZDrift(4);
             setDiffusionLength(25);
+            setStopHeight(650);
 
             float[][][] kernel =
                     {
@@ -1053,5 +1055,13 @@ public class Configuration {
 
     public double getDiffusionLength() {
         return diffusionLength;
+    }
+
+    public int getStopHeight() {
+        return stopHeight;
+    }
+
+    public void setStopHeight(int stopHeight) {
+        this.stopHeight = stopHeight;
     }
 }
