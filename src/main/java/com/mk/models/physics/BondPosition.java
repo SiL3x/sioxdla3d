@@ -64,8 +64,6 @@ public class BondPosition {
         xTilt = vector.getX();
         yTilt = vector.getY();
         zTilt = vector.getZ();
-
-        //System.out.println("Vec = " + new Vector3D(x, y, z) + "  ==>  (" + xTilt + ", " +yTilt+", "+zTilt);
     }
 
     public double getX() {

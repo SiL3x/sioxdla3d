@@ -10,13 +10,13 @@ public class Edge extends Line {
     private double larger;
     private double smaller;
 
-    public Edge(Vector3D p1, Vector3D p2, double tolerance) throws MathIllegalArgumentException {
+    public Edge(final Vector3D p1, final Vector3D p2, final double tolerance) throws MathIllegalArgumentException {
         super(p1, p2, tolerance);
         this.p1 = p1;
         this.p2 = p2;
 
-        double abscissaP1 = this.getAbscissa(p1);
-        double abscissaP2 = this.getAbscissa(p2);
+        final double abscissaP1 = this.getAbscissa(p1);
+        final double abscissaP2 = this.getAbscissa(p2);
 
         if (abscissaP1 > abscissaP2) {
             larger = abscissaP1;
@@ -27,9 +27,8 @@ public class Edge extends Line {
         }
     }
 
-    public double edgeDistance(Vector3D point) {
-
-        double abscissa = this.getAbscissa(point);
+    public double edgeDistance(final Vector3D point) {
+        final double abscissa = this.getAbscissa(point);
 
         if (abscissa <= larger && abscissa >= smaller) return this.distance(point);
         else if (abscissa >= larger) return this.pointAt(larger).distance(point);
@@ -37,12 +36,10 @@ public class Edge extends Line {
         return 0;
     }
 
-    public boolean intersects(Line line) {
+    public boolean intersects(final Line line) {
         if (this.intersection(line) == null) return false;
-        if (this.edgeDistance(this.intersection(line)) > 1e-6) { //1e-6
-            return false;
-        }
-        return true;
+        if (this.edgeDistance(this.intersection(line)) > 1e-6) return false;
+        else return true;
     }
 
     public boolean isOnEdge(final Vector3D point) {

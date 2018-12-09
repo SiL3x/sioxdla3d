@@ -5,7 +5,6 @@ import org.apache.commons.math3.geometry.euclidean.threed.Line;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,23 +15,18 @@ public class Substrate {
     private INDArray substrateArray;
     int meshSizeX;
     int meshSizeY;
-    int meshSizeZ;
     int highestPoint;
     int front;
     int spread;
 
     List<List<Vector3D>> orientationMap;
 
-    public int getMin() {
-        return min;
-    }
-
     int min;
     int max;
 
     List<Polygon> faces;
 
-    public Substrate(int meshSize) {
+    public Substrate(final int meshSize) {
        new Substrate(meshSize, meshSize);
     }
 
@@ -103,7 +97,7 @@ public class Substrate {
 
                 double distanceSum = 0;
                 Vector3D orientation = new Vector3D(0, 0, 0);
-                Vector3D point = new Vector3D(x, y, this.getValue(x, y) - 1);
+                final Vector3D point = new Vector3D(x, y, this.getValue(x, y) - 1);
 
                 for (Polygon face : faces) {
                     distanceSum += face.distanceToPoint(point);
@@ -152,38 +146,21 @@ public class Substrate {
 
     private void setZValue(final int x, final int y) {
         final Line line = new Line(new Vector3D(x, y, 0), new Vector3D(x, y, 1), 0.05);
-        Vector3D intersection;
-        int i = 0;
         ArrayList<Integer> intersections = new ArrayList<>();
 
         for (Polygon polygon : faces) {
-            intersection = polygon.plane.intersection(line);
+            final Vector3D intersection = polygon.plane.intersection(line);
 
             if (polygon.isInPolygon(intersection)) {
-                i++;
                 //if ((int) Math.round(intersection.getZ()) < 700) System.out.println("face " + polygon);
                 intersections.add((int) Math.round(intersection.getZ()));
-                //break;
             }
         }
         values.putScalar(x, y, Collections.max(intersections));
-        //if (i != 1) { System.out.println("i = " + i + "  at = " + x + ", " + y + " intersections = " + intersections); }
-    }
-
-    public INDArray getValues() {
-        return values;
-    }
-
-    public List<List<Vector3D>> getOrientationMap() {
-        return orientationMap;
     }
 
     public Vector3D getOrientation(final int x, final int y) {
         return orientationMap.get(x).get(y);
-    }
-
-    public int getHighestPoint() {
-        return highestPoint;
     }
 
     public String toString() {
