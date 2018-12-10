@@ -56,7 +56,7 @@ public class Substrate {
         for (int x = 0; x < meshSizeX; x++) {
             for (int y = 0; y < meshSizeY; y++) {
                 setZValue(x, y);
-                if (getValue(x, y) < 718) System.out.println("x, y = " + x + ", " + y + "   z = " + getValue(x, y));
+                //if (getValue(x, y) < 718) System.out.println("x, y = " + x + ", " + y + "   z = " + getValue(x, y));
             }
         }
 
@@ -184,6 +184,9 @@ public class Substrate {
                 //if ((int) Math.round(intersection.getZ()) < 700) System.out.println("face " + polygon);
                 intersections.add((int) Math.round(intersection.getZ()));
             }
+        }
+        if (intersections.size() > 1 && intersections.get(0) != intersections.get(1)) {
+            System.out.println("x, y = " + x + ", " + y + "   inter = " + intersections);
         }
         values.putScalar(x, y, Collections.max(intersections));
     }
