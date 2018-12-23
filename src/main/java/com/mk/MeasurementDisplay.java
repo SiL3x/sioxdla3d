@@ -22,7 +22,8 @@ public class MeasurementDisplay {
         //String directory = "/home/max/dev/projects/3d-dla-output/20181111_eater_diff_50"; // 50
         //String directory = "/home/max/dev/projects/3d-dla-output/20181122_karlsruhe_100"; // 100
         //String directory = "/home/max/dev/projects/3d-dla-output/20181201_karlsruhe"; // 100
-        String directory = "/home/max/dev/projects/3d-dla-output/20181208_karlsruhe"; // neues substrat
+        //String directory = "/home/max/dev/projects/3d-dla-output/20181208_karlsruhe"; // neues substrat
+        String directory = "/home/max/dev/projects/3d-dla-output/20181210_karlsruhe"; // neues substrat 200
 
         loadFiles(directory);
 

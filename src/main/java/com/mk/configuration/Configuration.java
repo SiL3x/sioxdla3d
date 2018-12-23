@@ -373,7 +373,6 @@ public class Configuration {
 
         if (name == "test5") {
             setMeshSize(790, 790, 790);
-
             setSubstrate(
                     Arrays.asList(
                             Arrays.asList( // 1
@@ -438,6 +437,7 @@ public class Configuration {
                             )
                     )
             );
+
 
             setSeedNumber(2000);
             setSpawnOffset(15);

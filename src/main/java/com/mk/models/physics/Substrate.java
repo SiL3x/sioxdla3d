@@ -27,7 +27,7 @@ public class Substrate {
     List<Polygon> faces;
 
     public Substrate(final int meshSize) {
-       new Substrate(meshSize, meshSize);
+       this(meshSize, meshSize);
     }
 
     public Substrate(final int meshSizeX, final int meshSizeY) {
@@ -46,25 +46,15 @@ public class Substrate {
     }
 
     public void createSubstrate(final List<List<Vector3D>> verticesList) {
-        faces = new ArrayList<>();
-
-        for (List<Vector3D> corners : verticesList) {
-            faces.add(new Polygon(corners));
-        }
-
-        //  create values array
-        for (int x = 0; x < meshSizeX; x++) {
-            for (int y = 0; y < meshSizeY; y++) {
-                setZValue(x, y);
-                //if (getValue(x, y) < 718) System.out.println("x, y = " + x + ", " + y + "   z = " + getValue(x, y));
-            }
-        }
+        createFacesList(verticesList);
+        setZvalues();
 
         max = values.minNumber().intValue();
         min = values.maxNumber().intValue();
         front = min;
         highestPoint = max;
         spread = min - max;
+
         System.out.println("front = " + front + "  min = " + min + "  max = " + max + "  spread = " + spread);
 
         substrateArray = createSubstrateArray();
@@ -74,6 +64,24 @@ public class Substrate {
 
         //  check if all mesh sides are safe, by checking if all values[x, y] are set
         if (max == 0) System.out.println("!!! ERROR: Substrate not completely covered by polygons");
+    }
+
+    public void setZvalues() {
+        //  create values array
+        for (int x = 0; x < meshSizeX; x++) {
+            for (int y = 0; y < meshSizeY; y++) {
+                setZValue(x, y);
+                //if (getValue(x, y) < 50) System.out.println("x, y = " + x + ", " + y + "   z = " + getValue(x, y));
+            }
+        }
+    }
+
+    public void createFacesList(List<List<Vector3D>> verticesList) {
+        faces = new ArrayList<>();
+
+        for (List<Vector3D> corners : verticesList) {
+            faces.add(new Polygon(corners));
+        }
     }
 
     public INDArray createSubstrateArray() {
@@ -177,16 +185,11 @@ public class Substrate {
         final Line line = new Line(new Vector3D(x, y, 0), new Vector3D(x, y, 1), 0.05);
         ArrayList<Integer> intersections = new ArrayList<>();
 
+        Vector3D intersection;
         for (Polygon polygon : faces) {
-            final Vector3D intersection = polygon.plane.intersection(line);
+            intersection = polygon.plane.intersection(line);
 
-            if (polygon.isInPolygon(intersection)) {
-                //if ((int) Math.round(intersection.getZ()) < 700) System.out.println("face " + polygon);
-                intersections.add((int) Math.round(intersection.getZ()));
-            }
-        }
-        if (intersections.size() > 1 && intersections.get(0) != intersections.get(1)) {
-            System.out.println("x, y = " + x + ", " + y + "   inter = " + intersections);
+            if (polygon.isInPolygon(intersection)) intersections.add((int) Math.round(intersection.getZ()));
         }
         values.putScalar(x, y, Collections.max(intersections));
     }

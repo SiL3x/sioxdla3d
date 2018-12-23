@@ -16,7 +16,7 @@ class SubstrateTest {
 
     @Test
     public void createSubstrate() {
-        Substrate substrate = new Substrate(100);
+        Substrate substrate = new Substrate(100, 100);
 
         List<List<Vector3D>> vertices = Arrays.asList(
                 Arrays.asList(
@@ -56,28 +56,11 @@ class SubstrateTest {
                         new Vector3D( 0,49, 90)
                 ));
 
-
-        /*
-        List<List<Vector3D>> vertices = Arrays.asList(
-                Arrays.asList(
-                        new Vector3D( 0,  0, 90),
-                        new Vector3D(99,  0, 90),
-                        new Vector3D(99, 99, 90),
-                        new Vector3D( 0, 99, 90)));
-        */
-
-        /*
-        List<List<Vector3D>> vertices = Arrays.asList(
-                Arrays.asList(
-                        new Vector3D( 0,  0, 90),
-                        new Vector3D(99,  0, 90),
-                        new Vector3D(99, 99, 40),
-                        new Vector3D( 0, 99, 40)));
-        */
-
         substrate.createSubstrate(vertices);
         substrate.calculateOrientationMap();
-        //System.out.println("substrate.getOrientationMap() = " + substrate.getOrientationMap());
+
+        //TODO: insert asserts
+
         System.out.println("(49, 0) substrate = " + substrate.getValue(49, 0) + "  normal = " + substrate.getOrientation(49, 0));
         System.out.println("(49, 24) substrate = " + substrate.getValue(49, 24) + "  normal = " + substrate.getOrientation(49, 24));
         System.out.println("(49, 44) substrate = " + substrate.getValue(49, 44) + "  normal = " + substrate.getOrientation(49, 44));
@@ -95,6 +78,10 @@ class SubstrateTest {
                 Arrays.asList(
                         new Vector3D(0, 0, 4),
                         new Vector3D(4, 0, 4),
+                        new Vector3D(0, 4, 2)
+                ),
+                Arrays.asList(
+                        new Vector3D(4, 0, 4),
                         new Vector3D(0, 4, 2),
                         new Vector3D(4, 4, 2))
                 );
@@ -106,7 +93,81 @@ class SubstrateTest {
         Assert.assertEquals(substrateArray.getInt(2, 2, 1), 1);
 
         System.out.println(substrate.getValueWithFront(0, 0));
+    }
 
+    @Test
+    public void createFacesListFromVerticesAndSetZValues() {
+        Substrate substrate = new Substrate(790);
+        List<List<Vector3D>> vertices =
+                Arrays.asList(
+                        Arrays.asList( // 1
+                                new Vector3D(0, 0, 725),
+                                new Vector3D(150, 0,650),
+                                new Vector3D(0, 789, 725)
+                        ),
+                        Arrays.asList( // 2
+                                new Vector3D(0, 789, 725),
+                                new Vector3D(150, 0,650),
+                                new Vector3D(150, 789, 650)
+                        ),
+                        Arrays.asList( // 3
+                                new Vector3D(150, 0,650),
+                                new Vector3D(250, 0,  750),
+                                new Vector3D(150, 789, 650)
+                        ),
+                        Arrays.asList( // 4
+                                new Vector3D(150, 789, 650),
+                                new Vector3D(250, 0,  750),
+                                new Vector3D(250, 789, 750)
+                        ),
+                        Arrays.asList( // 5
+                                new Vector3D(250, 0,  750),
+                                new Vector3D(350, 0, 650),
+                                new Vector3D(250, 789, 750)
+                        ),
+                        Arrays.asList( // 6
+                                new Vector3D(250, 789, 750),
+                                new Vector3D(350, 0, 650),
+                                new Vector3D(350, 789, 650)
+                        ),
+                        Arrays.asList( // 7
+                                new Vector3D(350, 0, 650),
+                                new Vector3D(550, 0, 650),
+                                new Vector3D(350, 789, 650)
+                        ),
+                        Arrays.asList( // 8
+                                new Vector3D(350, 789, 650),
+                                new Vector3D(550, 0, 650),
+                                new Vector3D(550, 789, 650)
+                        ),
+                        Arrays.asList( // 9
+                                new Vector3D(550, 0, 650),
+                                new Vector3D(670, 394, 500),
+                                new Vector3D(550, 789, 650)
+                        ),
+                        Arrays.asList( // 10
+                                new Vector3D(550, 0, 650),
+                                new Vector3D(789, 0, 650),
+                                new Vector3D(670, 394, 500)
+                        ),
+                        Arrays.asList( // 11
+                                new Vector3D(789, 0, 650),
+                                new Vector3D(789, 789, 650),
+                                new Vector3D(670, 394, 500)
+                        ),
+                        Arrays.asList( // 12
+                                new Vector3D(550, 789, 650),
+                                new Vector3D(670, 394, 500),
+                                new Vector3D(789, 789, 650)
+                        )
+                );
+
+        substrate.createFacesList(vertices);
+
+        substrate.setZvalues();
+        //Assert.assertEquals(50, substrate.getValue(49, 49));
+
+        System.out.println("substrate.getValue(49, 49) = " + substrate.getValue(99, 99));
 
     }
 }

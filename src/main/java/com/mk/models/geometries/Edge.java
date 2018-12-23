@@ -10,10 +10,10 @@ public class Edge extends Line {
     private double larger;
     private double smaller;
 
-    public Edge(final Vector3D p1, final Vector3D p2, final double tolerance) throws MathIllegalArgumentException {
-        super(p1, p2, tolerance);
-        this.p1 = p1;
-        this.p2 = p2;
+    public Edge(final Vector3D inP1, final Vector3D inP2, final double tolerance) throws MathIllegalArgumentException {
+        super(inP1, inP2, tolerance);
+        p1 = inP1;
+        p2 = inP2;
 
         final double abscissaP1 = this.getAbscissa(p1);
         final double abscissaP2 = this.getAbscissa(p2);
