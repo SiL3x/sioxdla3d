@@ -127,6 +127,8 @@ public class SiOxDla3d {
         System.out.println("  >>> saving slice z = {0, 789}");
         saveMesh(0, 789);
 
+        //TODO: write mesh saver class
+
         /*
         System.out.println("  >>> saving slice z = {0, 499}");
         saveMesh(0, 499);

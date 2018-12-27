@@ -6,23 +6,23 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import java.util.*;
 
 public class Polygon {
-    List<Vector3D> vectors;
+    final List<Vector3D> vectors;
+    final public Plane plane;
+    final public List<Edge> edges;
+    final public Vector3D normal;
 
-    public Plane plane;
-    public List<Edge> edges;
-    public Vector3D normal;
-
-    public Polygon(List<Vector3D> inVectors) {
+    public Polygon(final List<Vector3D> inVectors) {
         vectors = inVectors;
         edges = calculateBorders(vectors);
-        calculatePlane();
+        plane = calculatePlane();
+        normal = plane.getNormal();
     }
 
     private List<Edge> calculateBorders(final List<Vector3D> vectors) {
         List<Edge> borders = new ArrayList<>();
         List<Vector3D> sortedVectors = new LinkedList<>(vectors);
 
-        Vector3D first = sortedVectors.get(0);
+        final Vector3D first = sortedVectors.get(0);
 
         for (int i = 0; i < (vectors.size() - 1); i++) {
             Vector3D vector = sortedVectors.get(0);
@@ -43,12 +43,11 @@ public class Polygon {
         return out;
     }
 
-    private void calculatePlane() {
-        plane = new Plane(vectors.get(0), vectors.get(1), vectors.get(2), 0.05);
-        normal = plane.getNormal();
+    private Plane calculatePlane() {
+        return new Plane(vectors.get(0), vectors.get(1), vectors.get(2), 0.05);
     }
 
-    public double distanceToPoint(Vector3D vector3D) {
+    public double distanceToPoint(final Vector3D vector3D) {
         //  1. Calculate point distance to plane and the nearest point on plane
         final Vector3D intersection = plane.intersection(new Line(normal, normal.add(vector3D), 0.05));
 
@@ -64,11 +63,11 @@ public class Polygon {
         return minDistance;
     }
 
-    public boolean isInPolygon(Vector3D vector3D) {
+    public boolean isInPolygon(final Vector3D vector3D) {
         if (vector3D == null) return false;
 
-        Line lineToCheck = calculateLineToCheck(vector3D);
-        Double abscissa = lineToCheck.getAbscissa(vector3D);
+        final Line lineToCheck = calculateLineToCheck(vector3D);
+        final Double abscissa = lineToCheck.getAbscissa(vector3D);
 
         int crossCount = 0;
         List<Vector3D> intersections =  new ArrayList<>();
@@ -91,17 +90,15 @@ public class Polygon {
 
     }
 
-    private Line calculateLineToCheck(Vector3D vector3D) {
-        Vector3D edge1 = vectors.get(1).subtract(vectors.get(0));
-        Vector3D edge2 = vectors.get(2).subtract(vectors.get(0));
+    private Line calculateLineToCheck(final Vector3D vector3D) {
+        final Vector3D edge1 = vectors.get(1).subtract(vectors.get(0));
+        final Vector3D edge2 = vectors.get(2).subtract(vectors.get(0));
         return new Line(vector3D, vector3D.add(edge1).add(edge2), 0.05);
     }
 
     private boolean listContains(final List<Vector3D> list, final Vector3D value) {
         for (Vector3D valueInList : list) {
-            if (valueInList.equals(value)) {
-                return true;
-            }
+            if (valueInList.equals(value)) return true;
         }
         return false;
     }

@@ -14,10 +14,12 @@ public class MeasurementDisplay790 {
     File[] files;
 
     public  MeasurementDisplay790() throws Exception {
-        String directory = "/home/max/dev/projects/3d-dla-output/20181208_karlsruhe"; // neues substrat
+        //String directory = "/home/max/dev/projects/3d-dla-output/20181208_karlsruhe"; // neues substrat
+        String directory = "/home/max/dev/projects/3d-dla-output/20181225_karlsruhe";
 
         loadFiles(directory);
 
+        System.out.println(">>> Load file : " + files[0]);
         mesh = readFromDisk(files[0]);
 
         System.out.println(">>> Create mesh");
