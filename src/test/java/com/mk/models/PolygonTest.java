@@ -6,6 +6,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,6 +14,7 @@ class PolygonTest {
     private final double DELTA = 1e-3;
     Polygon polygon;
     Polygon polygon2;
+    Polygon polygon3;
 
     private void createPolygon() {
         List<Vector3D> vectors = Arrays.asList(
@@ -29,6 +31,14 @@ class PolygonTest {
                 new Vector3D(1, -1, -1));
 
         polygon2 = new Polygon(vectors);
+
+        vectors = Arrays.asList(
+                new Vector3D(0, 0, 1),
+                new Vector3D(1, 0, 0),
+                new Vector3D(0, 1, 0));
+
+        polygon3 = new Polygon(vectors);
+        //Todo: write isInPolygon test for poly3
     }
 
     @Test
@@ -149,7 +159,7 @@ class PolygonTest {
 
     @Test
     public void isIntersectionInPolygon() {
-        final Polygon face = new Polygon(
+        Polygon face1 = new Polygon(
                 Arrays.asList(
                         new Vector3D(100, 999, 950),
                         new Vector3D(200, 999, 850),
@@ -157,8 +167,123 @@ class PolygonTest {
                 )
         );
 
-        final Line line = new Line(new Vector3D(963, 0, 0), new Vector3D(963, 0, 990), 0.05);
-        Vector3D intersection = face.plane.intersection(line);
-        Assert.assertFalse(face.isInPolygon(intersection));
+        Line line = new Line(new Vector3D(963, 0, 0), new Vector3D(963, 0, 990), 0.05);
+        Vector3D intersection = face1.plane.intersection(line);
+        Assert.assertFalse(face1.isInPolygon(intersection));
+
+        // Not in polygon
+        Polygon face2 = new Polygon(
+                Arrays.asList(
+                        new Vector3D(250, 789, 750),
+                        new Vector3D(350, 789, 650),
+                        new Vector3D(350, 0, 650)
+                )
+        );
+
+        line = new Line(new Vector3D(354, 0, 0), new Vector3D(354, 0, 1), 0.05);
+        intersection = face2.plane.intersection(line);
+        System.out.println("intersection = " + intersection);
+        Assert.assertFalse(face2.isInPolygon(intersection));
+
+        // In polygon
+        Polygon face3 = new Polygon(
+                Arrays.asList(
+                        new Vector3D(350, 0, 650),
+                        new Vector3D(550, 0, 650),
+                        new Vector3D(350, 789, 650)
+                )
+        );
+
+        intersection = face3.plane.intersection(line);
+        System.out.println("intersection = " + intersection);
+        Assert.assertTrue(face3.isInPolygon(intersection));
+
+        // Not in Polygon
+        Polygon face4 = new Polygon(
+                Arrays.asList(
+                        new Vector3D(150, 789, 650),
+                        new Vector3D(250, 789, 750),
+                        new Vector3D(250, 0, 750)
+                )
+        );
+
+        intersection = face4.plane.intersection(line);
+        System.out.println("intersection = " + intersection);
+        Assert.assertFalse(face4.isInPolygon(intersection));
+
+        List<Polygon> polygons = new ArrayList<>();
+
+        List<List<Vector3D>> vertices =
+                Arrays.asList(
+                        Arrays.asList( // 1
+                                new Vector3D(0, 0, 725),
+                                new Vector3D(150, 0,650),
+                                new Vector3D(0, 789, 725)
+                        ),
+                        Arrays.asList( // 2
+                                new Vector3D(0, 789, 725),
+                                new Vector3D(150, 0,650),
+                                new Vector3D(150, 789, 650)
+                        ),
+                        Arrays.asList( // 3
+                                new Vector3D(150, 0,650),
+                                new Vector3D(250, 0,  750),
+                                new Vector3D(150, 789, 650)
+                        ),
+                        Arrays.asList( // 4
+                                new Vector3D(150, 789, 650),
+                                new Vector3D(250, 0,  750),
+                                new Vector3D(250, 789, 750)
+                        ),
+                        Arrays.asList( // 5
+                                new Vector3D(250, 0,  750),
+                                new Vector3D(350, 0, 650),
+                                new Vector3D(250, 789, 750)
+                        ),
+                        Arrays.asList( // 6
+                                new Vector3D(250, 789, 750),
+                                new Vector3D(350, 0, 650),
+                                new Vector3D(350, 789, 650)
+                        ),
+                        Arrays.asList( // 7
+                                new Vector3D(350, 0, 650),
+                                new Vector3D(550, 0, 650),
+                                new Vector3D(350, 789, 650)
+                        ),
+                        Arrays.asList( // 8
+                                new Vector3D(350, 789, 650),
+                                new Vector3D(550, 0, 650),
+                                new Vector3D(550, 789, 650)
+                        ),
+                        Arrays.asList( // 9
+                                new Vector3D(550, 0, 650),
+                                new Vector3D(670, 394, 500),
+                                new Vector3D(550, 789, 650)
+                        ),
+                        Arrays.asList( // 10
+                                new Vector3D(550, 0, 650),
+                                new Vector3D(789, 0, 650),
+                                new Vector3D(670, 394, 500)
+                        ),
+                        Arrays.asList( // 11
+                                new Vector3D(789, 0, 650),
+                                new Vector3D(789, 789, 650),
+                                new Vector3D(670, 394, 500)
+                        ),
+                        Arrays.asList( // 12
+                                new Vector3D(550, 789, 650),
+                                new Vector3D(670, 394, 500),
+                                new Vector3D(789, 789, 650)
+                        )
+                );
+
+                for (List<Vector3D> vertice : vertices) {
+                    polygons.add(new Polygon(vertice));
+                }
+
+        for (Polygon polygon : polygons) {
+            intersection = polygon.plane.intersection(line);
+            System.out.println("intersection = " + intersection + "   isInPolygon = " + polygon.isInPolygon(intersection));
+        }
     }
 }

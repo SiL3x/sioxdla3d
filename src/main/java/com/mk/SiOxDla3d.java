@@ -44,7 +44,7 @@ public class SiOxDla3d {
 
     private boolean run = true;
     private int border;
-    private String name = "test4";
+    private String name = "test5";
     //private String name = "1000_large_test";   //"realistic";
 
 
@@ -123,11 +123,18 @@ public class SiOxDla3d {
 
         System.out.println(">>> Computing time = "  + (System.currentTimeMillis() - time));
         System.out.println(">>> Saving INDarray");
+
+        System.out.println("  >>> saving slice z = {0, 789}");
+        saveMesh(0, 789);
+
+        //TODO: write mesh saver class
+
+        /*
         System.out.println("  >>> saving slice z = {0, 499}");
         saveMesh(0, 499);
         System.out.println("  >>> saving slice z = {500, 999}");
         saveMesh(500, 999);
-
+        */
         /*
         System.out.println(">>> Create mesh");
         PlotMesh plotMesh = new PlotMesh();

@@ -7,15 +7,15 @@ import java.util.*;
 
 public class Polygon {
     final List<Vector3D> vectors;
+    final public Plane plane;
+    final public List<Edge> edges;
+    final public Vector3D normal;
 
-    public Plane plane;
-    public List<Edge> edges;
-    public Vector3D normal;
-
-    public Polygon(final List<Vector3D> vectors) {
-        this.vectors = vectors;
+    public Polygon(final List<Vector3D> inVectors) {
+        vectors = inVectors;
         edges = calculateBorders(vectors);
-        calculatePlane();
+        plane = calculatePlane();
+        normal = plane.getNormal();
     }
 
     private List<Edge> calculateBorders(final List<Vector3D> vectors) {
@@ -25,7 +25,7 @@ public class Polygon {
         final Vector3D first = sortedVectors.get(0);
 
         for (int i = 0; i < (vectors.size() - 1); i++) {
-            final Vector3D vector = sortedVectors.get(0);
+            Vector3D vector = sortedVectors.get(0);
             Collections.sort(sortedVectors, (a, b) -> a.distance(vector) < b.distance(vector) ? -1 : a.distance(vector) == b.distance(vector) ? 0 : 1);
             borders.add(new Edge(sortedVectors.get(0), sortedVectors.get(1), 0.05));
             sortedVectors.remove(0);
@@ -43,12 +43,11 @@ public class Polygon {
         return out;
     }
 
-    private void calculatePlane() {
-        plane = new Plane(vectors.get(0), vectors.get(1), vectors.get(2), 0.05);
-        normal = plane.getNormal();
+    private Plane calculatePlane() {
+        return new Plane(vectors.get(0), vectors.get(1), vectors.get(2), 0.05);
     }
 
-    public double distanceToPoint(Vector3D vector3D) {
+    public double distanceToPoint(final Vector3D vector3D) {
         //  1. Calculate point distance to plane and the nearest point on plane
         final Vector3D intersection = plane.intersection(new Line(normal, normal.add(vector3D), 0.05));
 
@@ -64,12 +63,10 @@ public class Polygon {
         return minDistance;
     }
 
-    public boolean isInPolygon(Vector3D vector3D) {
+    public boolean isInPolygon(final Vector3D vector3D) {
         if (vector3D == null) return false;
 
-        final Vector3D edge1 = vectors.get(0).subtract(vectors.get(1));
-        final Vector3D edge2 = vectors.get(1).subtract(vectors.get(2));
-        final Line lineToCheck = new Line(vector3D, vector3D.add(edge1).add(edge2), 0.01);
+        final Line lineToCheck = calculateLineToCheck(vector3D);
         final Double abscissa = lineToCheck.getAbscissa(vector3D);
 
         int crossCount = 0;
@@ -79,10 +76,10 @@ public class Polygon {
             if (edge.isOnEdge(vector3D)) return true;
 
             if (edge.intersects(lineToCheck)) {
-                final Double intersectionAbscissa = lineToCheck.getAbscissa(lineToCheck.intersection(edge));
-                final Vector3D intersectionOnEdge = lineToCheck.intersection(edge);
+                Double intersectionAbscissa = lineToCheck.getAbscissa(lineToCheck.intersection(edge));
+                Vector3D intersectionOnEdge = lineToCheck.intersection(edge);
 
-                if ( intersectionAbscissa > abscissa && !listContains(intersections, intersectionOnEdge)) {
+                if (intersectionAbscissa > abscissa && !listContains(intersections, intersectionOnEdge)) {
                     intersections.add(intersectionOnEdge);
                     crossCount++;
                 }
@@ -90,13 +87,18 @@ public class Polygon {
         }
         if (crossCount % 2 == 0) return false;
         else return true;
+
+    }
+
+    private Line calculateLineToCheck(final Vector3D vector3D) {
+        final Vector3D edge1 = vectors.get(1).subtract(vectors.get(0));
+        final Vector3D edge2 = vectors.get(2).subtract(vectors.get(0));
+        return new Line(vector3D, vector3D.add(edge1).add(edge2), 0.05);
     }
 
     private boolean listContains(final List<Vector3D> list, final Vector3D value) {
         for (Vector3D valueInList : list) {
-            if (valueInList.equals(value)) {
-                return true;
-            }
+            if (valueInList.equals(value)) return true;
         }
         return false;
     }
