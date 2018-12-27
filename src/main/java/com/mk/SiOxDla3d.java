@@ -175,7 +175,10 @@ public class SiOxDla3d {
             walker.moveRnd(configuration.getZdrift());
             if (walkerIsTooFarOrBelowSurface(walker)) walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
 
-            stickingPosition = simulationUtils.walkerSticks(walker);
+            if (walkerIsNearToSurface(walker)) {
+                stickingPosition = simulationUtils.walkerSticks(walker);
+            }
+
             if (stickingPosition[0] != -1) {
                 notSticked = false;
             }
@@ -197,7 +200,7 @@ public class SiOxDla3d {
     }
 
     private boolean walkerIsNearToSurface(final Walker walker) {
-        // TODO: check why this isn't used
+        // TODO: use constant instead of number
         return walker.getPosition().getZ() >= (substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY()) - configuration.getKernel3D().length * 0.6928);
     }
 

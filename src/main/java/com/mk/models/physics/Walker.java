@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Walker {
     private int border=1;
     private Position position;
-    private Configuration configuration;
+    final private Configuration configuration;
     private int spawnZ;
 
     private int sector = 0 ;
@@ -25,7 +25,7 @@ public class Walker {
 
     public Walker(final Configuration configuration, final int front) {
         perRow = (int) Math.round(Math.sqrt(configuration.getSectorNumber()));
-        System.out.println("perRow = " + perRow + " sector no " +configuration.getSectorNumber());
+        System.out.println("perRow = " + perRow + " sector no " + configuration.getSectorNumber());
         distance = (int) Math.round(configuration.getMeshSizeX() / perRow);
 
         this.configuration = configuration;
@@ -37,6 +37,7 @@ public class Walker {
     }
 
     public Walker(Configuration configuration, int front, int sector) {
+        //TODO: Rework the sector spawning
         perRow = (int) Math.round(Math.sqrt(configuration.getSectorNumber()));
         distance = Math.round(configuration.getMeshSizeX() / perRow);
 
