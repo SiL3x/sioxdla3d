@@ -183,7 +183,7 @@ public class SiOxDla3d {
                 notSticked = false;
             }
 
-            if (i == 1000) {
+            if (i == 10000) {
                 System.out.println("killed a walker");
                 return new Walker(configuration, -1, -1, -1);
             }

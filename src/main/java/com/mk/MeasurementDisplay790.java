@@ -15,7 +15,9 @@ public class MeasurementDisplay790 {
 
     public  MeasurementDisplay790() throws Exception {
         //String directory = "/home/max/dev/projects/3d-dla-output/20181208_karlsruhe"; // neues substrat
-        String directory = "/home/max/dev/projects/3d-dla-output/20181225_karlsruhe";
+        //String directory = "/home/max/dev/projects/3d-dla-output/20181225_karlsruhe";
+        //String directory = "/home/max/dev/projects/3d-dla-output/20190102_karlsruhe";
+        String directory = "/home/max/dev/projects/3d-dla-output/20190202_karlsruhe";
 
         loadFiles(directory);
 
