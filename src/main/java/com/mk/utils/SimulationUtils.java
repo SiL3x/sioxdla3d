@@ -122,6 +122,11 @@ public class SimulationUtils {
                 }
             }
         }
+
+        if (ThreadLocalRandom.current().nextDouble() < sim.configuration.getCrystallizationProbability()) {
+            return new int[] {walker.getPosition().getX(), walker.getPosition().getY(), walker.getPosition().getZ()};
+        }
+
         return new int[]{-1, -1, -1};
     }
 
