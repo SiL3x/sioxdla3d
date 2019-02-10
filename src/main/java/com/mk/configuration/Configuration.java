@@ -40,6 +40,7 @@ public class Configuration {
     private int meshSizeZ;
     private double diffusionLength;
     private int stopHeight;
+    private double crystallizationProbability;
 
     public Configuration(String configName) {
         this.configName = configName;
@@ -441,12 +442,13 @@ public class Configuration {
 
             setSeedNumber(2000);
             setSpawnOffset(100); // 15
-            setGrowthRatio(100);
+            setGrowthRatio(500);
             setSectorNumber(256);
             setStickingProbability(1);
-            setZDrift(10); // 4
-            setDiffusionLength(25);
-            setStopHeight(50);
+            setZDrift(4); // 4
+            setDiffusionLength(10);
+            setStopHeight(250);
+            setCrystallizationProbability(1e-1);
 
             float[][][] kernel =
                     {
@@ -1181,5 +1183,13 @@ public class Configuration {
 
     public void setStopHeight(int stopHeight) {
         this.stopHeight = stopHeight;
+    }
+
+    public double getCrystallizationProbability() {
+        return crystallizationProbability;
+    }
+
+    public void setCrystallizationProbability(double crystallizationProbability) {
+        this.crystallizationProbability = crystallizationProbability;
     }
 }
