@@ -34,7 +34,7 @@ public class Config {
 
     public float[][][] kernel() { return KernelFactory.get(kernelName).kernel3D; }
 
-    public List<List<Vector3D>> substrate() { return SubstrateFactory.get(substrateName).substrate; }
+    public List<List<Vector3D>> substrate() { return SubstrateFactory.get(substrateName).getSubstrate(); }
 
     public int getMeshSize() { return meshSize; }
 
