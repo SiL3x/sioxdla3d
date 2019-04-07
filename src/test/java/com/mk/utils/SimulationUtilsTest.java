@@ -1,6 +1,7 @@
 package com.mk.utils;
 
 import com.mk.SiOxDla3d;
+import com.mk.configuration.Config;
 import com.mk.configuration.Configuration;
 import com.mk.models.geometries.Position;
 import com.mk.models.physics.BondPosition;
@@ -158,7 +159,7 @@ class SimulationUtilsTest {
     @Test
     public void moveGrowthFrontTest() {
         SiOxDla3d sim = mock(SiOxDla3d.class);
-        Configuration configuration = mock(Configuration.class);
+        Config configuration = mock(Config.class);
         Substrate substrate = createTestSubstrate();
         when(configuration.getGrowthRatio()).thenReturn(4);
         when(sim.getConfiguration()).thenReturn(configuration);

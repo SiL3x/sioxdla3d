@@ -11,36 +11,33 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Configuration {
-    private final String configName;
-    private int meshSizeX;
-    private int meshSizeY;
-    private int meshResolution;
-    private int meshSize;
-    private List<Position> seedPosition;
-    private Position walkerStart;
-    private int moveLength;
-    private double stickingDistance;
-
-    private int growthRatio;
-
-    private int spawnOffset;
-    private int stickingProbability;
-    private int exposure;
-    private int[][] kernel;
-    public ArrayList<Vector3D> substratePoints;
-    private int seedNumber;
-    private int surfaceStickDistance;
-    private List<List<Vector3D>> substrate;
-    private int sectorNumber;
-    private float[][][] kernel3D;
-
-
-    private INDArray kernel3Dnd;
-    private int zDrift;
+    private final String configName; //
+    private int meshSizeX; //
+    private int meshSizeY; //
     private int meshSizeZ;
+    private int meshSize; //
+    private int growthRatio; //
+    private int spawnOffset; //
+    private int stickingProbability;
+    private int seedNumber;
+    private int sectorNumber;
+    private int zDrift;
     private double diffusionLength;
     private int stopHeight;
     private double crystallizationProbability;
+
+    private INDArray kernel3Dnd;
+    private float[][][] kernel3D;
+    private List<List<Vector3D>> substrate;
+    private int[][] kernel;
+    public ArrayList<Vector3D> substratePoints;
+
+    private int surfaceStickDistance;
+    private int exposure;
+    private int moveLength;
+    private double stickingDistance;
+    private Position walkerStart;
+    private List<Position> seedPosition;
 
     public Configuration(String configName) {
         this.configName = configName;
@@ -373,7 +370,7 @@ public class Configuration {
         }
 
         if (name == "test5") {
-            setMeshSize(790, 790, 790);
+
             setSubstrate(
                     Arrays.asList(
                             Arrays.asList( // 1
@@ -439,7 +436,7 @@ public class Configuration {
                     )
             );
 
-
+            setMeshSize(790, 790, 790);
             setSeedNumber(2000);
             setSpawnOffset(100); // 15
             setGrowthRatio(500);
@@ -1019,19 +1016,12 @@ public class Configuration {
     }
 
 
-
-
     private void setDiffusionLength(int diffusionLength) {
         this.diffusionLength = diffusionLength;
     }
 
     private void setZDrift(int i) {
         zDrift = i;
-    }
-
-
-    public void setMeshResolution(int i) {
-        meshResolution = 1;
     }
 
     public int getMeshSize() {
