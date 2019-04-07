@@ -1,5 +1,6 @@
 package com.mk;
 
+import com.mk.configuration.Config;
 import com.mk.configuration.Configuration;
 import com.mk.graphic.PlotMesh;
 import com.mk.models.geometries.Position;
@@ -34,7 +35,8 @@ import static org.nd4j.serde.binary.BinarySerde.writeArrayToDisk;
  */
 public class SiOxDla3d {
 
-    public Configuration configuration;
+    //public Configuration configuration;
+    public Config configuration;
     public INDArray mesh;
     public Substrate substrate;
     public int meshSize;
@@ -44,7 +46,7 @@ public class SiOxDla3d {
 
     private boolean run = true;
     private int border;
-    private String name = "test5";
+    private String name = "config.json";
     //private String name = "1000_large_test";   //"realistic";
 
 
@@ -61,9 +63,11 @@ public class SiOxDla3d {
 
         System.out.println(">>> Loading configuration: " + name);
         configuration = simulationUtils.loadConfiguration(name);
-        meshSize = 0;
+        System.out.println(">>> Initialize configuration");
+        configuration.initialize();
 
         System.out.println(">>> creating mesh");
+        meshSize = 0;
         mesh = simulationUtils.createMesh(
                 configuration.getMeshSizeX(),
                 configuration.getMeshSizeY(),
@@ -81,7 +85,6 @@ public class SiOxDla3d {
         System.out.println(">>> Place seeds");
         simulationUtils.placeSeeds();
         System.out.println("<<< seeds placed");
-
 
         //TODO: set iteration variables
         int i = 0;
@@ -232,7 +235,7 @@ public class SiOxDla3d {
         return substrate;
     }
 
-    public Configuration getConfiguration() {
+    public Config getConfiguration() {
         return configuration;
     }
 

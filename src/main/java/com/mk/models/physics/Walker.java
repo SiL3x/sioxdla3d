@@ -1,15 +1,15 @@
 package com.mk.models.physics;
 
+import com.mk.configuration.Config;
 import com.mk.configuration.Configuration;
 import com.mk.models.geometries.Position;
-import com.mk.models.physics.Substrate;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Walker {
     private int border=1;
     private Position position;
-    final private Configuration configuration;
+    final private Config configuration;
     private int spawnZ;
 
     private int sector = 0 ;
@@ -17,26 +17,7 @@ public class Walker {
     int distance;
 
 
-    public Walker(Configuration configuration) {
-        this.configuration = configuration;
-        this.position = configuration.getWalkerStart();
-        this.border = configuration.getKernel3D().length/2 +2;
-    }
-
-    public Walker(final Configuration configuration, final int front) {
-        perRow = (int) Math.round(Math.sqrt(configuration.getSectorNumber()));
-        System.out.println("perRow = " + perRow + " sector no " + configuration.getSectorNumber());
-        distance = (int) Math.round(configuration.getMeshSizeX() / perRow);
-
-        this.configuration = configuration;
-        this.spawnZ = front - configuration.getSpawnOffset();
-        this.border = configuration.getKernel().length/2 +2;
-        int randomX = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSizeX() - border);
-        int randomY = ThreadLocalRandom.current().nextInt(border, configuration.getMeshSizeY() - border);
-        this.position = new Position(randomX, randomY, spawnZ);
-    }
-
-    public Walker(Configuration configuration, int front, int sector) {
+    public Walker(Config configuration, int front, int sector) {
         //TODO: Rework the sector spawning
         perRow = (int) Math.round(Math.sqrt(configuration.getSectorNumber()));
         distance = Math.round(configuration.getMeshSizeX() / perRow);
@@ -50,7 +31,7 @@ public class Walker {
         this.sector = sector;
     }
 
-    public Walker(Configuration configuration, int front, int x, int y) {
+    public Walker(Config configuration, int front, int x, int y) {
         this.configuration = configuration;
         this.spawnZ = front - configuration.getSpawnOffset();
         this.border = configuration.getKernel3D().length/2 +2;

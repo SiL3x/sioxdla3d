@@ -1,6 +1,8 @@
 package com.mk.utils;
 
 import com.mk.SiOxDla3d;
+import com.mk.configuration.Config;
+import com.mk.configuration.ConfigLoader;
 import com.mk.configuration.Configuration;
 import com.mk.models.geometries.Position;
 import com.mk.models.physics.BondPosition;
@@ -72,9 +74,8 @@ public class SimulationUtils {
         return outArray;
     }
 
-    public Configuration loadConfiguration(final String name) {
-        sim.configuration = new Configuration(name);
-        //TODO: load configuration from resources
+    public Config loadConfiguration(final String name) {
+        sim.configuration = new ConfigLoader(name).getConfig();
         return sim.configuration;
     }
 
