@@ -7,6 +7,7 @@ import com.mk.models.geometries.Position;
 import com.mk.models.physics.BondPosition;
 import com.mk.models.physics.Substrate;
 import com.mk.models.physics.Walker;
+import com.mk.utils.CliUtils;
 import com.mk.utils.SimulationUtils;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -46,11 +47,13 @@ public class SiOxDla3d {
 
     private boolean run = true;
     private int border;
-    private String name = "config.json";
+    private CliUtils cliUtils;
     //private String name = "1000_large_test";   //"realistic";
 
 
-    public SiOxDla3d() throws Exception {
+    public SiOxDla3d(String[] args) throws Exception {
+        cliUtils = new CliUtils(args);
+
         double time = System.currentTimeMillis();
         System.out.println(">>> Start time : " + time);
         simulationUtils = new SimulationUtils(this);
@@ -61,8 +64,8 @@ public class SiOxDla3d {
         ForkJoinPool commonPool = ForkJoinPool.commonPool();
         System.out.println(">>> Thread pool : " + commonPool.getParallelism());
 
-        System.out.println(">>> Loading configuration: " + name);
-        configuration = simulationUtils.loadConfiguration(name);
+        System.out.println(">>> Loading configuration: " + cliUtils.configFilePath());
+        configuration = simulationUtils.loadConfiguration(cliUtils.configFilePath());
         System.out.println(">>> Initialize configuration");
         configuration.initialize();
 
@@ -96,7 +99,6 @@ public class SiOxDla3d {
         }
 
         while (run) {
-
             //run = false;
 
             System.out.println(">>> Start parallel stream - Iteration = " + i);
@@ -243,13 +245,9 @@ public class SiOxDla3d {
         return border;
     }
 
-    public static void main( String[] args ) throws Exception {
+    public static void main(String[] args) throws Exception {
         System.out.println("### New DLA Simulation");
-        if (System.getProperty("outfile") != null) {
-            // TODO: implement command line arguments
-            String outFile = System.getProperty("outfile");
-            SiOxDla3d siOxDla3d = new SiOxDla3d();
-        }
-        SiOxDla3d siOxDla3d = new SiOxDla3d();
+
+        SiOxDla3d siOxDla3d = new SiOxDla3d(args);
     }
 }

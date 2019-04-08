@@ -11,7 +11,7 @@ public class FileUtils {
         byte[] encoded;
 
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-             InputStream is = FileUtils.class.getClassLoader().getResourceAsStream(path)) {
+             InputStream is = FileUtils.class.getResourceAsStream(path)) { // TODO: this should accept absolute paths
 
             if (is == null) throw new IllegalArgumentException("Could not find specified file");
 
