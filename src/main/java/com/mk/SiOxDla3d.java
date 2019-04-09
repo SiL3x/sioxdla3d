@@ -32,7 +32,6 @@ import static org.nd4j.serde.binary.BinarySerde.writeArrayToDisk;
 /**
  * Diffusion limited aggregation model in 3D
  * for SiOx growth in a PECVD
- *
  */
 public class SiOxDla3d {
 
@@ -48,7 +47,6 @@ public class SiOxDla3d {
     private boolean run = true;
     private int border;
     private CliUtils cliUtils;
-    //private String name = "1000_large_test";   //"realistic";
 
 
     public SiOxDla3d(String[] args) throws Exception {
@@ -178,9 +176,13 @@ public class SiOxDla3d {
 
         while (notSticked) {
             walker.moveRnd(configuration.getZdrift());
-            if (walkerIsTooFarOrBelowSurface(walker)) walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
+            if (walkerIsTooFarOrBelowSurface(walker)) {
+                //System.out.println("walker too far @ z = " + walker.getPosition().getZ() );
+                walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
+            }
 
             if (walkerIsNearToSurface(walker)) {
+                //System.out.println("walker near surface");
                 stickingPosition = simulationUtils.walkerSticks(walker);
             }
 
@@ -201,7 +203,7 @@ public class SiOxDla3d {
 
     private boolean walkerIsTooFarOrBelowSurface(final Walker walker) {
         return walker.getPosition().getZ() < (substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset() - 10) ||
-                walker.getPosition().getZ() >= substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY());
+                walker.getPosition().getZ() > substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY());
     }
 
     private boolean walkerIsNearToSurface(final Walker walker) {
