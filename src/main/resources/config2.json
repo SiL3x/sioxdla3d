@@ -1,0 +1,16 @@
+{
+  "meshSizeX" : 790,
+  "meshSizeY" : 790,
+  "meshSizeZ" : 790,
+  "seedNumber" : 200,
+  "spawnOffset" : 100,
+  "growthRatio" : 500,
+  "sectorNumber" : 256,
+  "stickingProbability" : 1,
+  "zDrift" : 4,
+  "diffusionLength" : 10,
+  "stopHeight" : 250,
+  "crystallizationProbability" : 1e-1,
+  "kernelName": "SimpleKernel",
+  "substrateName": "Plane790"
+}
