@@ -32,7 +32,7 @@ public class Config {
         substrate = substrate();
     }
 
-    public float[][][] kernel() { return KernelFactory.get(kernelName).kernel3D; }
+    public float[][][] kernel() { return KernelFactory.get(kernelName).getKernel3D(); }
 
     public void setKernel3D() {
         float[] flatKernel = ArrayUtil.flattenFloatArray(kernel());
