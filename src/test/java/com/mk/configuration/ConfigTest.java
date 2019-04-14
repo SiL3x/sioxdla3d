@@ -35,6 +35,7 @@ public class ConfigTest {
 
     @Test public void shouldInitializeTheConfig_whenCalle() {
         config.initialize();
+        System.out.println("kerne3d = " + config.getKernel3D());
         assertThat(config.getKernel3D().length).isEqualTo(5);
         assertThat(config.getKernel3Dnd().length()).isEqualTo(125);
     }

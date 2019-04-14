@@ -212,10 +212,14 @@ public class SimulationUtils {
         for (int x = 0; x < length; x++) {
             for (int y = 0; y < length; y++) {
                 for (int z = 0; z < length; z++) {
-                    if (kernel[x][y][z] > 0) bondPositions.add(new BondPosition(x - half, y - half, z - half, 1));
+                    if (kernel[x][y][z] > 0) {
+                        bondPositions.add(new BondPosition(x - half, y - half, z - half, 1));
+                        System.out.println("(x, y, z) = (" + z + ", " + y + ", " + z + ")");
+                    }
                 }
             }
         }
+        System.out.println("bondPositions = " + bondPositions);
         return bondPositions;
     }
 }

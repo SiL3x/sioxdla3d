@@ -177,12 +177,12 @@ public class SiOxDla3d {
         while (notSticked) {
             walker.moveRnd(configuration.getZdrift());
             if (walkerIsTooFarOrBelowSurface(walker)) {
-                //System.out.println("walker too far @ z = " + walker.getPosition().getZ() );
+                System.out.println("walker too far @ z = " + walker.getPosition().getZ() );
                 walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
             }
 
             if (walkerIsNearToSurface(walker)) {
-                //System.out.println("walker near surface");
+                System.out.println("walker near surface");
                 stickingPosition = simulationUtils.walkerSticks(walker);
             }
 

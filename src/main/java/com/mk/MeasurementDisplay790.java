@@ -21,7 +21,8 @@ public class MeasurementDisplay790 {
         //String directory = "/home/max/dev/projects/3d-dla-output/20190202_karlsruhe_2";
         //String directory = "/home/max/dev/projects/3d-dla-output/20190203_karlsruhe_1";
         //String directory = "/home/max/dev/projects/3d-dla-output/20190210_karlsruhe";
-        String directory = "/home/max/dev/projects/3d-dla-output/20190409_test";
+        //String directory = "/home/max/dev/projects/3d-dla-output/20190409_test";
+        String directory = "/home/max/dev/projects/3d-dla-output/20190410_config2";
 
         loadFiles(directory);
 
