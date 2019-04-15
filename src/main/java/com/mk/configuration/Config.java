@@ -32,7 +32,14 @@ public class Config {
         substrate = substrate();
     }
 
-    public float[][][] kernel() { return KernelFactory.get(kernelName).kernel3D; }
+    public float[][][] kernel() { return KernelFactory.get(kernelName).getKernel3D(); }
+
+    public void setKernel3D() {
+        float[] flatKernel = ArrayUtil.flattenFloatArray(kernel());
+        int[] shape = {kernel().length, kernel().length, kernel().length};
+        kernel3Dnd = Nd4j.create(flatKernel, shape, 'c');
+        kernel3D = kernel();
+    }
 
     public List<List<Vector3D>> substrate() { return SubstrateFactory.get(substrateName).getSubstrate(); }
 
@@ -55,14 +62,6 @@ public class Config {
     }
 
     public int getStickingProbability() { return stickingProbability; }
-
-
-    public void setKernel3D() {
-        float[] flatKernel = ArrayUtil.flattenFloatArray(kernel());
-        int[] shape = {kernel().length, kernel().length, kernel().length};
-        kernel3Dnd = Nd4j.create(flatKernel, shape, 'c');
-        kernel3D = kernel();
-    }
 
     public float[][][] getKernel3D() { return kernel3D; }
 
