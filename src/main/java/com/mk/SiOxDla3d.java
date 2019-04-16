@@ -178,7 +178,8 @@ public class SiOxDla3d {
             walker.moveRnd(configuration.getZdrift());
             if (walkerIsTooFar(walker)) {
                 //System.out.println("walker too far @ z = " + walker.getPosition().getZ() );
-                walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
+                //walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
+                walker.moveDown(10);
             }
 
             if (walkerIsBelowSurface(walker)) {
