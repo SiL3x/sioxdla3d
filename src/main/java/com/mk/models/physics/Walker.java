@@ -93,4 +93,12 @@ public class Walker {
     public void setPosition(final int x, final int y, final int z) {
         position = new Position(x, y, z);
     }
+
+    public void moveUp(int i) {
+        position.setZ(position.getZ() - i);
+    }
+
+    public void moveDown(int i) {
+        position.setZ(position.getZ() + 10);
+    }
 }

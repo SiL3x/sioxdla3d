@@ -176,9 +176,14 @@ public class SiOxDla3d {
 
         while (notSticked) {
             walker.moveRnd(configuration.getZdrift());
-            if (walkerIsTooFarOrBelowSurface(walker)) {
+            if (walkerIsTooFar(walker)) {
                 //System.out.println("walker too far @ z = " + walker.getPosition().getZ() );
-                walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
+                //walker.respawn(substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset());
+                walker.moveDown(10);
+            }
+
+            if (walkerIsBelowSurface(walker)) {
+                 walker.moveUp(3);
             }
 
             if (walkerIsNearToSurface(walker)) {
@@ -201,9 +206,13 @@ public class SiOxDla3d {
         return walker;
     }
 
-    private boolean walkerIsTooFarOrBelowSurface(final Walker walker) {
-        return walker.getPosition().getZ() < (substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset() - 10) ||
-                walker.getPosition().getZ() > substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY());
+    private boolean walkerIsBelowSurface(final Walker walker) {
+        return walker.getPosition().getZ() > substrate.getValueWithFront(walker.getPosition().getX(), walker.getPosition().getY());
+    }
+
+
+    private boolean walkerIsTooFar(final Walker walker) {
+        return walker.getPosition().getZ() < (substrate.getFront() - substrate.getSpread() - configuration.getSpawnOffset() - 10);
     }
 
     private boolean walkerIsNearToSurface(final Walker walker) {
