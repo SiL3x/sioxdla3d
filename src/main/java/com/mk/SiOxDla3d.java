@@ -130,6 +130,7 @@ public class SiOxDla3d {
         System.out.println("  >>> saving slice z = {0, 789}");
         saveMesh(0, 789);
 
+        System.out.println(">>> Config: " + cliUtils.configFilePath());
         //TODO: write mesh saver class
 
         /*
@@ -196,7 +197,7 @@ public class SiOxDla3d {
             }
 
             if (i == 10000) {
-                System.out.println("killed a walker");
+                System.out.println("killed a walker @ " + walker.getPosition().toString());
                 return new Walker(configuration, -1, -1, -1);
             }
             i++;
