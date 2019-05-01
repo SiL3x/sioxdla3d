@@ -4,7 +4,7 @@
   "meshSizeZ" : 790,
   "seedNumber" : 200,
   "spawnOffset" : 100,
-  "growthRatio" : 25,
+  "growthRatio" : 50,
   "sectorNumber" : 40,
   "stickingProbability" : 1,
   "zDrift" : 4,
