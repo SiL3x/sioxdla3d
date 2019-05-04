@@ -24,9 +24,14 @@ public class MeasurementDisplay790 {
         //String directory = "/home/max/dev/projects/3d-dla-output/20190409_test";
         //String directory = "/home/max/dev/projects/3d-dla-output/20190410_config2";
         //String directory = "/home/max/dev/projects/3d-dla-output/20190416_config3";
-        String directory = "/home/max/dev/projects/3d-dla-output/20190417_config4";
+        //String directory = "/home/max/dev/projects/3d-dla-output/20190417_config4";
         //String directory = "/home/max/dev/projects/3d-dla-output/20190420_config5";
         //String directory = "/home/max/dev/projects/3d-dla-output/201904_stick_prob/stick_prob_2";
+
+        // Valley series 01
+        //String directory = "/home/max/dev/projects/3d-dla-output/20190501_valleys/valley_15";
+        //String directory = "/home/max/dev/projects/3d-dla-output/20190501_valleys/valley_30";
+        String directory = "/home/max/dev/projects/3d-dla-output/20190501_valleys/valley_45";
 
         loadFiles(directory);
 
