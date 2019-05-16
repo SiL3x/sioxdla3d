@@ -5,7 +5,7 @@
   "seedNumber" : 200,
   "spawnOffset" : 100,
   "growthRatio" : 200,
-  "sectorNumber" : 40,
+  "sectorNumber" : 49,
   "stickingProbability" : 1,
   "zDrift" : 4,
   "diffusionLength" : 10,

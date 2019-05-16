@@ -31,7 +31,12 @@ public class MeasurementDisplay790 {
         // Valley series 01
         //String directory = "/home/max/dev/projects/3d-dla-output/20190501_valleys/valley_15";
         //String directory = "/home/max/dev/projects/3d-dla-output/20190501_valleys/valley_30";
-        String directory = "/home/max/dev/projects/3d-dla-output/20190501_valleys/valley_45";
+        //String directory = "/home/max/dev/projects/3d-dla-output/20190501_valleys/valley_45";
+        //String directory = "/home/max/dev/projects/3d-dla-output/201905_sector/sector_36";
+        //String directory = "/home/max/dev/projects/3d-dla-output/201905_sector/sector_64";
+        //String directory = "/home/max/dev/projects/3d-dla-output/201905_sector/sector_100";
+        //String directory = "/home/max/dev/projects/3d-dla-output/201905_diffusion_length/length_20";
+        String directory = "/home/max/dev/projects/3d-dla-output/201905_diffusion_length/length_05";
 
         loadFiles(directory);
 
