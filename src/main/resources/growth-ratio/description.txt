@@ -1,2 +1,6 @@
 This series is based on config4.json. The sector number was
 reduced to 40 to avoid over deposition.
+
+simulation crashed... have to be be retried...
+
+No with sect_no set to 49

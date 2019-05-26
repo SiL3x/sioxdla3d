@@ -14,26 +14,35 @@ public class MeasurementDisplay790 {
     File[] files;
 
     public  MeasurementDisplay790() throws Exception {
-        //String directory = "/home/max/dev/projects/3d-dla-output/20181208_karlsruhe"; // neues substrat
-        //String directory = "/home/max/dev/projects/3d-dla-output/20181225_karlsruhe";
-        //String directory = "/home/max/dev/projects/3d-dla-output/20190102_karlsruhe";
-        //String directory = "/home/max/dev/projects/3d-dla-output/20190202_karlsruhe";
-        //String directory = "/home/max/dev/projects/3d-dla-output/20190202_karlsruhe_2";
-        //String directory = "/home/max/dev/projects/3d-dla-output/20190203_karlsruhe_1";
-        //String directory = "/home/max/dev/projects/3d-dla-output/20190210_karlsruhe";
-        //String directory = "/home/max/dev/projects/3d-dla-output/20190409_test";
-        //String directory = "/home/max/dev/projects/3d-dla-output/20190410_config2";
-        //String directory = "/home/max/dev/projects/3d-dla-output/20190416_config3";
-        //String directory = "/home/max/dev/projects/3d-dla-output/20190417_config4";
-        //String directory = "/home/max/dev/projects/3d-dla-output/20190420_config5";
-        //String directory = "/home/max/dev/projects/3d-dla-output/201904_stick_prob/stick_prob_2";
+        String baseDirectory = "/home/max/dev/projects/3d-dla-output/";
+        String simDirectory;
+
+        //simDirectory = "20181208_karlsruhe"; // neues substrat
+        //simDirectory = "20181225_karlsruhe";
+        //simDirectory = "20190102_karlsruhe";
+        //simDirectory = "20190202_karlsruhe";
+        //simDirectory = "20190202_karlsruhe_2";
+        //simDirectory = "20190203_karlsruhe_1";
+        //simDirectory = "20190210_karlsruhe";
+        //simDirectory = "20190409_test";
+        //simDirectory = "20190410_config2";
+        //simDirectory = "20190416_config3";
+        //simDirectory = "20190417_config4";
+        //simDirectory = "20190420_config5";
+        //simDirectory = "201904_stick_prob/stick_prob_2";
 
         // Valley series 01
-        //String directory = "/home/max/dev/projects/3d-dla-output/20190501_valleys/valley_15";
-        //String directory = "/home/max/dev/projects/3d-dla-output/20190501_valleys/valley_30";
-        String directory = "/home/max/dev/projects/3d-dla-output/20190501_valleys/valley_45";
-
-        loadFiles(directory);
+        //simDirectory = "20190501_valleys/valley_15";
+        //simDirectory = "20190501_valleys/valley_30";
+        //simDirectory = "20190501_valleys/valley_45";
+        //simDirectory = "201905_sector/sector_36";
+        //simDirectory = "201905_sector/sector_64";
+        //simDirectory = "201905_sector/sector_100";
+        //simDirectory = "201905_diffusion_length/length_20";
+        //simDirectory = "201905_diffusion_length/length_05";
+        //simDirectory = "presentation/2019_05_presentation_1";
+        simDirectory = "kernel/20190525_kernel111_2";
+        loadFiles(baseDirectory + simDirectory);
 
         System.out.println(">>> Load file : " + files[0]);
         mesh = readFromDisk(files[0]);
