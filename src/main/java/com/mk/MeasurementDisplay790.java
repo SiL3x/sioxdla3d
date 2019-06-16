@@ -41,7 +41,8 @@ public class MeasurementDisplay790 {
         //simDirectory = "201905_diffusion_length/length_20";
         //simDirectory = "201905_diffusion_length/length_05";
         //simDirectory = "presentation/2019_05_presentation_1";
-        simDirectory = "kernel/20190525_kernel111_2";
+        //simDirectory = "kernel/20190525_kernel111_2";
+        simDirectory = "20190616_kernel111_valley45";
         loadFiles(baseDirectory + simDirectory);
 
         System.out.println(">>> Load file : " + files[0]);
