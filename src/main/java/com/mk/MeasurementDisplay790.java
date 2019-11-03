@@ -1,6 +1,7 @@
 package com.mk;
 
 import com.mk.graphic.PlotMesh;
+import com.mk.graphic.PlotProjections;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import java.io.File;
@@ -43,10 +44,15 @@ public class MeasurementDisplay790 {
         //simDirectory = "presentation/2019_05_presentation_1";
         //simDirectory = "kernel/20190525_kernel111_2";
         simDirectory = "20190616_kernel111_valley45";
+
         loadFiles(baseDirectory + simDirectory);
 
         System.out.println(">>> Load file : " + files[0]);
         mesh = readFromDisk(files[0]);
+
+        System.out.println(">>> Plot projections");
+        PlotProjections plotProjections = new PlotProjections();
+        plotProjections.plotProjection(mesh);
 
         System.out.println(">>> Create mesh");
         PlotMesh plotMesh = new PlotMesh();
