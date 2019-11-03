@@ -1,14 +1,12 @@
 package com.mk.configuration;
 
-import com.mk.configuration.kernels.Kernel111_1;
-import com.mk.configuration.kernels.Kernel111_2;
-import com.mk.configuration.kernels.KernelInterface;
-import com.mk.configuration.kernels.SimpleKernel;
+import com.mk.configuration.kernels.*;
 
 public class KernelFactory {
     public static final String SIMPLE  = "SimpleKernel";
     public static final String KERNEL111_1  = "Kernel111_1";
     public static final String KERNEL111_2  = "Kernel111_2";
+    public static final String BLOCKKERNEL = "BlockKernel";
 
     public static KernelInterface get(final String kernel) {
         switch(kernel) {
@@ -18,6 +16,8 @@ public class KernelFactory {
                 return new Kernel111_1();
             case KERNEL111_2:
                 return new Kernel111_2();
+            case BLOCKKERNEL:
+                return new BlockKernel();
             default:
                 throw new IllegalStateException("Don't know about this kernel yet!");
         }
