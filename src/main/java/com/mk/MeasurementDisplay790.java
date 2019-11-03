@@ -29,7 +29,7 @@ public class MeasurementDisplay790 {
         //simDirectory = "20190410_config2";
         //simDirectory = "20190416_config3";
         //simDirectory = "20190417_config4";
-        //simDirectory = "20190420_config5";
+        simDirectory = "20190420_config5";
         //simDirectory = "201904_stick_prob/stick_prob_2";
 
         // Valley series 01
@@ -43,7 +43,7 @@ public class MeasurementDisplay790 {
         //simDirectory = "201905_diffusion_length/length_05";
         //simDirectory = "presentation/2019_05_presentation_1";
         //simDirectory = "kernel/20190525_kernel111_2";
-        simDirectory = "20190616_kernel111_valley45";
+        //simDirectory = "20190616_kernel111_valley45";
 
         loadFiles(baseDirectory + simDirectory);
 
