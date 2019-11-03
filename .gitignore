@@ -2,6 +2,7 @@
 *.class
 *.jar
 *.iml
+*.bmp
 
 #
 /out/*
