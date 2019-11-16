@@ -7,6 +7,7 @@ public class KernelFactory {
     public static final String KERNEL111_1  = "Kernel111_1";
     public static final String KERNEL111_2  = "Kernel111_2";
     public static final String BLOCKKERNEL = "BlockKernel";
+    public static final String BLOCKSMALL = "BlockKernelSmall";
     public static final String SPHEREKERNEL = "SphereKernel";
 
     public static KernelInterface get(final String kernel) {
@@ -19,6 +20,8 @@ public class KernelFactory {
                 return new Kernel111_2();
             case BLOCKKERNEL:
                 return new BlockKernel();
+            case BLOCKSMALL:
+                return new BlockKernelSmall();
             case SPHEREKERNEL:
                 return new SphereKernel();
             default:

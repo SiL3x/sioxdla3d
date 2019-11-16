@@ -45,7 +45,8 @@ public class MeasurementDisplay790 {
         //simDirectory = "kernel/20190525_kernel111_2";
         //simDirectory = "20190616_kernel111_valley45";
         //simDirectory = "20190617_kernel111_valley30";
-        simDirectory = "anisotropy/20191108_cube_kernel";
+        //simDirectory = "anisotropy/20191108_cube_kernel";
+        simDirectory = "anisotropy/20191116_octaeder";
 
         loadFiles(baseDirectory + simDirectory);
 
