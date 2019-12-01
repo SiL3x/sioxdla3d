@@ -118,7 +118,8 @@ public class SimulationUtils {
         for (int[] position : positionsWithinDiffusionLength) {
             bondValue = calculateRotatedKernelOverlap(position);
             if (bondValue > 0) {
-                if (ThreadLocalRandom.current().nextFloat() * Math.exp(bondValue) > sim.getStickingProbability()) {
+                // TODO: include a choice into config. ThreadLocalRandom.current().nextFloat() * Math.exp(bondValue) > sim.getStickingProbability()
+                if (ThreadLocalRandom.current().nextDouble(sim.getStickingProbability()) < bondValue) {
                     return position;
                 }
             }
