@@ -26,6 +26,7 @@ public class Config {
     private float[][][] kernel3D;
     private INDArray kernel3Dnd;
     private List<List<Vector3D>> substrate;
+    private String stickingFunction;
 
     public void initialize() {
         setKernel3D();
@@ -87,5 +88,9 @@ public class Config {
 
     public String toString() {
         return "MeshX: " + meshSizeX + " MeshY: " + meshSizeY;
+    }
+
+    public String getStickingFunction() {
+        return stickingFunction;
     }
 }
