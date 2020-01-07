@@ -52,7 +52,8 @@ public class MeasurementDisplay790 {
         // simDirectory = "anisotropy/20191123_small_realistic";
         // simDirectory = "anisotropy/20191128_small_realistic_really";
         // simDirectory = "anisotropy/20191213_large_realistic";
-        simDirectory = "anisotropy/20191221_realistic_02";
+        //simDirectory = "anisotropy/20191221_realistic_02";
+        simDirectory = "direction/2020_01_07_direction_111";
         loadFiles(baseDirectory + simDirectory);
 
         System.out.println(">>> Load file : " + files[0]);

@@ -11,7 +11,7 @@
   "diffusionLength" : 10,
   "stopHeight" : 250,
   "crystallizationProbability" : 1e-5,
-  "kernelName": "SmallKernel100",
+  "kernelName": "BlockKernelSmall",
   "substrateName": "Plane790",
   "stickingFunction": "linear"
 }

@@ -6,11 +6,12 @@
   "spawnOffset" : 50,
   "growthRatio" : 80,
   "sectorNumber" : 100,
-  "stickingProbability" : 5,
+  "stickingProbability" : 2,
   "zDrift" : 4,
   "diffusionLength" : 10,
   "stopHeight" : 250,
   "crystallizationProbability" : 1e-5,
   "kernelName": "SmallKernel111",
-  "substrateName": "Plane790"
+  "substrateName": "Plane790",
+  "stickingFunction": "linear"
 }

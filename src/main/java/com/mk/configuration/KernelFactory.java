@@ -14,6 +14,7 @@ public class KernelFactory {
     public static final String SMALL111 = "SmallKernel111";
     public static final String SMALL110 = "SmallKernel110";
     public static final String SMALL100 = "SmallKernel100";
+    public static final String SMALL110111 = "SmallKernel110111";
 
     public static KernelInterface get(final String kernel) {
         switch(kernel) {
@@ -39,6 +40,8 @@ public class KernelFactory {
                 return new SmallKernel110();
             case SMALL100:
                 return new SmallKernel100();
+            case SMALL110111:
+                return new SmallKernel110111();
             default:
                 throw new IllegalStateException("Don't know about this kernel yet!");
         }
